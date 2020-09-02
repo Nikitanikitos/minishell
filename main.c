@@ -24,39 +24,68 @@ void	type_prompt()
 	write(1, "$", 1);
 }
 
-
-void	read_command(char command[], char *parameters[])
+void	read_user_input(char *user_input)
 {
-	int		q;
+	read(1, user_input, 200);
+}
 
-	q = 0;
-	ft_bzero(command, 100);
-	read(1, command, 100);
-	while (command[q])
+void	parsing_user_input(char *user_input, char *command, char ***parameters)
+{
+	char	*temp_parsed_input;
+	char	**parsed_input;
+
+	parsed_input = ft_split(user_input, ' ');
+	ft_strcpy(command, parsed_input[0]);
+	while (*command)
 	{
-		if (command[q] == '\n')
-		{
-			command[q] = 0;
-			break;
-		}
-		q++;
+		if (*command == '\n' || *command == ' ')
+			*command = 0;
+		command++;
 	}
+	parsed_input++;
+	*parameters = parsed_input;
+	if (*parsed_input)
+	{
+		while (*(parsed_input + 1))
+			parsed_input++;
+		temp_parsed_input = *parsed_input;
+		while (*temp_parsed_input)
+		{
+			if (*temp_parsed_input == '\n' || *temp_parsed_input == ' ')
+				*temp_parsed_input = 0;
+			temp_parsed_input++;
+		}
+
+	}
+}
+
+void	get_command_and_parameters(char *command, char ***parameters)
+{
+	char 	user_input[200] = "/bin/ls /";
+
+	read_user_input(user_input);
+	ft_bzero(command, 200);
+	parsing_user_input(user_input, command, parameters);
 }
 
 int		main(int ac, char **av)
 {
-	char	command[100] = "/bin/ls";
-	char 	*parameters[] = {"/", NULL};
+	char	command[100];
+	char 	**parameters;
+	char 	*parameterss[] = {"/", NULL};
 	int 	status;
 
 	while (TRUE)
 	{
 		type_prompt();
-		read_command(command, parameters);
+		get_command_and_parameters(command, &parameters);
+		printf("command = %s$\n", command);
+		while (*parameters != NULL)
+			printf("parameter = %s$\n", *parameters++);
 		if (fork())
 			waitpid(-1, &status, 0);
 		else
-			execve(command, parameters, 0);
+			execve(command, parameterss, 0);
 		if (command[0] == 'q')
 			break;
 	}
