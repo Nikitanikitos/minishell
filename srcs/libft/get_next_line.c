@@ -44,7 +44,7 @@ void	write_line(t_list *list, char **line, int result)
 	if (list)
 	{
 		i = ft_strlen(list->content);
-		if (*ft_strchr(list->content, '\n'))
+		if (ft_strchr(list->content, '\n'))
 			i -= 1;
 		*line = ft_strndup(list->content, i);
 	}

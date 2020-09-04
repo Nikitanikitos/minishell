@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_command_and_parameters.c                       :+:      :+:    :+:   */
+/*   get_commands_with_params_list.c                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: imicah <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -22,47 +22,32 @@ void	type_prompt()
 	write(1, "$", 1);
 }
 
-void	parsing_user_input(char *user_input, char *command, char ***parameters)
-{
-	int		len;
-	char	**parsed_parameters;
-
-
-//	parsed_parameters = ft_split(user_input, ' ');
-//	while (*parsed_parameters)
-//	{
-//		if (ft_strchr(*parsed_parameters, ';'))
-//			continue;
-	}
-//	ft_strcpy(command, parsed_parameters[0]);
-//	*parameters = parsed_parameters;
-}
-
-void	get_command_and_parameters(t_list *commands_list)
+void	parse_commands_list(char **all_commands_with_params, t_list **commands_with_params_list)
 {
 	t_command	command;
-	char	*parameters;
-	int 	index;
-	char 	*user_input;
+	char		**commands_with_params;
 
-	get_next_line(1, &user_input);
-	
-	while (user_input[index])
+	while (*all_commands_with_params)
 	{
-		if (user_input[index] == ' ')
-		{
-			command.command = ft_strndup(user_input, index - 1);
-			user_input += index + 1;
-			index = 0;
-			while (user_input[index] == ' ')
-				index++;
-		}
-		else if (user_input[index] == ';')
-		{
-			parameters = ft_strndup(user_input, index - 1);
-			command.parameters = ft_split(parameters, ' ');
-			commands_list = ft_lstnew(&command);
-		}
-		index++;
+		commands_with_params = ft_split(*all_commands_with_params, ' ');
+		command.command = commands_with_params[0];
+		command.parameters = commands_with_params;
+		if (!*commands_with_params_list)
+			*commands_with_params_list = ft_lstnew(&command);
+		else
+			ft_lstadd_back(commands_with_params_list, ft_lstnew(&command));
+		all_commands_with_params++;
 	}
+}
+
+t_list	*get_commands_with_params_list(char *user_input)
+{
+	t_list		*commands_with_params_list;
+	char		**all_commands_with_params;
+
+	commands_with_params_list = NULL;
+	all_commands_with_params = ft_split(user_input, ';');
+//	free(user_input);
+	parse_commands_list(all_commands_with_params, &commands_with_params_list);
+	return (commands_with_params_list);
 }

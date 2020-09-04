@@ -17,7 +17,7 @@
 # include <stdlib.h>
 # include <unistd.h>
 
-# define BUFFER_SIZE 1
+# define BUFFER_SIZE 32
 
 int					ft_atoi(const char *nptr);
 int					ft_strlen(const char *str);
