@@ -3,14 +3,39 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: imicah <imicah@student.21-school.ru>       +#+  +:+       +#+        */
+/*   By: imicah <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/05/12 17:47:02 by imicah            #+#    #+#             */
-/*   Updated: 2020/05/20 18:25:49 by imicah           ###   ########.fr       */
+/*   Created: 2020/09/04 15:36:15 by imicah            #+#    #+#             */
+/*   Updated: 2020/09/04 15:36:16 by imicah           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line.h"
+#include "libft.h"
+
+void	add_list(t_list **lst, char *content)
+{
+	t_list	*temp;
+	char	*prev_content;
+
+	if (*lst == NULL)
+	{
+		*lst = ft_lstnew(content);
+		return ;
+	}
+	temp = (*lst);
+	while ((*lst)->next)
+		*lst = (*lst)->next;
+	if (ft_strchr((*lst)->content, '\n'))
+		(*lst)->next = ft_lstnew(content);
+	else
+	{
+		prev_content = (*lst)->content;
+		(*lst)->content = ft_strjoin(prev_content, content);
+		free(content);
+		free(prev_content);
+	}
+	*lst = temp;
+}
 
 void	write_line(t_list *list, char **line, int result)
 {
@@ -71,9 +96,9 @@ int		get_next_line(int fd, char **line)
 	char			*buffer;
 	static t_list	*lists[14000];
 
-	if (! (buffer = ft_calloc(1, BUFFER_SIZE + 1)) )
+	if (line == NULL || fd < 0 || fd > 14000 || !(buffer = ft_calloc(1, BUFFER_SIZE + 1)))
 		return (-1);
-	while ( (result = (read(1, buffer, BUFFER_SIZE) ) ) > 0)
+	while ((result = (read(fd, buffer, BUFFER_SIZE))) > 0)
 	{
 		if (ft_strchr(buffer, '\n'))
 		{

@@ -66,7 +66,7 @@ void	get_command_and_parameters(char *command, char ***parameters)
 	char 	*user_input;
 
 //	read_user_input(user_input);
-	get_next_line(fd, &user_input);
+	get_next_line(1, &user_input);
 	ft_bzero(command, 200);
 	parsing_user_input(user_input, command, parameters);
 }

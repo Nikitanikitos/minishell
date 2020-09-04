@@ -17,6 +17,8 @@
 # include <stdlib.h>
 # include <unistd.h>
 
+# define BUFFER_SIZE 1
+
 int					ft_atoi(const char *nptr);
 int					ft_strlen(const char *str);
 int					ft_memcmp(const void *arr1, const void *arr2,
@@ -41,7 +43,6 @@ void				*ft_memmove(void *dest, const void *src, size_t byte_sizes);
 void				*ft_memccpy(void *dest, const void *src, int c,
 								size_t byte_sizes);
 
-
 char				*ft_itoa(int n);
 char				ft_isalnum(char c);
 char				ft_isalpha(char c);
@@ -51,6 +52,7 @@ char				ft_isdigit(char c);
 char				ft_tolower(char c);
 char				ft_toupper(char c);
 char				*ft_strdup(const char *src);
+char				*ft_strndup(const char *src, int len);
 char				*ft_strcpy(char *dest, char *src);
 char				**ft_split(char const *s, char c);
 char				*ft_strchr(const char *str, char ch);
@@ -61,6 +63,8 @@ char				*ft_substr(char const *s, unsigned int start, size_t len);
 char				*ft_strmapi(const char *s, char (*f)(unsigned int, char));
 char				*ft_strnstr(const char *big, const char *little,
 								size_t len);
+
+int					get_next_line(int fd, char **line);
 
 typedef struct		s_list
 {
