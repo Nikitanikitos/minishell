@@ -16,10 +16,12 @@
 
 void	print_command_and_parameters(t_command	*commands)
 {
+	char	*command;
 	char 	**params;
 
+	command = commands->command;
 	params = commands->parameters;
-	printf("command = %s$\n", commands->command);
+	printf("command = %s$\n", command);
 	while (*params != NULL)
 		printf("parameter = %s$\n", *(params)++);
 }
@@ -35,16 +37,17 @@ int		main(void)
 	while (TRUE)
 	{
 		type_prompt();
-		get_next_line(fd, &user_input);
+		get_next_line(1, &user_input);
 		commands_list = get_commands_with_params_list(user_input);
-//		free(user_input);
+		free(user_input);
 		command = (t_command*)commands_list->content;
 		print_command_and_parameters(command);
+
 		if (fork())
 			waitpid(-1, &status, 0);
 		else
 			status = execve(command->command, command->parameters, 0);
-		if (command->command[0] == 'q')
+		if (command->command[1] == 'q')
 			break;
 	}
 	return 0;
