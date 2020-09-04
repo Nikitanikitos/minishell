@@ -18,28 +18,13 @@ void	write_line(t_list *list, char **line, int result)
 
 	if (list)
 	{
-		if ((i = ft_strchr(list->content, '\n')))
+		i = ft_strlen(list->content);
+		if (*ft_strchr(list->content, '\n'))
 			i -= 1;
-		else
-			i = ft_strchr(list->content, '\0');
 		*line = ft_strndup(list->content, i);
 	}
 	else if (!result && BUFFER_SIZE != 0)
 		*line = ft_strndup("", 0);
-}
-
-char	*ft_calloc(size_t count, size_t size)
-{
-	char			*result;
-	unsigned int	byte_sizes;
-
-	byte_sizes = count * size;
-	if (!(result = (char*)malloc(count * size)))
-		return (NULL);
-	while (byte_sizes)
-		result[byte_sizes--] = 0;
-	result[byte_sizes] = 0;
-	return (result);
 }
 
 int		ft_result(t_list **element, int result)

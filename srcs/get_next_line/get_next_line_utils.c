@@ -19,7 +19,7 @@ char	*ft_strjoin(const char *string1, const char *string2)
 	unsigned int			len_new_string;
 
 	i = 0;
-	len_new_string = ft_strchr(string1, '\0') + ft_strchr(string2, '\0');
+	len_new_string = ft_strlen(string1) + ft_strlen(string2);
 	if (!(result = (char*)malloc(sizeof(char) * (len_new_string + 1))))
 		return (NULL);
 	while (*string1)
@@ -42,29 +42,6 @@ char	*ft_strndup(const char *src, int len)
 		result[i++] = *(src++);
 	result[i] = '\0';
 	return (result);
-}
-
-t_list	*ft_lstnew(char *content)
-{
-	t_list	*element;
-
-	if (!(element = (t_list*)malloc(sizeof(t_list))))
-		return (NULL);
-	element->content = content;
-	element->next = NULL;
-	return (element);
-}
-
-int		ft_strchr(const char *src, char c)
-{
-	const char *src_copy = src;
-
-	while (*src_copy)
-		if (*src_copy++ == c)
-			return ((int)(src_copy - src));
-	if (c == '\0')
-		return ((int)(src_copy - src));
-	return (0);
 }
 
 void	add_list(t_list **lst, char *content)

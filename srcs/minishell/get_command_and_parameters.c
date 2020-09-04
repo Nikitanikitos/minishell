@@ -10,6 +10,8 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <fcntl.h>
+#include <printf.h>
 #include "minishell.h"
 
 void	type_prompt()
@@ -54,21 +56,17 @@ void	parsing_user_input(char *user_input, char *command, char ***parameters)
 
 	parsed_parameters = ft_split(user_input, ' ');
 	ft_strcpy(command, parsed_parameters[0]);
-	while (*command)
-	{
-		if (*command == '\n' || *command == ' ')
-			*command = 0;
-		command++;
-	}
 	*parameters = parsed_parameters;
 	nullify_the_last_argument(parsed_parameters);
 }
 
 void	get_command_and_parameters(char *command, char ***parameters)
 {
-	char 	user_input[200];
+	int 	fd = open("command.txt", O_RDONLY);
+	char 	*user_input;
 
-	read_user_input(user_input);
+//	read_user_input(user_input);
+	get_next_line(fd, &user_input);
 	ft_bzero(command, 200);
 	parsing_user_input(user_input, command, parameters);
 }

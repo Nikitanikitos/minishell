@@ -15,20 +15,16 @@
 
 # include <stdlib.h>
 # include <unistd.h>
+# include "libft.h"
 
-typedef struct		s_list
-{
-	void			*content;
-	struct s_list	*next;
-}					t_list;
+# define BUFFER_SIZE 1
+
 
 int					get_next_line(int fd, char **line);
-int					ft_strchr(const char *src, char c);
 
 char				*ft_strndup(const char *src, int n);
 char				*ft_strjoin(const char *string1, const char *string2);
 
 void				add_list(register t_list **lst, char *buffer);
-t_list				*ft_lstnew(char *content);
 
 #endif
