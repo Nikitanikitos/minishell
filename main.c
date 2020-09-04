@@ -28,7 +28,6 @@ void	print_command_and_parameters(t_command	*commands)
 
 int		main(void)
 {
-	int 		fd = open("test.txt", O_RDONLY);
 	char		*user_input;
 	t_command	*command;
 	t_list		*commands_list;
@@ -47,8 +46,8 @@ int		main(void)
 			waitpid(-1, &status, 0);
 		else
 			status = execve(command->command, command->parameters, 0);
-		if (command->command[1] == 'q')
-			break;
+		if (!ft_strcmp(command->command, "exit"))
+			exit(0);
 	}
-	return 0;
+	return (0);
 }
