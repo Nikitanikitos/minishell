@@ -14,24 +14,46 @@
 #include <fcntl.h>
 #include "minishell.h"
 
-void	print_command_and_parameters(t_command	*commands)
+void	print_command_and_parameters(t_list	*commands_list)
 {
-	char	*command;
-	char 	**params;
+	t_command	*command;
 
-	command = commands->command;
-	params = commands->parameters;
-	printf("command = %s$\n", command);
-	while (*params != NULL)
-		printf("parameter = %s$\n", *(params)++);
+	while (commands_list)
+	{
+		printf("\n");
+		command = (t_command*)commands_list->content;
+		printf("command = %s$\n", command->command);
+		while (*command->parameters != NULL)
+			printf("parameter = %s$\n", *(command->parameters)++);
+		commands_list = commands_list->next;
+		printf("\n");
+	}
+}
+
+int8_t	starting_processes(t_list *commands_list)
+{
+	int 		status;
+	t_command	*command;
+
+	while (commands_list)
+	{
+		command = (t_command*)commands_list->content;
+		if (!ft_strcmp(command->command, "exit"))
+			return (0);
+		else if (fork())
+			waitpid(-1, &status, 0);
+		else
+			status = execve(command->command, command->parameters, 0);
+		commands_list = commands_list->next;
+	}
+	return (1);
 }
 
 int		main(void)
 {
+	int 		fd = open("test.txt", O_RDONLY);
 	char		*user_input;
-	t_command	*command;
 	t_list		*commands_list;
-	int			status;
 
 	while (TRUE)
 	{
@@ -39,15 +61,9 @@ int		main(void)
 		get_next_line(1, &user_input);
 		commands_list = get_commands_with_params_list(user_input);
 		free(user_input);
-		command = (t_command*)commands_list->content;
-		print_command_and_parameters(command);
-
-		if (fork())
-			waitpid(-1, &status, 0);
-		else
-			status = execve(command->command, command->parameters, 0);
-		if (!ft_strcmp(command->command, "exit"))
+		if (!starting_processes(commands_list))
 			exit(0);
+		free(commands_list);
 	}
 	return (0);
 }

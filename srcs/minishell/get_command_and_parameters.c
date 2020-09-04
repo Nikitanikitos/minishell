@@ -10,6 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <printf.h>
 #include "minishell.h"
 
 void	type_prompt()
@@ -37,7 +38,7 @@ void	parse_commands_list(char **all_commands_with_params, t_list **commands_with
 		if (!*commands_with_params_list)
 			*commands_with_params_list = ft_lstnew(command);
 		else
-			ft_lstadd_back(commands_with_params_list, ft_lstnew(&command));
+			ft_lstadd_back(commands_with_params_list, ft_lstnew(command));
 		all_commands_with_params++;
 	}
 }

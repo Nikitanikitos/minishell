@@ -28,4 +28,4 @@ typedef struct	s_command
 	char 		**parameters;
 }				t_command;
 
-void	print_command_and_parameters(t_command	*commands);
+void	print_command_and_parameters(t_list	*commands);
