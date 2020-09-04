@@ -22,6 +22,7 @@ void	print_command_and_parameters(char *command, char **parameters)
 
 int		main(int ac, char **av)
 {
+	t_list	commands_list;
 	char	command[100];
 	char 	**parameters;
 	int 	status;
@@ -29,8 +30,7 @@ int		main(int ac, char **av)
 	while (TRUE)
 	{
 		type_prompt();
-		get_command_and_parameters(command, &parameters);
-		print_command_and_parameters(command, parameters);
+		get_command_and_parameters(&commands_list);
 		if (fork())
 			waitpid(-1, &status, 0);
 		else

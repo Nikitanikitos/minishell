@@ -16,5 +16,11 @@
 
 # define TRUE	1
 
-void	get_command_and_parameters(char *command, char ***parameters);
+void	get_command_and_parameters(t_list *commands_list);
 void	type_prompt();
+
+typedef struct	s_command
+{
+	char		*command;
+	char 		**parameters;
+}				t_command;
