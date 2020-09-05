@@ -1,30 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minishell.h                                        :+:      :+:    :+:   */
+/*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: imicah <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/09/02 15:41:49 by imicah            #+#    #+#             */
-/*   Updated: 2020/09/02 15:42:42 by imicah           ###   ########.fr       */
+/*   Created: 2020/09/04 19:40:10 by imicah            #+#    #+#             */
+/*   Updated: 2020/09/04 19:40:12 by imicah           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdlib.h>
-#include <unistd.h>
-#include "libft.h"
+#include "minishell.h"
 
-# define TRUE	1
-# define FALSE	0
-
-void			type_prompt();
-
-t_list			*get_commands_with_params_list(char *user_input);
-
-typedef struct	s_command
+void	print_command_and_parameters(t_list	*commands_list)
 {
-	char		*command;
-	char 		**parameters;
-}				t_command;
+	t_command	*command;
 
-void			print_command_and_parameters(t_list	*commands);
+	while (commands_list)
+	{
+		printf("\n");
+		command = (t_command*)commands_list->content;
+		printf("command = %s$\n", command->command);
+		while (*command->parameters != NULL)
+			printf("parameter = %s$\n", *(command->parameters)++);
+		commands_list = commands_list->next;
+		printf("\n");
+	}
+}

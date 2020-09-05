@@ -18,9 +18,9 @@ void	type_prompt()
 	static int	first_time = 1;
 
 	if (first_time)
-		write(1, " \e[1:1H\e[2J", 12);
+		write(STDOUT_FILENO, " \e[1:1H\e[2J", 12);
 	first_time = 0;
-	write(1, "$", 1);
+	write(STDOUT_FILENO, "$", 1);
 }
 
 void	parse_commands_list(char **all_commands_with_params, t_list **commands_with_params_list)
@@ -45,8 +45,8 @@ void	parse_commands_list(char **all_commands_with_params, t_list **commands_with
 
 t_list	*get_commands_with_params_list(char *user_input)
 {
-	t_list		*commands_with_params_list;
 	char		**all_commands_with_params;
+	t_list		*commands_with_params_list;
 
 	commands_with_params_list = NULL;
 	all_commands_with_params = ft_split(user_input, ';');
