@@ -15,7 +15,7 @@
 int8_t	starting_processes(t_list *command_list)
 {
 	pid_t		pid;
-	int 		status;
+	int			status;
 	t_arguments	*arguments;
 
 	while (command_list)
@@ -23,7 +23,8 @@ int8_t	starting_processes(t_list *command_list)
 		errno = 0;
 		arguments = (t_arguments*)command_list->content;
 		if (execute_command_in_buildins(*arguments))
-		{}
+		{
+		}
 		else if ((pid = fork()))
 			waitpid(-1, &status, 0);
 		else if (pid < 0)
@@ -37,10 +38,10 @@ int8_t	starting_processes(t_list *command_list)
 
 int		main(void)
 {
-//	int 		fd = open("test.txt", O_RDONLY);
 	char		*user_input;
 	t_list		*commands_list;
 
+	//	int 		fd = open("test.txt", O_RDONLY);
 	while (TRUE)
 	{
 		type_prompt();

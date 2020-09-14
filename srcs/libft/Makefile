@@ -11,30 +11,29 @@
 # **************************************************************************** #
 
 NAME		= libft.a
-NAME_SO		= libft.so
 
-SRCS		= $(shell find src -type f -name 'ft_*.c' -not -name 'ft_lst*.c')
-SRCS_BONUS	= $(shell find src -type f -name 'ft_lst*.c')
+SRCS		= $(shell find . -type f -name '*.c' -not -name 'ft_lst*.c')
+SRCS_BONUS	= $(shell find . -type f -name 'ft_lst*.c')
 SRCS_SO		= $(shell find . -type f -name 'ft_*.c')
 
 OBJS		= $(SRCS:%.c=%.o)
 OBJS_BONUS	= $(SRCS_BONUS:%.c=%.o)
-OBJS_SO		= $(SRCS_SO:%.c=%.o)
 
-GCC			= gcc -Wall -Wextra -Werror -I.
+INCLUDES    = -I../../headers
+GCC			= gcc -Wall -Wextra -Werror
 
 .PHONY: clean fclean all so bonus
 
 #######################################################
 
-all: $(NAME)
+all: $(NAME) bonus
 
 $(NAME): $(OBJS)
 	ar -rc $(NAME) $(OBJS)
 	ranlib $(NAME)
 
 %.o : %.c
-	$(GCC) -o $@ -c $<
+	$(GCC) $(INCLUDES) -o $@ -c $<
 
 #######################################################
 
@@ -48,9 +47,6 @@ so: $(NAME_SO)
 
 $(NAME_SO): $(OBJS_SO)
 	gcc -shared -o $(NAME_SO) $(OBJS_SO)
-
-%.o : %.c
-	$(GCC)  -o $@ -c $<
 
 #######################################################
 

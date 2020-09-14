@@ -12,5 +12,5 @@
 
 char	ft_isascii(char c)
 {
-	return (0 <= c && c < 128);
+	return (0 <= c && c < 127);
 }
