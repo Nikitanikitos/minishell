@@ -12,7 +12,7 @@
 
 #include "minishell.h"
 
-int		echo(void *arguments)
+int		echo(void *arguments, t_list *env_list)
 {
 	int					i;
 	int					flag;

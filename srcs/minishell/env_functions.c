@@ -12,6 +12,17 @@
 
 #include "minishell.h"
 
+void	add_env(char **key_value, t_list **env_list)
+{
+	t_env	*env;
+
+	if ((env = (t_env*)malloc(sizeof(t_env))) == NULL)
+		return ;
+	env->value = key_value[0];
+	env->key = (key_value[1]) ? key_value[1] : ft_strdup("");
+	ft_lstadd_back(env_list, ft_lstnew(env));
+}
+
 t_list	*get_env_list(char **envp)
 {
 	t_env	*env;
@@ -29,7 +40,7 @@ t_list	*get_env_list(char **envp)
 		if (env_list == NULL)
 			env_list = ft_lstnew(env);
 		else
-			ft_lstadd_front(&env_list, ft_lstnew(env));
+			ft_lstadd_back(&env_list, ft_lstnew(env));
 		envp++;
 	}
 	return (env_list);

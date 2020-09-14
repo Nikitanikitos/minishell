@@ -45,7 +45,7 @@ t_list	*get_commands_list(char *user_input)
 	return (arguments_list);
 }
 
-int		execute_command_in_buildins(t_arguments arguments)
+int		execute_buildin_command(t_arguments arguments, t_list *env_list)
 {
 	int				index;
 	const t_builtin	builtins[] = {
@@ -63,7 +63,7 @@ int		execute_command_in_buildins(t_arguments arguments)
 	{
 		if (!ft_strcmp(builtins[index].command, arguments.command))
 		{
-			if (builtins[index].func(&arguments))
+			if (builtins[index].func(&arguments, env_list))
 				print_error();
 			return (TRUE);
 		}

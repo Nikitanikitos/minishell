@@ -12,26 +12,28 @@
 
 #include "minishell.h"
 
-void	print_env()
+void	print_export(t_list *env_list)
 {
-	int i;
+	t_env	env;
 
-	i = 0;
-	while (__environ[i])
-		ft_putendl_fd(__environ[i++], 1);
+	while (env_list)
+	{
+		env = *(t_env*)env_list->content;
+		ft_putstr_fd("declare -x ", 1);
+		ft_putstr_fd(env.key, 1);
+		write(1, "=", 1);
+		ft_putendl_fd(env.value, 1);
+		env_list = env_list->next;
+	}
 }
 
-int		export(void *arguments)
+int		export(void *arguments, t_list *env_list)
 {
 	const t_arguments	command = *(t_arguments*)arguments;
-	int i = 0;
 
 	if (!command.parameters[1])
-		print_env();
-	while (__environ[i])
-	{
-		printf("%s\n", __environ[i]);
-		i++;
-	}
+		print_export(env_list);
+	else if (ft_strchr(command.parameters[1], '='))
+		add_env(ft_split(command.parameters[1], '='), &env_list);
 	return (errno);
 }
