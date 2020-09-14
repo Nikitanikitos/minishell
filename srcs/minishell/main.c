@@ -12,9 +12,10 @@
 
 #include "minishell.h"
 
-int8_t	starting_processes(t_list *command_list)
+void	starting_processes(t_list *command_list, t_list *env_list)
 {
 	pid_t		pid;
+	char 		**env;
 	int			status;
 	t_arguments	*arguments;
 
@@ -30,25 +31,27 @@ int8_t	starting_processes(t_list *command_list)
 		else if (pid < 0)
 			exit(EXIT_FAILURE);
 		else
-			status = execve(arguments->command, arguments->parameters, 0);
+			status = execve(arguments->command, arguments->parameters, env);
 		command_list = command_list->next;
 	}
-	return (TRUE);
 }
 
-int		main(void)
+int		main(int ac, char **av, char **envp)
 {
 	char		*user_input;
 	t_list		*commands_list;
+	t_list		*env_list;
 
 	//	int 		fd = open("test.txt", O_RDONLY);
+	if ((env_list = get_env_list(envp)) == NULL)
+		exit(1);
 	while (TRUE)
 	{
 		type_prompt();
 		get_next_line(0, &user_input);
 		commands_list = get_commands_list(user_input);
 		free(user_input);
-		starting_processes(commands_list);
+		starting_processes(commands_list, env_list);
 		free_list(commands_list);
 	}
 }

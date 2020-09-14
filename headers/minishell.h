@@ -36,7 +36,14 @@ typedef struct	s_builtin
 	int 		(*func)(void*);
 }				t_builtin;
 
+typedef struct	s_env
+{
+	char		*key;
+	char		*value;
+}				t_env;
+
 t_list			*get_commands_list(char *user_input);
+t_list			*get_env_list(char **envp);
 
 void			type_prompt();
 void			print_error(void);
@@ -48,6 +55,7 @@ void			free_double_array(char **array);
 int				echo(void* arguments);
 int				pwd(void*);
 int				cd(void *arguments);
+int				export(void *x);
 int				ft_exit(void*);
 
 int				execute_command_in_buildins(t_arguments arguments);

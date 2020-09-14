@@ -52,8 +52,9 @@ int		execute_command_in_buildins(t_arguments arguments)
 			{"echo", &echo},
 			{"cd", &cd},
 			{"pwd", &pwd},
-			{"export", NULL},
+			{"export", &export},
 			{"unset", NULL},
+			{"env", NULL},
 			{"exit", &ft_exit},
 	};
 
