@@ -9,7 +9,8 @@
 /*   Updated: 2020/09/02 15:42:42 by imicah           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-#include <stdio.h>
+
+#include <stdio.h> // TODO удалить!
 
 #include <stdlib.h>
 #include <unistd.h>
@@ -38,6 +39,7 @@ typedef struct	s_builtin
 t_list			*get_commands_list(char *user_input);
 
 void			type_prompt();
+void			print_error(void);
 void			print_arguments_list(t_list	*commands);
 
 void			free_list(t_list *list);

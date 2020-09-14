@@ -12,7 +12,7 @@
 
 #include "minishell.h"
 
-void	print_arguments_list(t_list	*commands)
+void	print_arguments_list(t_list *commands)
 {
 	t_arguments	*command;
 
@@ -28,7 +28,7 @@ void	print_arguments_list(t_list	*commands)
 	}
 }
 
-void	type_prompt()
+void	type_prompt(void)
 {
 	static int	first_time = 1;
 
@@ -38,38 +38,11 @@ void	type_prompt()
 	write(STDOUT_FILENO, "$", 1);
 }
 
-void	free_double_array(char **array)
+void	print_error(void)
 {
-	char	*temp;
-	char	**double_temp;
+	char	*error;
 
-	double_temp = array;
-	while (*array)
-	{
-		temp = *array;
-		array++;
-		free(temp);
-	}
-	free(double_temp);
-}
-
-void	free_arguments(void *arguments)
-{
-	t_arguments *commands;
-
-	commands = (t_arguments*)arguments;
-	free_double_array(commands->parameters);
-	free(commands);
-}
-
-void	free_list(t_list *list)
-{
-	t_list	*temp_list;
-
-	while (list)
-	{
-		temp_list = list;
-		list = list->next;
-		ft_lstdelone(temp_list, &free_arguments);
-	}
+	error = strerror(errno);
+	ft_putendl_fd(error, STDERR_FILENO);
+	free(error);
 }

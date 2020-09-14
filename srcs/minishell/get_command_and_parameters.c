@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_commands_list.c                    :+:      :+:    :+:   */
+/*   get_commands_list.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: imicah <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -63,7 +63,7 @@ int		execute_command_in_buildins(t_arguments arguments)
 		if (!ft_strcmp(builtins[index].command, arguments.command))
 		{
 			if (builtins[index].func(&arguments))
-				ft_putendl_fd(strerror(errno), STDERR_FILENO);
+				print_error();
 			return (TRUE);
 		}
 		index++;

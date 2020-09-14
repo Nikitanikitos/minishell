@@ -12,11 +12,11 @@
 
 #include "minishell.h"
 
-int		echo(void* arguments)
+int		echo(void *arguments)
 {
-	int		i;
-	int 	flag;
-	const	t_arguments command = *(t_arguments*)arguments;
+	int					i;
+	int					flag;
+	const t_arguments	command = *(t_arguments*)arguments;
 
 	flag = 1;
 	i = 1;

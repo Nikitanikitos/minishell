@@ -12,21 +12,20 @@
 
 #include "minishell.h"
 
-int		pwd(void* q)
+int		pwd(void *x)
 {
-	char	*cwd = getcwd(NULL, 0);
-	const int	length = ft_strlen(cwd);
+	char	*cwd;
 
-	write(1, cwd, length);
+	cwd = getcwd(NULL, 0);
+	ft_putendl_fd(cwd, 1);
 	free(cwd);
-	write(1, "\n", 1);
 	return (errno);
 }
 
 char	*get_destination_directory(char *directory)
 {
 	char	*new_path;
-	char 	*temp_path;
+	char	*temp_path;
 	char	*cwd;
 
 	cwd = getcwd(NULL, 0);
@@ -39,8 +38,8 @@ char	*get_destination_directory(char *directory)
 
 int		cd(void *arguments)
 {
-	const	t_arguments command = *(t_arguments*)arguments;
-	char	*new_path;
+	const t_arguments	command = *(t_arguments*)arguments;
+	char				*new_path;
 
 	if (command.parameters[1] == NULL)
 		new_path = ft_strdup("/");
@@ -54,7 +53,7 @@ int		cd(void *arguments)
 	return (errno);
 }
 
-int	ft_exit(void* q)
+int		ft_exit(void *q)
 {
 	exit(0);
 }
