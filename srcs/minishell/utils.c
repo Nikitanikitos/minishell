@@ -12,18 +12,18 @@
 
 #include "minishell.h"
 
-void	print_command_and_parameters(t_list	*commands_list)
+void	print_arguments_list(t_list	*commands)
 {
-	t_command	*command;
+	t_arguments	*command;
 
-	while (commands_list)
+	while (commands)
 	{
 		printf("\n");
-		command = (t_command*)commands_list->content;
+		command = (t_arguments*)commands->content;
 		printf("command = %s$\n", command->command);
 		while (*command->parameters != NULL)
 			printf("parameter = %s$\n", *(command->parameters)++);
-		commands_list = commands_list->next;
+		commands = commands->next;
 		printf("\n");
 	}
 }

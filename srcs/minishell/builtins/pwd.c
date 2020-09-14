@@ -35,12 +35,14 @@ char	*get_destination_directory(char *directory)
 	return (new_path);
 }
 
-int		cd(void *commandd)
+int		cd(void *arguments)
 {
-	const	t_command command = *(t_command*)commandd;
+	const	t_arguments command = *(t_arguments*)arguments;
 	char	*new_path;
 
-	if (command.parameters[1][0] == '/' ||
+	if (command.parameters[1] == NULL)
+		new_path = ft_strdup("/");
+	else if (command.parameters[1][0] == '/' ||
 		!ft_strncmp(command.parameters[1], "../", 3))
 		new_path = ft_strdup(command.parameters[1]);
 	else

@@ -12,25 +12,25 @@
 
 #include "minishell.h"
 
-int8_t	starting_processes(t_list *commands_list)
+int8_t	starting_processes(t_list *command_list)
 {
 	pid_t		pid;
 	int 		status;
-	t_command	*command;
+	t_arguments	*arguments;
 
-	while (commands_list)
+	while (command_list)
 	{
 		errno = 0;
-		command = (t_command*)commands_list->content;
-		if (execute_command_in_buildins(*command))
+		arguments = (t_arguments*)command_list->content;
+		if (execute_command_in_buildins(*arguments))
 		{}
 		else if ((pid = fork()))
 			waitpid(-1, &status, 0);
 		else if (pid < 0)
-			exit(1);
+			exit(EXIT_FAILURE);
 		else
-			status = execve(command->command, command->parameters, 0);
-		commands_list = commands_list->next;
+			status = execve(arguments->command, arguments->parameters, 0);
+		command_list = command_list->next;
 	}
 	return (TRUE);
 }
@@ -45,7 +45,7 @@ int		main(void)
 	{
 		type_prompt();
 		get_next_line(0, &user_input);
-		commands_list = get_commands_with_params_list(user_input);
+		commands_list = get_commands_list(user_input);
 		free(user_input);
 		starting_processes(commands_list);
 		free(commands_list);

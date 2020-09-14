@@ -23,11 +23,11 @@
 # define TRUE	1
 # define FALSE	0
 
-typedef struct	s_command
+typedef struct	s_arguments
 {
 	char		*command;
 	char 		**parameters;
-}				t_command;
+}				t_arguments;
 
 typedef struct	s_builtin
 {
@@ -35,14 +35,14 @@ typedef struct	s_builtin
 	int 		(*func)(void*);
 }				t_builtin;
 
-t_list			*get_commands_with_params_list(char *user_input);
+t_list			*get_commands_list(char *user_input);
 
 void			type_prompt();
 void			print_error(void);
-void			print_command_and_parameters(t_list	*commands);
+void			print_arguments_list(t_list	*commands);
 
 int				pwd(void*);
-int				cd(void *path);
+int				cd(void *arguments);
 int				ft_exit(void*);
 
-int				execute_command_in_buildins(t_command command);
+int				execute_command_in_buildins(t_arguments arguments);

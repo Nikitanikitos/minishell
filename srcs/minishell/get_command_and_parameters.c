@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_commands_with_params_list.c                    :+:      :+:    :+:   */
+/*   get_commands_list.c                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: imicah <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -13,39 +13,39 @@
 #include <printf.h>
 #include "minishell.h"
 
-void	parse_commands_list(char **all_commands_with_params, t_list **commands_with_params_list)
+void	parse_commands_list(char **all_commands, t_list **arguments_list)
 {
-	t_command	*command;
-	char		**commands_with_params;
+	t_arguments	*arguments;
+	char		**command;
 
-	while (*all_commands_with_params)
+	while (*all_commands)
 	{
-		commands_with_params = ft_split(*all_commands_with_params, ' ');
-		if (!(command = (t_command*)malloc(sizeof(t_command))))
+		command = ft_split(*all_commands, ' ');
+		if (!(arguments = (t_arguments*)malloc(sizeof(t_arguments))))
 			return ;
-		command->command = commands_with_params[0];
-		command->parameters = commands_with_params;
-		if (!*commands_with_params_list)
-			*commands_with_params_list = ft_lstnew(command);
+		arguments->command = command[0];
+		arguments->parameters = command;
+		if (!*arguments_list)
+			*arguments_list = ft_lstnew(arguments);
 		else
-			ft_lstadd_back(commands_with_params_list, ft_lstnew(command));
-		all_commands_with_params++;
+			ft_lstadd_back(arguments_list, ft_lstnew(arguments));
+		all_commands++;
 	}
 }
 
-t_list	*get_commands_with_params_list(char *user_input)
+t_list	*get_commands_list(char *user_input)
 {
-	char		**all_commands_with_params;
-	t_list		*commands_with_params_list;
+	char		**all_commands;
+	t_list		*arguments_list;
 
-	commands_with_params_list = NULL;
-	all_commands_with_params = ft_split(user_input, ';');
-	parse_commands_list(all_commands_with_params, &commands_with_params_list);
-	free(all_commands_with_params);
-	return (commands_with_params_list);
+	arguments_list = NULL;
+	all_commands = ft_split(user_input, ';');
+	parse_commands_list(all_commands, &arguments_list);
+	free(all_commands);
+	return (arguments_list);
 }
 
-int		execute_command_in_buildins(t_command command)
+int		execute_command_in_buildins(t_arguments arguments)
 {
 	int				index;
 	const t_builtin	builtins[] = {
@@ -60,9 +60,9 @@ int		execute_command_in_buildins(t_command command)
 	index = 0;
 	while (index < NUMBER_BUILDIN_CMD)
 	{
-		if (!ft_strcmp(builtins[index].command, command.command))
+		if (!ft_strcmp(builtins[index].command, arguments.command))
 		{
-			if (builtins[index].func(&command))
+			if (builtins[index].func(&arguments))
 				print_error();
 			return (TRUE);
 		}
