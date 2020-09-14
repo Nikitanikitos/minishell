@@ -12,7 +12,7 @@
 
 #include "minishell.h"
 
-void	pwd(void* q)
+int		pwd(void* q)
 {
 	char	*cwd = getcwd(NULL, 0);
 	const int	length = ft_strlen(cwd);
@@ -20,29 +20,37 @@ void	pwd(void* q)
 	write(1, cwd, length);
 	free(cwd);
 	write(1, "\n", 1);
+	return (errno);
 }
 
-void	cd(void *commandd)
+char	*get_destination_directory(char *directory)
+{
+	char	*new_path;
+	char 	*temp_path;
+	const char	*cwd = getcwd(NULL, 0);
+
+	temp_path = ft_strjoin("/", directory);
+	new_path = ft_strjoin(cwd, temp_path);
+	free(temp_path);
+	return (new_path);
+}
+
+int		cd(void *commandd)
 {
 	const	t_command command = *(t_command*)commandd;
 	char	*new_path;
-	const char	*cwd = getcwd(NULL, 0);
 
-	if (command.parameters[1][0] == '/')
-		chdir(command.parameters[1]);
+	if (command.parameters[1][0] == '/' ||
+		!ft_strncmp(command.parameters[1], "../", 3))
+		new_path = ft_strdup(command.parameters[1]);
 	else
-	{
-		new_path = ft_strjoin("/", command.parameters[1]);
-		free(command.parameters[1]);
-		command.parameters[1] = new_path;
-		new_path = ft_strjoin(cwd, command.parameters[1]);
-		free(command.parameters[1]);
-	}
+		new_path = get_destination_directory(command.parameters[1]);
 	chdir(new_path);
 	free(new_path);
+	return (errno);
 }
 
-void	ft_exit(void* q)
+int	ft_exit(void* q)
 {
 	exit(0);
 }

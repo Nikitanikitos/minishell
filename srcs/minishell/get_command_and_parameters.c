@@ -13,16 +13,6 @@
 #include <printf.h>
 #include "minishell.h"
 
-void	type_prompt()
-{
-	static int	first_time = 1;
-
-	if (first_time)
-		write(STDOUT_FILENO, " \e[1:1H\e[2J", 12);
-	first_time = 0;
-	write(STDOUT_FILENO, "$", 1);
-}
-
 void	parse_commands_list(char **all_commands_with_params, t_list **commands_with_params_list)
 {
 	t_command	*command;
@@ -72,7 +62,8 @@ int		execute_command_in_buildins(t_command command)
 	{
 		if (!ft_strcmp(builtins[index].command, command.command))
 		{
-			builtins[index].func(&command);
+			if (builtins[index].func(&command))
+				print_error();
 			return (TRUE);
 		}
 		index++;

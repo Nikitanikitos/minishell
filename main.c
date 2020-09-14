@@ -10,7 +10,6 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdio.h>
 #include "minishell.h"
 
 int8_t	starting_processes(t_list *commands_list)
@@ -21,12 +20,10 @@ int8_t	starting_processes(t_list *commands_list)
 
 	while (commands_list)
 	{
+		errno = 0;
 		command = (t_command*)commands_list->content;
 		if (execute_command_in_buildins(*command))
-		{
-		}
-		else if (!ft_strcmp(command->command, "exit"))
-			return (FALSE);
+		{}
 		else if ((pid = fork()))
 			waitpid(-1, &status, 0);
 		else if (pid < 0)
@@ -50,9 +47,7 @@ int		main(void)
 		get_next_line(0, &user_input);
 		commands_list = get_commands_with_params_list(user_input);
 		free(user_input);
-		if (!starting_processes(commands_list))
-			exit(0);
+		starting_processes(commands_list);
 		free(commands_list);
 	}
-	return (0);
 }

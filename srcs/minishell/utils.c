@@ -27,3 +27,25 @@ void	print_command_and_parameters(t_list	*commands_list)
 		printf("\n");
 	}
 }
+
+void	type_prompt()
+{
+	static int	first_time = 1;
+
+	if (first_time)
+		write(STDOUT_FILENO, " \e[1:1H\e[2J", 12);
+	first_time = 0;
+	write(STDOUT_FILENO, "$", 1);
+}
+
+void	print_error(void)
+{
+	const char	*error[] = {"", "",
+				  		"No such file or directory",
+				  		"", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "",
+				  		"Is not a directory"};
+	const int	error_length = ft_strlen(error[errno]);
+
+	write(STDOUT_FILENO, error[errno], error_length);
+	write(STDOUT_FILENO, "\n", 1);
+}
