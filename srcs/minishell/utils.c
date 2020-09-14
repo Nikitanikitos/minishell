@@ -38,18 +38,6 @@ void	type_prompt()
 	write(STDOUT_FILENO, "$", 1);
 }
 
-void	print_error(void)
-{
-	const char	*error[] = {"", "",
-				  		"No such file or directory",
-				  		"", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "",
-				  		"Is not a directory"};
-	const int	error_length = ft_strlen(error[errno]);
-
-	write(STDOUT_FILENO, error[errno], error_length);
-	write(STDOUT_FILENO, "\n", 1);
-}
-
 void	free_double_array(char **array)
 {
 	char	*temp;

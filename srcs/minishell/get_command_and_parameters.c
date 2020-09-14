@@ -49,7 +49,7 @@ int		execute_command_in_buildins(t_arguments arguments)
 {
 	int				index;
 	const t_builtin	builtins[] = {
-			{"echo", NULL},
+			{"echo", &echo},
 			{"cd", &cd},
 			{"pwd", &pwd},
 			{"export", NULL},
@@ -63,7 +63,7 @@ int		execute_command_in_buildins(t_arguments arguments)
 		if (!ft_strcmp(builtins[index].command, arguments.command))
 		{
 			if (builtins[index].func(&arguments))
-				print_error();
+				ft_putendl_fd(strerror(errno), STDERR_FILENO);
 			return (TRUE);
 		}
 		index++;
