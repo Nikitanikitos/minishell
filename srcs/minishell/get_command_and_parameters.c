@@ -54,3 +54,28 @@ t_list	*get_commands_with_params_list(char *user_input)
 	free(all_commands_with_params);
 	return (commands_with_params_list);
 }
+
+int		execute_command_in_buildins(t_command command)
+{
+	int				index;
+	const t_builtin	builtins[] = {
+			{"echo", NULL},
+			{"cd", &cd},
+			{"pwd", &pwd},
+			{"export", NULL},
+			{"unset", NULL},
+			{"exit", &ft_exit},
+	};
+
+	index = 0;
+	while (index < NUMBER_BUILDIN_CMD)
+	{
+		if (!ft_strcmp(builtins[index].command, command.command))
+		{
+			builtins[index].func(&command);
+			return (TRUE);
+		}
+		index++;
+	}
+	return (FALSE);
+}

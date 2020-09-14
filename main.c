@@ -11,7 +11,6 @@
 /* ************************************************************************** */
 
 #include <stdio.h>
-#include <fcntl.h>
 #include "minishell.h"
 
 int8_t	starting_processes(t_list *commands_list)
@@ -23,7 +22,10 @@ int8_t	starting_processes(t_list *commands_list)
 	while (commands_list)
 	{
 		command = (t_command*)commands_list->content;
-		if (!ft_strcmp(command->command, "exit"))
+		if (execute_command_in_buildins(*command))
+		{
+		}
+		else if (!ft_strcmp(command->command, "exit"))
 			return (FALSE);
 		else if ((pid = fork()))
 			waitpid(-1, &status, 0);
@@ -38,14 +40,14 @@ int8_t	starting_processes(t_list *commands_list)
 
 int		main(void)
 {
-	int 		fd = open("test.txt", O_RDONLY);
+//	int 		fd = open("test.txt", O_RDONLY);
 	char		*user_input;
 	t_list		*commands_list;
 
 	while (TRUE)
 	{
 		type_prompt();
-		get_next_line(fd, &user_input);
+		get_next_line(0, &user_input);
 		commands_list = get_commands_with_params_list(user_input);
 		free(user_input);
 		if (!starting_processes(commands_list))

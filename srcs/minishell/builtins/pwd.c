@@ -22,22 +22,24 @@ void	pwd(void* q)
 	write(1, "\n", 1);
 }
 
-void	cd(void *command)
+void	cd(void *commandd)
 {
-
+	const	t_command command = *(t_command*)commandd;
 	char	*new_path;
-	char	*cwd;
+	const char	*cwd = getcwd(NULL, 0);
 
-//	if ((char*)path[0] == '/')
-//		chdir(path);
-//	else if
-//	{
-		cwd = getcwd(NULL, 0);
-		new_path = ft_strjoin(cwd, path);
-		free(path);
-		free(cwd);
-		chdir(new_path);
-//	}
+	if (command.parameters[1][0] == '/')
+		chdir(command.parameters[1]);
+	else
+	{
+		new_path = ft_strjoin("/", command.parameters[1]);
+		free(command.parameters[1]);
+		command.parameters[1] = new_path;
+		new_path = ft_strjoin(cwd, command.parameters[1]);
+		free(command.parameters[1]);
+	}
+	chdir(new_path);
+	free(new_path);
 }
 
 void	ft_exit(void* q)
