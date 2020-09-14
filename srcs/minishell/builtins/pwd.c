@@ -27,11 +27,13 @@ char	*get_destination_directory(char *directory)
 {
 	char	*new_path;
 	char 	*temp_path;
-	const char	*cwd = getcwd(NULL, 0);
+	char	*cwd;
 
+	cwd = getcwd(NULL, 0);
 	temp_path = ft_strjoin("/", directory);
 	new_path = ft_strjoin(cwd, temp_path);
 	free(temp_path);
+	free(cwd);
 	return (new_path);
 }
 

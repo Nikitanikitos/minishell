@@ -48,6 +48,6 @@ int		main(void)
 		commands_list = get_commands_list(user_input);
 		free(user_input);
 		starting_processes(commands_list);
-		free(commands_list);
+		free_list(commands_list);
 	}
 }

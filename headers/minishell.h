@@ -41,6 +41,9 @@ void			type_prompt();
 void			print_error(void);
 void			print_arguments_list(t_list	*commands);
 
+void			free_list(t_list *list);
+void			free_double_array(char **array);
+
 int				pwd(void*);
 int				cd(void *arguments);
 int				ft_exit(void*);

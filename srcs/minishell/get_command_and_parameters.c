@@ -41,7 +41,7 @@ t_list	*get_commands_list(char *user_input)
 	arguments_list = NULL;
 	all_commands = ft_split(user_input, ';');
 	parse_commands_list(all_commands, &arguments_list);
-	free(all_commands);
+	free_double_array(all_commands);
 	return (arguments_list);
 }
 
