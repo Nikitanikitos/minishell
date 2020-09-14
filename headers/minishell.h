@@ -38,12 +38,12 @@ typedef struct	s_builtin
 t_list			*get_commands_list(char *user_input);
 
 void			type_prompt();
-void			print_error(void);
 void			print_arguments_list(t_list	*commands);
 
 void			free_list(t_list *list);
 void			free_double_array(char **array);
 
+int				echo(void* arguments);
 int				pwd(void*);
 int				cd(void *arguments);
 int				ft_exit(void*);
