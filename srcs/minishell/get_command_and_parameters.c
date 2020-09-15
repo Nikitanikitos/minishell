@@ -35,7 +35,7 @@ void	parse_commands_list(char **all_commands, t_list **arguments_list)
 
 	while (*all_commands)
 	{
-		command = ft_split(*all_commands, ' ');
+		command = ft_split_advanced(*all_commands, " \t");
 		if (!(arguments = (t_arguments*)malloc(sizeof(t_arguments))))
 			return ;
 		arguments->command = command[0];
