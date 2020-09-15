@@ -12,13 +12,6 @@
 
 #include "minishell.h"
 
-void	free_env(t_env *env)
-{
-	free(env->key);
-	free(env->value);
-	free(env);
-}
-
 int		unset(t_arguments *arguments, t_list *env_list)
 {
 	t_list		*temp_elem;

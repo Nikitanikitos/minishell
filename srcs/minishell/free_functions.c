@@ -36,14 +36,12 @@ void	free_arguments(void *arguments)
 	free(commands);
 }
 
-void	free_list(t_list *list)
+void	free_env(void *arg)
 {
-	t_list	*temp_list;
+	t_env *env;
 
-	while (list)
-	{
-		temp_list = list;
-		list = list->next;
-		ft_lstdelone(temp_list, &free_arguments);
-	}
+	env = (t_env*)arg;
+	free(env->value);
+	free(env->key);
+	free(env);
 }

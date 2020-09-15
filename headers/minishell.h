@@ -66,3 +66,6 @@ int				unset(t_arguments *arguments, t_list *env_list);
 int				ft_exit(t_arguments*, t_list *env_list);
 
 int				execute_buildin_command(t_arguments arguments, t_list *env_list);
+
+void			free_env(void *arg);
+void			free_arguments(void *arguments);

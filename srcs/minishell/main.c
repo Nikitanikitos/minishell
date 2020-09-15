@@ -51,6 +51,6 @@ int		main(int ac, char **av, char **envp)
 		commands_list = get_commands_list(user_input);
 		free(user_input);
 		starting_processes(commands_list, env_list);
-		free_list(commands_list);
+		ft_lstclear(commands_list, &free_arguments);
 	}
 }

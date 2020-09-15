@@ -54,5 +54,6 @@ int		cd(t_arguments *arguments, t_list *env_list)
 
 int		ft_exit(t_arguments *arguments, t_list *env_list)
 {
+	ft_lstclear(env_list, &free_env);
 	exit(0);
 }
