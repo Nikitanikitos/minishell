@@ -4,9 +4,9 @@
 /*   env_functions.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: imicah <imicah@student.21-school.ru>       +#+  +:+       +#+        */
-/*                                          	    +#+#+#+#+#+   +#+         */
-/*   Created: 2020/09/14 21:31:03 by imicah            #+#    #+#             */
-/*   Updated: 2020/09/14 21:31:03 by imicah           ###   ########.fr       */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2020/09/16 01:34:32 by imicah            #+#    #+#             */
+/*   Updated: 2020/09/16 01:34:34 by imicah           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,23 +43,21 @@ void	add_env(t_list *env_list, t_env *env)
 	while (env_list)
 	{
 		current_env = (t_env*)env_list->content;
-		if ((compare_result = ft_strcmp(env->key, current_env->key)) < 0)
+		compare_result = ft_strcmp(env->key, current_env->key);
+		if (compare_result <= 0 || env_list->next == NULL)
 		{
-			temp_elem = env_list->next;
-			env_list->next = ft_lstnew(env);
-			if (temp_elem)
-				env_list->next->next = temp_elem;
-			list_element_swap(env_list, env_list->next);
-			break ;
-		}
-		else if (compare_result == 0)
-		{
-			change_value_env(current_env, env);
-			break ;
-		}
-		else if (env_list->next == NULL)
-		{
-			env_list->next = ft_lstnew(env);
+			if (compare_result < 0)
+			{
+				temp_elem = env_list->next;
+				env_list->next = ft_lstnew(env);
+				if (temp_elem)
+					env_list->next->next = temp_elem;
+				list_element_swap(env_list, env_list->next);
+			}
+			else if (compare_result == 0)
+				change_value_env(current_env, env);
+			else
+				env_list->next = ft_lstnew(env);
 			break ;
 		}
 		env_list = env_list->next;
