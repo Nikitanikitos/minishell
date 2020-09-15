@@ -15,7 +15,7 @@
 void	starting_processes(t_list *command_list, t_list *env_list)
 {
 	pid_t		pid;
-	char 		**env;
+	char		**env;
 	int			status;
 	t_arguments	*arguments;
 

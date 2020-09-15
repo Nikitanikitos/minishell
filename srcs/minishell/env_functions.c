@@ -4,7 +4,7 @@
 /*   env_functions.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: imicah <imicah@student.21-school.ru>       +#+  +:+       +#+        */
-/*                                            	    +#+#+#+#+#+   +#+           */
+/*                                          	    +#+#+#+#+#+   +#+         */
 /*   Created: 2020/09/14 21:31:03 by imicah            #+#    #+#             */
 /*   Updated: 2020/09/14 21:31:03 by imicah           ###   ########.fr       */
 /*                                                                            */
@@ -50,7 +50,7 @@ void	add_env(t_list *env_list, t_env *env)
 			if (temp_elem)
 				env_list->next->next = temp_elem;
 			list_element_swap(env_list, env_list->next);
-			break;
+			break ;
 		}
 		else if (compare_result == 0)
 		{
@@ -68,14 +68,19 @@ void	add_env(t_list *env_list, t_env *env)
 
 t_list	*get_env_list(char **envp)
 {
+	char	**key_value;
 	t_env	*env;
 	t_list	*env_list;
 
-	env = env_init(ft_split(*envp++, '='));
+	key_value = ft_split(*envp++, '=');
+	env = env_init(key_value);
+	free(key_value);
 	env_list = ft_lstnew(env);
 	while (*envp)
 	{
-		env = env_init(ft_split(*envp, '='));
+		key_value = ft_split(*envp++, '=');
+		env = env_init(key_value);
+		free(key_value);
 		add_env(env_list, env);
 		envp++;
 	}

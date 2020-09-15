@@ -47,7 +47,7 @@ static size_t	get_segment_length(char *str, char *separators)
 	return (result);
 }
 
-char	**ft_split_advanced(char *str, char *separators)
+char			**ft_split_advanced(char *str, char *separators)
 {
 	char	**result;
 	size_t	numbers_segment;

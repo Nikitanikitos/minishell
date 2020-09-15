@@ -35,9 +35,9 @@ void	print_export(t_list *env_list)
 	}
 }
 
-int		export(t_arguments	*arguments, t_list *env_list)
+int		export(t_arguments *arguments, t_list *env_list)
 {
-	char				**key_value;
+	char	**key_value;
 
 	if (!arguments->parameters[1])
 		print_export(env_list);
