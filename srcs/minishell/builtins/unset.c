@@ -12,9 +12,27 @@
 
 #include "minishell.h"
 
+void	unset_env(t_list *env_list, t_list *prev_element)
+{
+	t_list *temp_element;
+
+	free_env(env_list->content);
+	if (prev_element)
+	{
+		prev_element->next = env_list->next;
+		free(env_list);
+	}
+	else if (env_list->next)
+	{
+		temp_element = env_list->next;
+		env_list->content = env_list->next->content;
+		env_list->next = env_list->next->next;
+		free(temp_element);
+	}
+}
+
 int		unset(t_arguments *arguments, t_list *env_list)
 {
-	t_list		*temp_elem;
 	t_list		*prev_element;
 	t_env		*current_env;
 
@@ -26,19 +44,7 @@ int		unset(t_arguments *arguments, t_list *env_list)
 		current_env = (t_env*)env_list->content;
 		if (!ft_strcmp(current_env->key, arguments->parameters[1]))
 		{
-			free_env(env_list->content);
-			if (prev_element)
-			{
-				prev_element->next = env_list->next;
-				free(env_list);
-			}
-			else if (env_list->next)
-			{
-				temp_elem = env_list->next;
-				env_list->content = env_list->next->content;
-				env_list->next = env_list->next->next;
-				free(temp_elem);
-			}
+			unset_env(env_list, prev_element);
 			return (errno);
 		}
 		prev_element = env_list;

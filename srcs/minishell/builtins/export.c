@@ -50,6 +50,7 @@ int		export(t_arguments *arguments, t_list *env_list)
 				key_value[1] = ft_strdup("");
 		}
 		add_env(env_list, env_init(key_value));
+		free(key_value);
 	}
 	return (errno);
 }
