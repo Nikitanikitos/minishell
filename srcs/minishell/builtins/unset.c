@@ -41,8 +41,9 @@ int		unset(t_arguments *arguments, t_list *env_list)
 			}
 			else if (env_list->next)
 			{
-				temp_elem = env_list;
-				env_list = env_list->next;
+				temp_elem = env_list->next;
+				env_list->content = env_list->next->content;
+				env_list->next = env_list->next->next;
 				free(temp_elem);
 			}
 			return (errno);
