@@ -47,10 +47,9 @@ t_env			*env_init(char **key_value);
 
 t_list			*get_commands_list(char *user_input);
 t_list			*get_env_list(char **envp);
+void			add_env(t_list *env_list, t_env *env);
 
-void			change_or_add_value_env(char **key_value, t_list **env_list);
-
-void			type_prompt();
+void			type_prompt(void);
 void			print_error(void);
 void			print_arguments_list(t_list	*commands);
 

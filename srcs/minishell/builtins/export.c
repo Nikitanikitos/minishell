@@ -49,7 +49,7 @@ int		export(t_arguments	*arguments, t_list *env_list)
 			if (ft_strchr(arguments->parameters[1], '='))
 				key_value[1] = ft_strdup("");
 		}
-		change_or_add_value_env(key_value, &env_list);
+		add_env(env_list, env_init(key_value));
 	}
 	return (errno);
 }

@@ -12,41 +12,17 @@
 
 #include "minishell.h"
 
-void	change_value_env(t_env *current_env, char **key_value)
+void	change_value_env(t_env *current_env, t_env *env)
 {
-	if (current_env->value && key_value[1] == NULL)
-		free(key_value[1]);
+	if (current_env->value && env->value == NULL)
+		free(env->value);
 	else
 	{
 		free(current_env->value);
-		current_env->value = key_value[1];
+		current_env->value = env->value;
 	}
-	free(key_value[0]);
-}
-
-void	change_or_add_value_env(char **key_value, t_list **env_list)
-{
-	t_list	*list_start = *env_list;
-	t_env	*current_env;
-
-	while ((*env_list)->next)
-	{
-		current_env = (t_env*)(*env_list)->content;
-		if (!ft_strcmp(current_env->key, key_value[0]))
-		{
-			change_value_env(current_env, key_value);
-			return ;
-		}
-		*env_list = (*env_list)->next;
-	}
-	current_env = (t_env*)(*env_list)->content;
-	if (!ft_strcmp(current_env->key, key_value[0]))
-		change_value_env(current_env, key_value);
-	else
-	{
-		(*env_list)->next = ft_lstnew(env_init(key_value));
-		*env_list = list_start;
-	}
+	free(env->key);
+	free(env);
 }
 
 void	list_element_swap(t_list *first_element, t_list *second_element)
@@ -62,11 +38,12 @@ void	add_env(t_list *env_list, t_env *env)
 {
 	t_list	*temp_elem;
 	t_env	*current_env;
+	int		compare_result;
 
 	while (env_list)
 	{
 		current_env = (t_env*)env_list->content;
-		if (ft_strcmp(env->key, current_env->key) < 0)
+		if ((compare_result = ft_strcmp(env->key, current_env->key)) < 0)
 		{
 			temp_elem = env_list->next;
 			env_list->next = ft_lstnew(env);
@@ -74,6 +51,11 @@ void	add_env(t_list *env_list, t_env *env)
 				env_list->next->next = temp_elem;
 			list_element_swap(env_list, env_list->next);
 			break;
+		}
+		else if (compare_result == 0)
+		{
+			change_value_env(current_env, env);
+			break ;
 		}
 		else if (env_list->next == NULL)
 		{
