@@ -12,7 +12,7 @@
 
 #include "minishell.h"
 
-int		pwd(void *x, t_list *env_list)
+int		pwd(t_arguments *arguments, t_list *env_list)
 {
 	char	*cwd;
 
@@ -36,24 +36,23 @@ char	*get_destination_directory(char *directory)
 	return (new_path);
 }
 
-int		cd(void *arguments, t_list *env_list)
+int		cd(t_arguments *arguments, t_list *env_list)
 {
-	const t_arguments	command = *(t_arguments*)arguments;
 	char				*new_path;
 
-	if (command.parameters[1] == NULL)
+	if (arguments->parameters[1] == NULL)
 		new_path = ft_strdup("/");
-	else if (command.parameters[1][0] == '/' ||
-		!ft_strncmp(command.parameters[1], "../", 3))
-		new_path = ft_strdup(command.parameters[1]);
+	else if (arguments->parameters[1][0] == '/' ||
+		!ft_strncmp(arguments->parameters[1], "../", 3))
+		new_path = ft_strdup(arguments->parameters[1]);
 	else
-		new_path = get_destination_directory(command.parameters[1]);
+		new_path = get_destination_directory(arguments->parameters[1]);
 	chdir(new_path);
 	free(new_path);
 	return (errno);
 }
 
-int		ft_exit(void *q, t_list *env_list)
+int		ft_exit(t_arguments *arguments, t_list *env_list)
 {
 	exit(0);
 }

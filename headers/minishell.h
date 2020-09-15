@@ -33,7 +33,7 @@ typedef struct	s_arguments
 typedef struct	s_builtin
 {
 	char		*command;
-	int 		(*func)(void*, t_list*);
+	int 		(*func)(t_arguments*, t_list*);
 }				t_builtin;
 
 typedef struct	s_env
@@ -59,10 +59,11 @@ void			print_export(t_list *env_list);
 void			free_list(t_list *list);
 void			free_double_array(char **array);
 
-int				echo(void* arguments, t_list *env_list);
-int				pwd(void*, t_list *env_list);
-int				cd(void *arguments, t_list *env_list);
-int				export(void *x, t_list *env_list);
-int				ft_exit(void*, t_list *env_list);
+int				echo(t_arguments* arguments, t_list *env_list);
+int				pwd(t_arguments*, t_list *env_list);
+int				cd(t_arguments *arguments, t_list *env_list);
+int				export(t_arguments *, t_list *env_list);
+int				unset(t_arguments *arguments, t_list *env_list);
+int				ft_exit(t_arguments*, t_list *env_list);
 
 int				execute_buildin_command(t_arguments arguments, t_list *env_list);

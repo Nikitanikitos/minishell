@@ -44,5 +44,4 @@ void	print_error(void)
 
 	error = strerror(errno);
 	ft_putendl_fd(error, STDERR_FILENO);
-	free(error);
 }

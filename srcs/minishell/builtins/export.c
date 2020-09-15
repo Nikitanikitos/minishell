@@ -35,19 +35,18 @@ void	print_export(t_list *env_list)
 	}
 }
 
-int		export(void *arguments, t_list *env_list)
+int		export(t_arguments	*arguments, t_list *env_list)
 {
-	const t_arguments	command = *(t_arguments*)arguments;
 	char				**key_value;
 
-	if (!command.parameters[1])
+	if (!arguments->parameters[1])
 		print_export(env_list);
 	else
 	{
-		key_value = ft_split(command.parameters[1], '=');
+		key_value = ft_split(arguments->parameters[1], '=');
 		if (ft_str_double_len(key_value) == 1)
 		{
-			if (ft_strchr(command.parameters[1], '='))
+			if (ft_strchr(arguments->parameters[1], '='))
 				key_value[1] = ft_strdup("");
 		}
 		change_or_add_value_env(key_value, &env_list);

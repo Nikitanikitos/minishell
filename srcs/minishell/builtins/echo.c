@@ -29,27 +29,26 @@ void	print_env(char *env_key, t_list *env_list)
 	}
 }
 
-int		echo(void *arguments, t_list *env_list)
+int		echo(t_arguments *arguments, t_list *env_list)
 {
 	int					i;
 	int					flag;
-	const t_arguments	command = *(t_arguments*)arguments;
 
 	flag = 1;
 	i = 1;
-	if (!ft_strcmp(command.parameters[1], "-n"))
+	if (!ft_strcmp(arguments->parameters[1], "-n"))
 	{
 		i++;
 		flag = 0;
 	}
-	while (command.parameters[i])
+	while (arguments->parameters[i])
 	{
-		if (command.parameters[i][0] == '$')
-			print_env(command.parameters[i], env_list);
+		if (arguments->parameters[i][0] == '$')
+			print_env(arguments->parameters[i], env_list);
 		else
-			ft_putstr_fd(command.parameters[i], 1);
+			ft_putstr_fd(arguments->parameters[i], 1);
 		i++;
-		if (command.parameters[i])
+		if (arguments->parameters[i])
 			write(1, " ", 1);
 	}
 	write(STDOUT_FILENO, "\n", (size_t)flag);
