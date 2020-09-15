@@ -13,6 +13,21 @@
 #include <printf.h>
 #include "minishell.h"
 
+void	ft_trim_double_array(char **double_array)
+{
+	int		i;
+	char	*temp_array;
+
+	i = 0;
+	while (double_array[i])
+	{
+		temp_array = ft_strtrim(double_array[i], "\t");
+		free(double_array[i]);
+		double_array[i] = temp_array;
+		i++;
+	}
+}
+
 void	parse_commands_list(char **all_commands, t_list **arguments_list)
 {
 	t_arguments	*arguments;

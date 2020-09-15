@@ -12,6 +12,23 @@
 
 #include "minishell.h"
 
+void	print_env(char *env_key, t_list *env_list)
+{
+	t_env	*env;
+
+	env_key++;
+	while (env_list)
+	{
+		env = (t_env*)env_list->content;
+		if (!ft_strcmp(env->key, env_key))
+		{
+			ft_putstr_fd(env->value, 1);
+			break ;
+		}
+		env_list = env_list->next;
+	}
+}
+
 int		echo(void *arguments, t_list *env_list)
 {
 	int					i;
@@ -27,7 +44,10 @@ int		echo(void *arguments, t_list *env_list)
 	}
 	while (command.parameters[i])
 	{
-		write(1, command.parameters[i], (size_t)ft_strlen(command.parameters[i]));
+		if (command.parameters[i][0] == '$')
+			print_env(command.parameters[i], env_list);
+		else
+			ft_putstr_fd(command.parameters[i], 1);
 		i++;
 		if (command.parameters[i])
 			write(1, " ", 1);
