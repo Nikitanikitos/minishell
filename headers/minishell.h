@@ -45,8 +45,7 @@ typedef struct	s_env
 t_list			*get_commands_list(char *user_input);
 t_list			*get_env_list(char **envp);
 
-t_env			*env_init(char **key_value);
-void			add_env(char **key_value, t_list **env_list);
+void			change_or_add_value_env(char **key_value, t_list **env_list);
 
 void			type_prompt();
 void			print_error(void);

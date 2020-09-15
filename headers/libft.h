@@ -21,6 +21,8 @@
 
 int					ft_atoi(const char *nptr);
 int					ft_strlen(const char *str);
+int					ft_str_double_len(char **array);
+
 int 				ft_strcmp(const char *s1, const char *s2);
 int					ft_memcmp(const void *arr1, const void *arr2,
 							size_t byte_sizes);
