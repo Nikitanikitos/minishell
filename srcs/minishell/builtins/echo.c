@@ -27,11 +27,11 @@ int		echo(void *arguments, t_list *env_list)
 	}
 	while (command.parameters[i])
 	{
-		write(1, command.parameters[i], ft_strlen(command.parameters[i]));
+		write(1, command.parameters[i], (size_t)ft_strlen(command.parameters[i]));
 		i++;
 		if (command.parameters[i])
 			write(1, " ", 1);
 	}
-	write(STDOUT_FILENO, "\n", flag);
+	write(STDOUT_FILENO, "\n", (size_t)flag);
 	return (errno);
 }

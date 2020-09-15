@@ -15,7 +15,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <fcntl.h>
-#include <wait.h>
+#include <sys/wait.h>
 #include <errno.h>
 #include <sys/dir.h>
 #include "libft.h"
@@ -45,7 +45,7 @@ typedef struct	s_env
 t_list			*get_commands_list(char *user_input);
 t_list			*get_env_list(char **envp);
 
-t_env			*get_env(char **key_value);
+t_env			*env_init(char **key_value);
 void			add_env(char **key_value, t_list **env_list);
 
 void			type_prompt();

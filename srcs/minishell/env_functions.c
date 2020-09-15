@@ -23,26 +23,39 @@ void	add_env(char **key_value, t_list **env_list)
 	ft_lstadd_back(env_list, ft_lstnew(env));
 }
 
+t_env	*env_init(char **key_value)
+{
+	t_env	*env;
+
+	if ((env = (t_env*)malloc(sizeof(t_env))) == NULL)
+		return (NULL);
+	env->key = key_value[0];
+	env->value = key_value[1];
+	return (env);
+}
+
 t_list	*get_env_list(char **envp)
 {
 	t_env	*env;
+	t_list	*start_list;
 	t_list	*env_list;
-	char	**key_value;
 
 	env_list = NULL;
+	start_list = NULL;
 	while (*envp)
 	{
-		key_value = ft_split(*envp, '=');
-		if ((env = (t_env*)malloc(sizeof(t_env))) == NULL)
-			return (NULL);
-		env->key = key_value[0];
-		env->value = key_value[1];
+		env = env_init(ft_split(*envp, '='));
 		if (env_list == NULL)
+		{
 			env_list = ft_lstnew(env);
+			start_list = env_list;
+		}
 		else
-			ft_lstadd_back(&env_list, ft_lstnew(env));
+		{
+			env_list->next = ft_lstnew(env);
+			env_list = env_list->next;
+		}
 		envp++;
 	}
-	return (env_list);
+	return (start_list);
 }
-

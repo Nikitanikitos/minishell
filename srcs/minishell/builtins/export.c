@@ -27,13 +27,55 @@ void	print_export(t_list *env_list)
 	}
 }
 
+void	change_value_env(t_env *current_env, char **key_value)
+{
+		free(current_env->value);
+		current_env->value = key_value[1];
+}
+
+void	change_or_add_value_env(char **key_value, t_list **env_list)
+{
+	t_list	*list_start = *env_list;
+	t_env	*current_env;
+
+	while ((*env_list)->next)
+	{
+		current_env = (t_env*)(*env_list)->content;
+		if (!ft_strcmp(current_env->key, key_value[0]))
+		{
+			change_value_env(current_env, key_value);
+			return ;
+		}
+		*env_list = (*env_list)->next;
+	}
+	current_env = (t_env*)(*env_list)->content;
+	if (!ft_strcmp(current_env->key, key_value[0]))
+		change_value_env(current_env, key_value);
+	else
+	{
+		(*env_list)->next = ft_lstnew(env_init(key_value));
+		*env_list = list_start;
+	}
+}
+
 int		export(void *arguments, t_list *env_list)
 {
 	const t_arguments	command = *(t_arguments*)arguments;
+	char				**env_without_value;
 
 	if (!command.parameters[1])
 		print_export(env_list);
-	else if (ft_strchr(command.parameters[1], '='))
-		add_env(ft_split(command.parameters[1], '='), &env_list);
+	else
+		change_or_add_value_env(ft_split(command.parameters[1], '='), &env_list);
+//	else if (ft_strchr(command.parameters[1], '='))
+//		add_env(ft_split(command.parameters[1], '='), &env_list);
+//	else
+//	{
+//		if ((env_without_value = (char**)malloc(sizeof(char*))) == NULL)
+//			return (0);
+//		env_without_value[0] = command.parameters[1];
+//		env_without_value[1] = NULL;
+//		add_env(env_without_value, &env_list);
+//	}
 	return (errno);
 }
