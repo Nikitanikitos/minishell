@@ -21,8 +21,8 @@
 #include "libft.h"
 
 # define NUMBER_BUILDIN_CMD	7
-# define TRUE	1
-# define FALSE	0
+# define TRUE				1
+# define FALSE				0
 
 typedef struct	s_arguments
 {
@@ -41,6 +41,9 @@ typedef struct	s_env
 	char		*key;
 	char		*value;
 }				t_env;
+
+t_arguments		*arguments_init(char **command);
+t_env			*env_init(char **key_value);
 
 t_list			*get_commands_list(char *user_input);
 t_list			*get_env_list(char **envp);

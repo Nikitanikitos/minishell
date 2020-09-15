@@ -4,7 +4,7 @@
 /*   env_functions.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: imicah <imicah@student.21-school.ru>       +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
+/*                                            	    +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/14 21:31:03 by imicah            #+#    #+#             */
 /*   Updated: 2020/09/14 21:31:03 by imicah           ###   ########.fr       */
 /*                                                                            */
@@ -22,17 +22,6 @@ void	change_value_env(t_env *current_env, char **key_value)
 		current_env->value = key_value[1];
 	}
 	free(key_value[0]);
-}
-
-t_env	*env_init(char **key_value)
-{
-	t_env	*env;
-
-	if ((env = (t_env*)malloc(sizeof(t_env))) == NULL)
-		return (NULL);
-	env->key = key_value[0];
-	env->value = key_value[1];
-	return (env);
 }
 
 void	change_or_add_value_env(char **key_value, t_list **env_list)
