@@ -19,7 +19,10 @@ void	parse_commands_list(char **all_commands, t_list **arguments_list)
 
 	while (*all_commands)
 	{
-		command = ft_split_advanced(*all_commands, " \t");
+		if (ft_strchr(*all_commands, '\'') || ft_strchr(*all_commands, '\"'))
+			continue;
+		else
+			command = ft_split_advanced(*all_commands, " \t");
 		arguments = arguments_init(command);
 		if (!*arguments_list)
 			*arguments_list = ft_lstnew(arguments);

@@ -3,3 +3,5 @@ CMakeLists.txt
 .idea
 .gitignore
 .DS_Store
+*.a
+.gitignore

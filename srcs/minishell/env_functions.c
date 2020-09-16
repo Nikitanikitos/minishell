@@ -6,7 +6,7 @@
 /*   By: imicah <imicah@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/16 01:34:32 by imicah            #+#    #+#             */
-/*   Updated: 2020/09/16 01:34:34 by imicah           ###   ########.fr       */
+/*   Updated: 2020/09/16 10:25:19 by imicah           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,7 @@ t_list	*get_env_list(char **envp)
 	env_list = ft_lstnew(env);
 	while (*envp)
 	{
-		key_value = ft_split(*envp++, '=');
+		key_value = ft_split(*envp, '=');
 		env = env_init(key_value);
 		free(key_value);
 		add_env(env_list, env);
