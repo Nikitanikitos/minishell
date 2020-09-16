@@ -12,6 +12,50 @@
 
 #include "minishell.h"
 
+char	**get_paths(t_list *env_list)
+{
+	t_env	*env;
+
+	while (env_list)
+	{
+		env = (t_env*)env_list->content;
+		if (!ft_strcmp(env->key, "PATH"))
+			return (ft_split(env->value, ':'));
+		env_list = env_list->next;
+	}
+	return (NULL);
+}
+
+void	check_path(char **command, t_list *env_list)
+{
+	char	*temp_command;
+	char 	**paths;
+	int 	i;
+	int 	fd;
+
+	i = 0;
+	if ((fd = open(*command, O_RDONLY)) != -1)
+	{
+		close(fd);
+		return;
+	}
+	temp_command = ft_strjoin("/", *command);
+	free(*command);
+	if ((paths = get_paths(env_list)) == NULL)
+		return;
+	while (paths[i])
+	{
+		*command = ft_strjoin(paths[i], temp_command);
+		if ((fd = open(*command, O_RDONLY)) != -1)
+			break;
+		free(*command);
+		i++;
+	}
+	if (fd != -1)
+		close(fd);
+	free_double_array(paths);
+}
+
 void	starting_processes(t_list *command_list, t_list *env_list)
 {
 	pid_t		pid;
@@ -31,7 +75,14 @@ void	starting_processes(t_list *command_list, t_list *env_list)
 		else if (pid < 0)
 			exit(EXIT_FAILURE);
 		else
-			status = execve(arguments->command, arguments->parameters, env);
+		{
+			check_path(&arguments->command, env_list);
+			if ((status = execve(arguments->command, arguments->parameters, env)))
+			{
+				print_error();
+				exit(status);
+			}
+		}
 		command_list = command_list->next;
 	}
 }
