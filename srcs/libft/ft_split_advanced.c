@@ -3,47 +3,62 @@
 /*                                                        :::      ::::::::   */
 /*   ft_split_advanced.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: imicah <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: froxanne <froxanne@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/09/15 19:50:59 by imicah            #+#    #+#             */
-/*   Updated: 2020/09/15 19:51:01 by imicah           ###   ########.fr       */
+/*   Created: 2020/09/16 15:12:51 by froxanne          #+#    #+#             */
+/*   Updated: 2020/09/16 17:23:49 by froxanne         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../../headers/minishell.h"
 
 static size_t	get_numbers_segment(char *str, char *separators)
 {
 	int8_t	flag;
+	char	i_flag;
 	size_t	result;
 
 	result = 0;
 	flag = 1;
+	i_flag = 0;
 	while (*str)
-	{
 		if (!ft_strchr(separators, *str) && flag)
 		{
 			result++;
 			flag = 0;
-			while (!ft_strchr(separators, *str))
+			while (!ft_strchr(separators, *str) || i_flag)
+			{
+				if (ft_strchr("\'\"", *str) && i_flag)
+					i_flag = 0;
+				else if (ft_strchr("\'\"", *str) && !i_flag)
+					i_flag = *str;
 				str++;
+			}
 		}
-		else if (ft_strchr(separators, *str))
-		{
+		else if (ft_strchr(separators, *str) && str++)
 			flag = 1;
-			str++;
-		}
-	}
 	return (result);
 }
 
 static size_t	get_segment_length(char *str, char *separators)
 {
 	size_t	result;
+	char	i_flag;
 
+	i_flag = 0;
 	result = 0;
-	while (!ft_strchr(separators, *str++))
+	while (*str && (!ft_strchr(separators, *str) || i_flag))
+	{
+		if (ft_strchr("\'\"", *str))
+		{
+			if (i_flag)
+				i_flag = 0;
+			else
+				i_flag = *str;
+		}
 		result++;
+		str++;
+	}
 	return (result);
 }
 
