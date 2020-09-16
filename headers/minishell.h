@@ -47,7 +47,7 @@ void			eof_handler(void);
 
 char			*parse_argument_with_single_quotes(char *parameters);
 char			*parse_argument_with_double_quotes(char *parameters, t_list *env_list);
-
+char			*parse_without_quotes(char *parameters, t_list *env_list);
 
 t_arguments		*arguments_init(char **command);
 t_env			*env_init(char **key_value);

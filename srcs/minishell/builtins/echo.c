@@ -26,8 +26,7 @@ int		echo(t_arguments *arguments, t_list *env_list)
 	}
 	while (arguments->parameters[i])
 	{
-		ft_putstr_fd(arguments->parameters[i], 1);
-		i++;
+		ft_putstr_fd(arguments->parameters[i++], 1);
 		if (arguments->parameters[i])
 			write(1, " ", 1);
 	}
