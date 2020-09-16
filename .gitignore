@@ -4,6 +4,6 @@ CMakeLists.txt
 .gitignore
 .DS_Store
 *.a
-.gitignore
 *.o
+.gitignore
 minishell

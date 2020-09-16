@@ -68,8 +68,7 @@ void	starting_processes(t_list *command_list, t_list *env_list)
 		errno = 0;
 		arguments = (t_arguments*)command_list->content;
 		if (execute_buildin_command(*arguments, env_list))
-		{
-		}
+			;
 		else if ((pid = fork()))
 			waitpid(-1, &status, 0);
 		else if (pid < 0)
