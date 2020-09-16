@@ -100,6 +100,10 @@ int		main(int ac, char **av, char **envp)
 	{
 		type_prompt();
 		get_next_line(0, &user_input);
+		if (!*user_input)
+			eof_handler();
+		else if (*user_input == '\n')
+			*user_input = 0;
 		commands_list = get_commands_list(user_input);
 		free(user_input);
 		starting_processes(commands_list, env_list);

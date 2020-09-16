@@ -6,3 +6,4 @@ CMakeLists.txt
 *.a
 .gitignore
 *.o
+minishell

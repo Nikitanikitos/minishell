@@ -21,3 +21,9 @@ void	sigint_handler(int signum)
 		type_prompt();
 	}
 }
+
+void	eof_handler(void)
+{
+	ft_putendl_fd("exit", 1);
+	exit(0);
+}

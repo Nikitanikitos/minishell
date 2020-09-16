@@ -42,7 +42,8 @@ typedef struct	s_env
 	char		*value;
 }				t_env;
 
-void	sigint_handler(int signum);
+void			sigint_handler(int signum);
+void			eof_handler(void);
 
 t_arguments		*arguments_init(char **command);
 t_env			*env_init(char **key_value);

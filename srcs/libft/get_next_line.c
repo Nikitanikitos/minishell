@@ -44,9 +44,11 @@ void	write_line(t_list *list, char **line, int result)
 	if (list)
 	{
 		i = ft_strlen(list->content);
-		if (ft_strchr(list->content, '\n'))
+		if (*(char*)(list->content) == '\n')
+			i = 1;
+		else if (ft_strchr(list->content, '\n'))
 			i -= 1;
-		*line = ft_strndup(list->content, i);
+		*line = ft_strndup(list->content, (size_t)i);
 	}
 	else if (!result && BUFFER_SIZE != 0)
 		*line = ft_strndup("", 0);
