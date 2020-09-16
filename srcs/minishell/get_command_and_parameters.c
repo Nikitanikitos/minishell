@@ -12,14 +12,24 @@
 
 #include "minishell.h"
 
-void	parse_commands_list(char **all_commands, t_list **arguments_list)
+void	parse_commands_list(char **all_commands, t_list **arguments_list, t_list *env_list)
 {
 	t_arguments	*arguments;
 	char		**command;
+	int 		i;
 
 	while (*all_commands)
 	{
+		i = 0;
 		command = ft_split_advanced(*all_commands, " \t");
+		while (command[i])
+		{
+			if (command[i][0] == '\"')
+				command[i] = parse_argument_with_double_quotes(command[i], env_list);
+			else if (command[i][0] == '\'')
+				command[i] = parse_argument_with_single_quotes(command[i]);
+			i++;
+		}
 		arguments = arguments_init(command);
 		if (!*arguments_list)
 			*arguments_list = ft_lstnew(arguments);
@@ -29,14 +39,14 @@ void	parse_commands_list(char **all_commands, t_list **arguments_list)
 	}
 }
 
-t_list	*get_commands_list(char *user_input)
+t_list	*get_commands_list(char *user_input, t_list *env_list)
 {
 	char		**all_commands;
 	t_list		*arguments_list;
 
 	arguments_list = NULL;
 	all_commands = ft_split_advanced(user_input, ";");
-	parse_commands_list(all_commands, &arguments_list);
+	parse_commands_list(all_commands, &arguments_list, env_list);
 	free_double_array(all_commands);
 	return (arguments_list);
 }

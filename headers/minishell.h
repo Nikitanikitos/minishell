@@ -45,11 +45,17 @@ typedef struct	s_env
 void			sigint_handler(int signum);
 void			eof_handler(void);
 
+char			*parse_argument_with_single_quotes(char *parameters);
+char			*parse_argument_with_double_quotes(char *parameters, t_list *env_list);
+
+
 t_arguments		*arguments_init(char **command);
 t_env			*env_init(char **key_value);
 
-t_list			*get_commands_list(char *user_input);
+t_list			*get_commands_list(char *user_input, t_list *env_list);
 t_list			*get_env_list(char **envp);
+
+char			*get_env_value(char *key, t_list *env_list);
 void			add_env(t_list *env_list, t_env *env);
 
 void			type_prompt(void);

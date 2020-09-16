@@ -12,6 +12,21 @@
 
 #include "minishell.h"
 
+char	*get_env_value(char *key, t_list *env_list)
+{
+	t_env	*env;
+
+	key++;
+	while (env_list)
+	{
+		env = (t_env*)env_list->content;
+		if (!ft_strcmp(env->key, key))
+			return (env->value);
+		env_list = env_list->next;
+	}
+	return ("");
+}
+
 void	change_value_env(t_env *current_env, t_env *env)
 {
 	if (current_env->value && env->value == NULL)

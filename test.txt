@@ -1,1 +1,1 @@
-/bin/ls -l wef erfv; qwerty cd
+/bin

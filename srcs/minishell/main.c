@@ -103,7 +103,7 @@ int		main(int ac, char **av, char **envp)
 			eof_handler();
 		else if (*user_input == '\n')
 			*user_input = 0;
-		commands_list = get_commands_list(user_input);
+		commands_list = get_commands_list(user_input, env_list);
 		free(user_input);
 		starting_processes(commands_list, env_list);
 		ft_lstclear(commands_list, &free_arguments);
