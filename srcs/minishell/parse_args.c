@@ -100,3 +100,75 @@ char	*parse_argument_with_double_quotes(char *parameters, t_list *env_list)
 	free(result);
 	return (parameters);
 }
+
+int 	get_next_quote(char *str, char quote, int i)
+{
+	i++;
+	while (str[i] != quote)
+		i++;
+	i++;
+	return (i);
+}
+
+int		get_length_argument(char *str)
+{
+	int		i;
+
+	i = 0;
+	if (str[i] != '\'' && str[i] != '\"' && str[i] != ';')
+		while (!ft_isspace(str[i]) && str[i] != '\'' && str[i] != '\"' && str[i] != ';')
+			i++;
+	else if (str[i] == '\'')
+		i = get_next_quote(str, '\'', i);
+	else if (str[i] == '\"')
+		i = get_next_quote(str, '\"', i);
+	if (str[i] == ';')
+		i--;
+	return (i);
+}
+
+t_list	*parse(char *str, int *length_sequence)
+{
+	int 	i;
+	char	*argument;
+	t_list	*arguments_list;
+
+	arguments_list = NULL;
+	while (*str)
+	{
+		if (*str == ';')
+			return (arguments_list);
+		while (ft_isspace(*str))
+			str++;
+		i = get_length_argument(str);
+		*length_sequence += i;
+		argument = ft_strndup(str, i);
+		str += i + 1;
+		if (!ft_strcmp(argument, "\'\'") || !ft_strcmp(argument, "\"\""))
+			free(argument);
+		else if (arguments_list)
+			ft_lstadd_back(&arguments_list, ft_lstnew(argument));
+		else
+			arguments_list = ft_lstnew(argument);
+	}
+	argument = ft_strndup(str, i);
+	ft_lstadd_back(&arguments_list, ft_lstnew(argument));
+	return (arguments_list);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
