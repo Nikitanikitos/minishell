@@ -92,7 +92,7 @@ int		main(int ac, char **av, char **envp)
 	t_list		*commands_list;
 	t_list		*env_list;
 
-	signal(SIGINT, sigint_handler);
+	signal(SIGINT, sigint_handler); // TODO добить сигналы
 	if ((env_list = get_env_list(envp)) == NULL)
 		exit(1);
 	while (TRUE)

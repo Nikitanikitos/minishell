@@ -22,7 +22,7 @@ void	parse_commands_list(char **all_commands, t_list **arguments_list,
 	while (*all_commands)
 	{
 		i = 0;
-		command = ft_split_advanced(*all_commands, " \t");
+		command = ft_split_advanced(*all_commands, " \t"); // TODO добавить сразу вызов комманды
 		while (command[i])
 		{
 			if (command[i][0] == '\"')
