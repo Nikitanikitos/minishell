@@ -71,7 +71,8 @@ char	*parse_without_quotes(char *parameters, t_list *env_list)
 			result = ft_strjoin(result, get_env_value(temp, env_list));
 		else
 			result = ft_strjoin(result, temp);
-		free(temp_result);
+		if (*temp_result)
+			free(temp_result);
 		free(temp);
 		parameters += index;
 	}
