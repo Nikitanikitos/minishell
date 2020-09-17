@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: imicah <imicah@student.21-school.ru>       +#+  +:+       +#+         #
+#    By: froxanne <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/09/14 19:06:46 by imicah            #+#    #+#              #
-#    Updated: 2020/09/14 19:06:48 by imicah           ###   ########.fr        #
+#    Updated: 2020/09/17 10:23:05 by froxanne         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -27,13 +27,13 @@ FLAGS   =
 all: $(NAME)
 
 $(NAME): $(OBJS) $(LIBFT)
-	gcc ${FLAGS} ${HEADERS} ${OBJS} $(LIBFT) -o ${NAME}
+	gcc -g ${FLAGS} ${HEADERS} ${OBJS} $(LIBFT) -o ${NAME}
 
 $(LIBFT):
 	$(MAKE) -C srcs/libft
 
 %.o: %.c
-	gcc ${FLAGS} ${HEADERS} -o $@ -c $<
+	gcc -g ${FLAGS} ${HEADERS} -o $@ -c $<
 
 clean:
 	rm -f $(OBJS)

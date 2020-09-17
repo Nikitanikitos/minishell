@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   constructors.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: imicah <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: froxanne <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/15 20:01:58 by imicah            #+#    #+#             */
-/*   Updated: 2020/09/15 20:02:00 by imicah           ###   ########.fr       */
+/*   Updated: 2020/09/17 11:06:12 by froxanne         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ t_env	*env_init(char **key_value)
 
 	if ((env = (t_env*)malloc(sizeof(t_env))) == NULL)
 		return (NULL);
-	env->key = key_value[0];
-	env->value = key_value[1];
+	env->key = ft_strdup(key_value[0]);
+	env->value = ft_strdup(key_value[1]);
 	return (env);
 }

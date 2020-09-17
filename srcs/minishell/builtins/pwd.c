@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pwd.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: imicah <imicah@student.21-school.ru>       +#+  +:+       +#+        */
+/*   By: froxanne <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/14 12:40:22 by imicah            #+#    #+#             */
-/*   Updated: 2020/09/14 12:40:24 by imicah           ###   ########.fr       */
+/*   Updated: 2020/09/17 11:33:29 by froxanne         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,5 +55,6 @@ int		cd(t_arguments *arguments, t_list *env_list)
 int		ft_exit(t_arguments *arguments, t_list *env_list)
 {
 	ft_lstclear(env_list, &free_env);
+	free_double_array(arguments->parameters); // free only 1 arg, need free all list;
 	exit(0);
 }

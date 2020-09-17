@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: imicah <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: froxanne <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/02 15:41:20 by imicah            #+#    #+#             */
-/*   Updated: 2020/09/02 15:41:22 by imicah           ###   ########.fr       */
+/*   Updated: 2020/09/17 11:31:25 by froxanne         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,4 +108,5 @@ int		main(int ac, char **av, char **envp)
 		starting_processes(commands_list, env_list);
 		ft_lstclear(commands_list, &free_arguments);
 	}
+	return (0);
 }
