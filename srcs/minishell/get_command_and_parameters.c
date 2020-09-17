@@ -12,46 +12,36 @@
 
 #include "minishell.h"
 
-void	parse_commands_list(char **all_commands, t_list **arguments_list,
-															t_list *env_list)
-{
-	t_arguments	*arguments;
-	char		**command;
-	int 		i;
+// TODO ' и " кавычки без разделений не работают
 
-	while (*all_commands)
+void	parse_arguments_in_command(char **command, t_list *env_list)
+{
+	while (*command)
 	{
-		i = 0;
-		command = ft_split_advanced(*all_commands, " \t"); // TODO добавить сразу вызов комманды
-		while (command[i])
-		{
-			if (command[i][0] == '\"')
-				command[i] = parse_argument_with_double_quotes(command[i], env_list);
-			else if (command[i][0] == '\'')
-				command[i] = parse_argument_with_single_quotes(command[i]);
-			else if (ft_strchr(command[i], '$'))
-				command[i] = parse_with_envp(command[i], env_list);
-			i++;
-		}
-		arguments = arguments_init(command);
-		if (!*arguments_list)
-			*arguments_list = ft_lstnew(arguments);
-		else
-			ft_lstadd_back(arguments_list, ft_lstnew(arguments));
-		all_commands++;
+		if ((*command)[0] == '\"')
+			*command = parse_argument_with_double_quotes(*command, env_list);
+		else if ((*command)[0] == '\'')
+			*command = parse_argument_with_single_quotes(*command);
+		else if (ft_strchr(*command, '$'))
+			*command = parse_with_envp(*command, env_list);
+		command++;
 	}
 }
 
-t_list	*get_commands_list(char *user_input, t_list *env_list)
+void	parse_and_execute_command(char **commands, t_list *env_list)
 {
-	char		**all_commands;
-	t_list		*arguments_list;
+	t_arguments	*arguments;
+	char		**command;
 
-	arguments_list = NULL;
-	all_commands = ft_split_advanced(user_input, ";");
-	parse_commands_list(all_commands, &arguments_list, env_list);
-	free_double_array(all_commands);
-	return (arguments_list);
+	while (*commands)
+	{
+		command = ft_split_advanced(*commands, " \t");
+		parse_arguments_in_command(command, env_list);
+		arguments = arguments_init(command);
+		start_process(arguments, env_list);
+		free_arguments(arguments);
+		commands++;
+	}
 }
 
 int		execute_buildin_command(t_arguments arguments, t_list *env_list)

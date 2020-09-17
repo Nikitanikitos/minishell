@@ -56,40 +56,51 @@ void	check_path(char **command, t_list *env_list)
 	free_double_array(paths);
 }
 
-void	starting_processes(t_list *command_list, t_list *env_list)
+void	start_process(t_arguments *arguments, t_list *env_list)
 {
 	pid_t		pid;
 	char		**env;
 	int			status;
-	t_arguments	*arguments;
 
-	while (command_list)
+	errno = 0;
+	if (execute_buildin_command(*arguments, env_list))
+		;
+	else if ((pid = fork()))
+		waitpid(-1, &status, 0);
+	else if (pid < 0)
+		exit(EXIT_FAILURE);
+	else
 	{
-		errno = 0;
-		arguments = (t_arguments*)command_list->content;
-		if (execute_buildin_command(*arguments, env_list))
-			;
-		else if ((pid = fork()))
-			waitpid(-1, &status, 0);
-		else if (pid < 0)
-			exit(EXIT_FAILURE);
-		else
+		check_path(&arguments->command, env_list);
+		if ((status = execve(arguments->command, arguments->parameters, env)))
 		{
-			check_path(&arguments->command, env_list);
-			if ((status = execve(arguments->command, arguments->parameters, env)))
-			{
-				print_error();
-				exit(status);
-			}
+			print_error();
+			exit(status);
 		}
-		command_list = command_list->next;
 	}
 }
+
+t_list	*minishell(char *user_input, t_list *env_list)
+{
+	char		**all_commands;
+	char		**commands;
+
+	all_commands = ft_split_advanced(user_input, ";");
+	while (*all_commands)
+	{
+		commands = ft_split_advanced(*all_commands, "|");
+		parse_and_execute_command(commands, env_list);
+		free(commands);
+		all_commands++;
+	}
+	free_double_array(all_commands);
+	return (NULL);
+}
+
 
 int		main(int ac, char **av, char **envp)
 {
 	char		*user_input;
-	t_list		*commands_list;
 	t_list		*env_list;
 
 	signal(SIGINT, sigint_handler); // TODO добить сигналы
@@ -103,10 +114,8 @@ int		main(int ac, char **av, char **envp)
 			eof_handler();
 		else if (*user_input == '\n')
 			*user_input = 0;
-		commands_list = get_commands_list(user_input, env_list);
+		minishell(user_input, env_list);
 		free(user_input);
-		starting_processes(commands_list, env_list);
-		ft_lstclear(commands_list, &free_arguments);
 	}
 	return (0);
 }

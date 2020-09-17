@@ -15,16 +15,14 @@
 void	free_double_array(char **array)
 {
 	char	*temp;
-	char	**double_temp;
 
-	double_temp = array;
 	while (*array)
 	{
 		temp = *array;
 		array++;
 		free(temp);
 	}
-	free(double_temp);
+//	free(array);
 }
 
 void	free_arguments(void *arguments)
