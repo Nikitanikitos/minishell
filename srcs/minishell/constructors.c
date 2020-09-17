@@ -29,7 +29,9 @@ t_env	*env_init(char **key_value)
 
 	if ((env = (t_env*)malloc(sizeof(t_env))) == NULL)
 		return (NULL);
-	env->key = ft_strdup(key_value[0]);
-	env->value = ft_strdup(key_value[1]);
+//	env->key = ft_strdup(key_value[0]);
+//	env->value = ft_strdup(key_value[1]);
+	env->key = key_value[0];
+	env->value = key_value[1];
 	return (env);
 }
