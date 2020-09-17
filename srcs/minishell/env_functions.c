@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env_functions.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: imicah <imicah@student.21-school.ru>       +#+  +:+       +#+        */
+/*   By: froxanne <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/16 01:34:32 by imicah            #+#    #+#             */
-/*   Updated: 2020/09/16 10:25:19 by imicah           ###   ########.fr       */
+/*   Updated: 2020/09/17 11:07:19 by froxanne         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,16 +85,17 @@ t_list	*get_env_list(char **envp)
 	t_env	*env;
 	t_list	*env_list;
 
-	key_value = ft_split(*envp++, '=');
-	env = env_init(key_value);
-	free(key_value);
-	env_list = ft_lstnew(env);
+	env_list = NULL;
 	while (*envp)
 	{
 		key_value = ft_split(*envp, '=');
 		env = env_init(key_value);
-		free(key_value);
-		add_env(env_list, env);
+		free_double_array(key_value);
+		key_value = NULL;
+		if (!env_list)
+			env_list = ft_lstnew(env);
+		else
+			add_env(env_list, env);
 		envp++;
 	}
 	return (env_list);
