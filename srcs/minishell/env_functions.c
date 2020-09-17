@@ -90,7 +90,8 @@ t_list	*get_env_list(char **envp)
 	{
 		key_value = ft_split(*envp, '=');
 		env = env_init(key_value);
-//		free_double_array(key_value);
+		free(key_value[2]);
+		free(key_value);
 		if (!env_list)
 			env_list = ft_lstnew(env);
 		else

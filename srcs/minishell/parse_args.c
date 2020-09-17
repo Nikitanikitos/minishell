@@ -52,6 +52,7 @@ char	*parse_with_envp(char *parameters, t_list *env_list)
 char	*parse_without_quotes(char *parameters, t_list *env_list)
 {
 	char	*result;
+	char	*temp_result;
 	char	*temp;
 	int 	index;
 
@@ -65,10 +66,12 @@ char	*parse_without_quotes(char *parameters, t_list *env_list)
 		if (index == -1)
 			index = ft_strlen(parameters);
 		temp = ft_strndup(parameters, (size_t)index);
+		temp_result = result;
 		if (*parameters == '$')
 			result = ft_strjoin(result, get_env_value(temp, env_list));
 		else
 			result = ft_strjoin(result, temp);
+		free(temp_result);
 		free(temp);
 		parameters += index;
 	}
@@ -90,8 +93,9 @@ char	*parse_argument_with_double_quotes(char *parameters, t_list *env_list)
 
 	result = ft_strtrim(parameters, "\"");
 	free(parameters);
-	parameters = result;
-	if (*parameters)
-		result = parse_without_quotes(parameters, env_list);
-	return (result);
+	if (!*result)
+		return (result);
+	parameters = parse_without_quotes(result, env_list);
+	free(result);
+	return (parameters);
 }
