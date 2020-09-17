@@ -38,7 +38,7 @@ char	*get_destination_directory(char *directory)
 
 int		cd(t_arguments *arguments, t_list *env_list)
 {
-	char				*new_path;
+	char	*new_path;
 
 	if (arguments->parameters[1] == NULL)
 		new_path = ft_strdup("/");

@@ -26,6 +26,27 @@ int		str_get_index(const char *str, char element)
 	return (-1);
 }
 
+char	*parse_with_envp(char *parameters, t_list *env_list)
+{
+	char	*result;
+	char	*temp;
+	int 	index;
+
+	result = "";
+	if (*parameters == '$')
+		index = str_get_index(parameters, ' ');
+	else
+		index = str_get_index(parameters, '$');
+	if (index == -1)
+		index = ft_strlen(parameters);
+	temp = ft_strndup(parameters, (size_t)index);
+	if (*parameters == '$')
+		result = ft_strjoin(result, get_env_value(temp, env_list));
+	else
+		result = ft_strjoin(result, temp);
+	free(temp);
+	return (result);
+}
 
 char	*parse_without_quotes(char *parameters, t_list *env_list)
 {
@@ -69,6 +90,7 @@ char	*parse_argument_with_double_quotes(char *parameters, t_list *env_list)
 	result = ft_strtrim(parameters, "\"");
 	free(parameters);
 	parameters = result;
-	result = parse_without_quotes(parameters, env_list);
+	if (*parameters)
+		result = parse_without_quotes(parameters, env_list);
 	return (result);
 }

@@ -31,11 +31,17 @@ void	print_arguments_list(t_list *commands)
 void	type_prompt(void)
 {
 	static int	first_time = 1;
+	char	*cwd;
+
 
 	if (first_time)
 		write(STDOUT_FILENO, " \e[1:1H\e[2J", 12);
 	first_time = 0;
-	write(STDOUT_FILENO, "$", 1);
+	write(STDOUT_FILENO, "minishell~", 10);
+	cwd = getcwd(NULL, 0);
+	ft_putstr_fd(cwd, 1);
+	free(cwd);
+	write(1, " $", 2);
 }
 
 void	print_error(void)

@@ -15,21 +15,22 @@
 char	*ft_strtrim(const char *s1, const char *s2)
 {
 	char	*result;
-	size_t	len;
+	int		len;
+	int		i;
 
+	i = 0;
 	while (ft_strchr(s2, *s1) && *s1)
 		s1++;
 	len = ft_strlen(s1);
-	while (ft_strchr(s2, s1[len]) && *s1)
+	while (ft_strchr(s2, s1[len - 1]) && *s1)
 		len--;
-	if (!(result = (char*)malloc(sizeof(char) * (len + 2))))
+	if (!(result = (char*)malloc(sizeof(char) * (len + 1))))
 		return (NULL);
-	result[len + 1] = '\0';
-	while (len)
+	while (i < len)
 	{
-		result[len] = s1[len];
-		len--;
+		result[i] = s1[i];
+		i++;
 	}
-	result[len] = s1[len];
+	result[i] = 0;
 	return (result);
 }

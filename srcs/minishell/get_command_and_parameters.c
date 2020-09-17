@@ -12,7 +12,8 @@
 
 #include "minishell.h"
 
-void	parse_commands_list(char **all_commands, t_list **arguments_list, t_list *env_list)
+void	parse_commands_list(char **all_commands, t_list **arguments_list,
+															t_list *env_list)
 {
 	t_arguments	*arguments;
 	char		**command;
@@ -29,7 +30,7 @@ void	parse_commands_list(char **all_commands, t_list **arguments_list, t_list *e
 			else if (command[i][0] == '\'')
 				command[i] = parse_argument_with_single_quotes(command[i]);
 			else if (ft_strchr(command[i], '$'))
-				command[i] = parse_without_quotes(command[i], env_list);
+				command[i] = parse_with_envp(command[i], env_list);
 			i++;
 		}
 		arguments = arguments_init(command);
