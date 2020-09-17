@@ -41,7 +41,7 @@ void	type_prompt(void)
 	cwd = getcwd(NULL, 0);
 	ft_putstr_fd(cwd, 1);
 	free(cwd);
-	write(1, " $", 2);
+	write(1, "~$ ", 3);
 }
 
 void	print_error(void)

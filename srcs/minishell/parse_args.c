@@ -32,18 +32,19 @@ char	*parse_with_envp(char *parameters, t_list *env_list)
 	char	*temp;
 	int 	index;
 
-	result = "";
 	if (*parameters == '$')
 		index = str_get_index(parameters, ' ');
 	else
 		index = str_get_index(parameters, '$');
 	if (index == -1)
 		index = ft_strlen(parameters);
-	temp = ft_strndup(parameters, (size_t)index);
+	result = ft_strndup(parameters, (size_t)index);
+	parameters += index;
+	temp = result;
 	if (*parameters == '$')
-		result = ft_strjoin(result, get_env_value(temp, env_list));
+		result = ft_strjoin(result, get_env_value(parameters, env_list));
 	else
-		result = ft_strjoin(result, temp);
+		result = ft_strjoin(result, parameters);
 	free(temp);
 	return (result);
 }
