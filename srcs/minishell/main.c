@@ -56,14 +56,14 @@ void	check_path(char **command, t_list *env_list)
 	free_double_array(paths);
 }
 
-void	start_process(t_arguments *arguments, t_list *env_list)
+void	start_process(t_command *command, t_list *env_list)
 {
 	pid_t		pid;
 	char		**env;
 	int			status;
 
 	errno = 0;
-	if (execute_buildin_command(*arguments, env_list))
+	if (execute_buildin_command(*command, env_list))
 		;
 	else if ((pid = fork()))
 		waitpid(-1, &status, 0);
@@ -71,8 +71,8 @@ void	start_process(t_arguments *arguments, t_list *env_list)
 		exit(EXIT_FAILURE);
 	else
 	{
-		check_path(&arguments->command, env_list);
-		if ((status = execve(arguments->command, arguments->parameters, env)))
+		check_path(&(command->arguments[0]), env_list);
+		if ((status = execve(command->arguments[0], command->arguments, env)))
 		{
 			print_error();
 			exit(status);
@@ -80,41 +80,20 @@ void	start_process(t_arguments *arguments, t_list *env_list)
 	}
 }
 
-char	**convert_from_list_to_array(t_list *list)
-{
-	char		**array;
-	const int	size_list = ft_lstsize(list);
-	int 		i;
-
-	if ((array = (char**)malloc(sizeof(char*) * (size_list + 1))) == NULL)
-		return (NULL);
-	i = 0;
-	while (list)
-	{
-		array[i++] = (char*)list->content;
-		list = list->next;
-	}
-	return (array);
-}
-
 t_list	*minishell(char *user_input, t_list *env_list)
 {
-	t_list		*arguments_list;
+	t_command	*command;
 	int 		length;
-	char		**arguments_array;
 
 	length = 0;
 	while (*user_input)
 	{
-		arguments_list = parse(user_input, &length);
-		arguments_array = convert_from_list_to_array(arguments_list);
-		parse_and_execute_command(arguments_array, env_list);
-		ft_lstclear(arguments_list, &free);
+		command = parse_user_input(user_input, &length, env_list);
+		start_process(command, env_list);
 		user_input += length;
 	}
 	return (NULL);
 }
-
 
 int		main(int ac, char **av, char **envp)
 {

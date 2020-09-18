@@ -12,7 +12,7 @@
 
 #include "minishell.h"
 
-int		pwd(t_arguments *arguments, t_list *env_list)
+int		pwd(t_command *arguments, t_list *env_list)
 {
 	char	*cwd;
 
@@ -36,25 +36,25 @@ char	*get_destination_directory(char *directory)
 	return (new_path);
 }
 
-int		cd(t_arguments *arguments, t_list *env_list)
+int		cd(t_command *command, t_list *env_list)
 {
 	char	*new_path;
 
-	if (arguments->parameters[1] == NULL)
+	if (*(command->arguments)== NULL)
 		new_path = ft_strdup("/");
-	else if (arguments->parameters[1][0] == '/' ||
-		!ft_strncmp(arguments->parameters[1], "../", 3))
-		new_path = ft_strdup(arguments->parameters[1]);
+	else if (*(command->arguments)[0] == '/' ||
+		!ft_strncmp(*(command->arguments), "../", 3))
+		new_path = ft_strdup(*(command->arguments));
 	else
-		new_path = get_destination_directory(arguments->parameters[1]);
+		new_path = get_destination_directory(*(command->arguments));
 	chdir(new_path);
 	free(new_path);
 	return (errno);
 }
 
-int		ft_exit(t_arguments *arguments, t_list *env_list)
+int		ft_exit(t_command *command, t_list *env_list)
 {
 	ft_lstclear(env_list, &free_env);
-	free_double_array(arguments->parameters); // free only 1 arg, need free all list;
+	free_double_array(command->arguments);
 	exit(0);
 }

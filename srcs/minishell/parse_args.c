@@ -12,14 +12,14 @@
 
 #include "minishell.h"
 
-int		str_get_index(const char *str, char element)
+int		str_get_index(const char *str, char *elements)
 {
 	int		i;
 
 	i = 0;
 	while (str[i])
 	{
-		if (str[i] == element)
+		if (ft_strchr(elements, str[i]))
 			return (i);
 		i++;
 	}
@@ -39,7 +39,7 @@ char	*parse_with_envp(char *parameters, t_list *env_list)
 	}
 	else
 	{
-		index = str_get_index(parameters, '$');
+		index = str_get_index(parameters, "$");
 		result = ft_strndup(parameters, (size_t)index);
 		parameters += index;
 		temp = result;
@@ -60,9 +60,9 @@ char	*parse_without_quotes(char *parameters, t_list *env_list)
 	while (*parameters)
 	{
 		if (*parameters == '$')
-			index = str_get_index(parameters, ' ');
+			index = str_get_index(parameters, " \'\"");
 		else
-			index = str_get_index(parameters, '$');
+			index = str_get_index(parameters, "$");
 		if (index == -1)
 			index = ft_strlen(parameters);
 		temp = ft_strndup(parameters, (size_t)index);

@@ -25,14 +25,14 @@ void	free_double_array(char **array)
 //	free(array);
 }
 
-void	free_arguments(void *arguments)
-{
-	t_arguments *commands;
-
-	commands = (t_arguments*)arguments;
-	free_double_array(commands->parameters);
-	free(commands);
-}
+//void	free_arguments(void *arguments)
+//{
+//	t_command *commands;
+//
+//	commands = (t_command*)arguments;
+//	free_double_array(commands->parameters);
+//	free(commands);
+//}
 
 void	free_env(void *arg)
 {

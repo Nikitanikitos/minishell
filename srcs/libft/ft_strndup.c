@@ -14,10 +14,13 @@
 
 char	*ft_strndup(const char *src, size_t len)
 {
-	char	*result;
-	size_t	i;
+	char			*result;
+	size_t			i;
+	const size_t	str_len = (size_t)ft_strlen(src);
 
 	i = 0;
+	if (str_len < len)
+		len = str_len;
 	if (!(result = (char*)malloc(sizeof(char) * (len + 1))))
 		return (NULL);
 	while (*src && len--)

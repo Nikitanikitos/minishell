@@ -12,9 +12,15 @@
 
 #include "minishell.h"
 
+void		print_double_array(char **array)
+{
+	while (*array)
+		printf("%s\n", (*array)++);
+}
+
 void	print_arguments_list(t_list *commands)
 {
-	t_arguments	*command;
+	t_command	*command;
 
 	printf("\n");
 	while (commands)
@@ -23,6 +29,24 @@ void	print_arguments_list(t_list *commands)
 		commands = commands->next;
 	}
 	printf("\n");
+}
+
+char	**convert_from_list_to_array(t_list *list)
+{
+	char		**array;
+	const int	size_list = ft_lstsize(list);
+	int 		i;
+
+	if ((array = (char**)malloc(sizeof(char*) * (size_list + 1))) == NULL)
+		return (NULL);
+	i = 0;
+	while (list)
+	{
+		array[i++] = ft_strdup(list->content);
+		list = list->next;
+	}
+	array[i] = NULL;
+	return (array);
 }
 
 void	type_prompt(void)

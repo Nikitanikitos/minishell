@@ -12,39 +12,33 @@
 
 #include "minishell.h"
 
-// TODO ' и " кавычки без разделений не работают
-
 void	parse_arguments_in_command(char **command, t_list *env_list)
 {
 	while (*command)
 	{
 		if ((*command)[0] == '\"')
 			*command = parse_argument_with_double_quotes(*command, env_list);
-		if ((*command)[0] == '\'')
+		else if ((*command)[0] == '\'')
 			*command = parse_argument_with_single_quotes(*command);
-		if (ft_strchr(*command, '$'))
+		else if (ft_strchr(*command, '$'))
 			*command = parse_with_envp(*command, env_list);
 		command++;
 	}
 }
 
-void	parse_and_execute_command(char **commands, t_list *env_list)
+t_command	*parse_user_input(char *user_input, int *length, t_list *env_list)
 {
-	t_arguments	*arguments;
-	char		**command;
+	t_list		*arguments_list;
+	char		**arguments_array;
 
-	while (*commands)
-	{
-		command = ft_split_advanced(*commands, " \t");
-		parse_arguments_in_command(command, env_list);
-		arguments = arguments_init(command);
-		start_process(arguments, env_list);
-		free_arguments(arguments);
-		commands++;
-	}
+	arguments_list = parse(user_input, length);
+	arguments_array = convert_from_list_to_array(arguments_list);
+//	ft_lstclear(arguments_list, &free);
+	parse_arguments_in_command(arguments_array, env_list);
+	return (arguments_init(arguments_array));
 }
 
-int		execute_buildin_command(t_arguments arguments, t_list *env_list)
+int		execute_buildin_command(t_command command, t_list *env_list)
 {
 	int				index;
 	const t_builtin	builtins[] = {
@@ -60,9 +54,10 @@ int		execute_buildin_command(t_arguments arguments, t_list *env_list)
 	index = 0;
 	while (index < NUMBER_BUILDIN_CMD)
 	{
-		if (!ft_strcmp(builtins[index].command, arguments.command))
+		if (!ft_strcmp(builtins[index].command, *(command.arguments)))
 		{
-			if (builtins[index].func(&arguments, env_list))
+			command.arguments++;
+			if (builtins[index].func(&command, env_list))
 				print_error();
 			return (TRUE);
 		}

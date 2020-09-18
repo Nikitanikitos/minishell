@@ -31,18 +31,18 @@ void	unset_env(t_list *env_list, t_list *prev_element)
 	}
 }
 
-int		unset(t_arguments *arguments, t_list *env_list)
+int		unset(t_command *command, t_list *env_list)
 {
 	t_list		*prev_element;
 	t_env		*current_env;
 
 	prev_element = NULL;
-	if (!arguments->parameters[1])
+	if (!*(command->arguments))
 		return (errno);
 	while (env_list)
 	{
 		current_env = (t_env*)env_list->content;
-		if (!ft_strcmp(current_env->key, arguments->parameters[1]))
+		if (!ft_strcmp(current_env->key, *(command->arguments)))
 		{
 			unset_env(env_list, prev_element);
 			return (errno);

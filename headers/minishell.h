@@ -26,14 +26,14 @@
 
 typedef struct	s_arguments
 {
-	char		*command;
-	char 		**parameters;
-}				t_arguments;
+	char		**arguments;
+	int 		*fd;
+}				t_command;
 
 typedef struct	s_builtin
 {
 	char		*command;
-	int 		(*func)(t_arguments*, t_list*);
+	int 		(*func)(t_command*, t_list*);
 }				t_builtin;
 
 typedef struct	s_env
@@ -45,17 +45,20 @@ typedef struct	s_env
 void			sigint_handler(int signum);
 void			eof_handler(void);
 
-void			start_process(t_arguments *command_list, t_list *env_list);
-void			parse_and_execute_command(char **commands, t_list *env_list);
+void			start_process(t_command *command, t_list *env_list);
+t_command		*parse_user_input(char *user_input, int *length, t_list *env_list);
 
-t_list	*parse(char *str, int *length_sequence);
+void			parse_arguments_in_command(char **command, t_list *env_list);
+char			**convert_from_list_to_array(t_list *list);
+
+t_list			*parse(char *str, int *length_sequence);
 
 char			*parse_argument_with_single_quotes(char *parameters);
 char			*parse_argument_with_double_quotes(char *parameters, t_list *env_list);
 char			*parse_without_quotes(char *parameters, t_list *env_list);
 char			*parse_with_envp(char *parameters, t_list *env_list);
 
-t_arguments		*arguments_init(char **command);
+t_command		*arguments_init(char **command);
 t_env			*env_init(char **key_value);
 
 t_list			*minishell(char *user_input, t_list *env_list);
@@ -73,14 +76,14 @@ void			print_export(t_list *env_list);
 void			free_list(t_list *list);
 void			free_double_array(char **array);
 
-int				echo(t_arguments* arguments, t_list *env_list);
-int				pwd(t_arguments*, t_list *env_list);
-int				cd(t_arguments *arguments, t_list *env_list);
-int				export(t_arguments *, t_list *env_list);
-int				unset(t_arguments *arguments, t_list *env_list);
-int				ft_exit(t_arguments*, t_list *env_list);
+int				echo(t_command* command, t_list *env_list);
+int				pwd(t_command*, t_list *env_list);
+int				cd(t_command *command, t_list *env_list);
+int				export(t_command *, t_list *env_list);
+int				unset(t_command *command, t_list *env_list);
+int				ft_exit(t_command*, t_list *env_list);
 
-int				execute_buildin_command(t_arguments arguments, t_list *env_list);
+int				execute_buildin_command(t_command command, t_list *env_list);
 
 void			free_env(void *arg);
 void			free_arguments(void *arguments);
