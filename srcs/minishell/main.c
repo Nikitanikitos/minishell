@@ -12,48 +12,37 @@
 
 #include "minishell.h"
 
-char	**get_paths(t_list *env_list)
+int		execute_buildin_command(t_command command, t_list *env_list)
 {
-	t_env	*env;
+	int				index;
+	const t_builtin	builtins[] = {
+			{"echo", &echo},
+			{"cd", &cd},
+			{"pwd", &pwd},
+			{"export", &export},
+			{"unset", &unset},
+			{"env", NULL},
+			{"exit", &ft_exit},
+	};
 
-	while (env_list)
+	index = 0;
+	while (index < NUMBER_BUILDIN_CMD)
 	{
-		env = (t_env*)env_list->content;
-		if (!ft_strcmp(env->key, "PATH"))
-			return (ft_split(env->value, ':'));
-		env_list = env_list->next;
+		if (!ft_strcmp(builtins[index].command, *(command.arguments)))
+		{
+			command.arguments++;
+			if (builtins[index].func(&command, env_list))
+				print_error();
+			return (TRUE);
+		}
+		index++;
 	}
-	return (NULL);
+	return (FALSE);
 }
-
-void	check_path(char **command, t_list *env_list)
+void		print_double_array(char **array)
 {
-	char	*temp_command;
-	char 	**paths;
-	int 	i;
-	int 	fd;
-
-	i = 0;
-	if ((fd = open(*command, O_RDONLY)) != -1)
-	{
-		close(fd);
-		return;
-	}
-	temp_command = ft_strjoin("/", *command);
-	free(*command);
-	if ((paths = get_paths(env_list)) == NULL)
-		return;
-	while (paths[i])
-	{
-		*command = ft_strjoin(paths[i], temp_command);
-		if ((fd = open(*command, O_RDONLY)) != -1)
-			break;
-		free(*command);
-		i++;
-	}
-	if (fd != -1)
-		close(fd);
-	free_double_array(paths);
+	while (*array != NULL)
+		printf("%s\n", (*array)++);
 }
 
 void	start_process(t_command *command, t_list *env_list)
@@ -71,8 +60,8 @@ void	start_process(t_command *command, t_list *env_list)
 		exit(EXIT_FAILURE);
 	else
 	{
-		check_path(&(command->arguments[0]), env_list);
-		if ((status = execve(command->arguments[0], command->arguments, env)))
+		check_path(command->arguments, env_list);
+		if ((status = execve(*(command->arguments), command->arguments, env)))
 		{
 			print_error();
 			exit(status);
@@ -85,11 +74,16 @@ t_list	*minishell(char *user_input, t_list *env_list)
 	t_command	*command;
 	int 		length;
 
-	length = 0;
 	while (*user_input)
 	{
-		command = parse_user_input(user_input, &length, env_list);
-		start_process(command, env_list);
+		length = 0;
+		if (*user_input == ';')
+			user_input++;
+		else
+		{
+			command = parse_user_input(user_input, &length, env_list);
+			start_process(command, env_list);
+		}
 		user_input += length;
 	}
 	return (NULL);

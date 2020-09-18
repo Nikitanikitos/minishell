@@ -12,6 +12,21 @@
 
 #include "minishell.h"
 
+int		get_length_argument(char *str)
+{
+	int		i;
+
+	i = 0;
+	if (str[i] != '\'' && str[i] != '\"' && str[i] != ';')
+		while (!ft_isspace(str[i]) && !ft_strchr(";\'\"\0", str[i]))
+			i++;
+	else if (str[i] == '\'')
+		i = get_next_quote(str, '\'', i);
+	else if (str[i] == '\"')
+		i = get_next_quote(str, '\"', i);
+	return (i);
+}
+
 void	parse_arguments_in_command(char **command, t_list *env_list)
 {
 	while (*command)
@@ -26,6 +41,36 @@ void	parse_arguments_in_command(char **command, t_list *env_list)
 	}
 }
 
+t_list	*parse(char *str, int *length_sequence)
+{
+	int 	i;
+	char	*argument;
+	t_list	*arguments_list;
+
+	arguments_list = NULL;
+	while (*str)
+	{
+		while (ft_isspace(*str))
+		{
+			(*length_sequence)++;
+			str++;
+		}
+		if (*str == ';')
+			return (arguments_list);
+		i = get_length_argument(str);
+		*length_sequence += i;
+		argument = ft_strndup(str, (size_t)i);
+		str += i;
+		if (!ft_strcmp(argument, "\'\'") || !ft_strcmp(argument, "\"\""))
+			free(argument);
+		else if (arguments_list)
+			ft_lstadd_back(&arguments_list, ft_lstnew(argument));
+		else
+			arguments_list = ft_lstnew(argument);
+	}
+	return (arguments_list);
+}
+
 t_command	*parse_user_input(char *user_input, int *length, t_list *env_list)
 {
 	t_list		*arguments_list;
@@ -33,35 +78,7 @@ t_command	*parse_user_input(char *user_input, int *length, t_list *env_list)
 
 	arguments_list = parse(user_input, length);
 	arguments_array = convert_from_list_to_array(arguments_list);
-//	ft_lstclear(arguments_list, &free);
 	parse_arguments_in_command(arguments_array, env_list);
 	return (arguments_init(arguments_array));
 }
 
-int		execute_buildin_command(t_command command, t_list *env_list)
-{
-	int				index;
-	const t_builtin	builtins[] = {
-			{"echo", &echo},
-			{"cd", &cd},
-			{"pwd", &pwd},
-			{"export", &export},
-			{"unset", &unset},
-			{"env", NULL},
-			{"exit", &ft_exit},
-	};
-
-	index = 0;
-	while (index < NUMBER_BUILDIN_CMD)
-	{
-		if (!ft_strcmp(builtins[index].command, *(command.arguments)))
-		{
-			command.arguments++;
-			if (builtins[index].func(&command, env_list))
-				print_error();
-			return (TRUE);
-		}
-		index++;
-	}
-	return (FALSE);
-}

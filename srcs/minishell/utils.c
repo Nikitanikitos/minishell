@@ -12,11 +12,6 @@
 
 #include "minishell.h"
 
-void		print_double_array(char **array)
-{
-	while (*array)
-		printf("%s\n", (*array)++);
-}
 
 void	print_arguments_list(t_list *commands)
 {
@@ -29,6 +24,20 @@ void	print_arguments_list(t_list *commands)
 		commands = commands->next;
 	}
 	printf("\n");
+}
+
+int		str_get_index(const char *str, char *elements)
+{
+	int		i;
+
+	i = 0;
+	while (str[i])
+	{
+		if (ft_strchr(elements, str[i]))
+			return (i);
+		i++;
+	}
+	return (-1);
 }
 
 char	**convert_from_list_to_array(t_list *list)
@@ -53,7 +62,6 @@ void	type_prompt(void)
 {
 	static int	first_time = 1;
 	char	*cwd;
-
 
 	if (first_time)
 		write(STDOUT_FILENO, " \e[1:1H\e[2J", 12);
