@@ -16,16 +16,13 @@ void	print_arguments_list(t_list *commands)
 {
 	t_arguments	*command;
 
+	printf("\n");
 	while (commands)
 	{
-		printf("\n");
-		command = (t_arguments*)commands->content;
-		printf("command = %s$\n", command->command);
-		while (*command->parameters != NULL)
-			printf("parameter = %s$\n", *(command->parameters)++);
+		printf("argument = %s|\n", (char*)commands->content);
 		commands = commands->next;
-		printf("\n");
 	}
+	printf("\n");
 }
 
 void	type_prompt(void)

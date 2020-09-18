@@ -80,20 +80,38 @@ void	start_process(t_arguments *arguments, t_list *env_list)
 	}
 }
 
+char	**convert_from_list_to_array(t_list *list)
+{
+	char		**array;
+	const int	size_list = ft_lstsize(list);
+	int 		i;
+
+	if ((array = (char**)malloc(sizeof(char*) * (size_list + 1))) == NULL)
+		return (NULL);
+	i = 0;
+	while (list)
+	{
+		array[i++] = (char*)list->content;
+		list = list->next;
+	}
+	return (array);
+}
+
 t_list	*minishell(char *user_input, t_list *env_list)
 {
-	char		**all_commands;
-	char		**commands;
+	t_list		*arguments_list;
+	int 		length;
+	char		**arguments_array;
 
-	all_commands = ft_split_advanced(user_input, ";");
-	while (*all_commands)
+	length = 0;
+	while (*user_input)
 	{
-		commands = ft_split_advanced(*all_commands, "|");
-		parse_and_execute_command(commands, env_list);
-		free(commands);
-		all_commands++;
+		arguments_list = parse(user_input, &length);
+		arguments_array = convert_from_list_to_array(arguments_list);
+		parse_and_execute_command(arguments_array, env_list);
+		ft_lstclear(arguments_list, &free);
+		user_input += length;
 	}
-	free_double_array(all_commands);
 	return (NULL);
 }
 

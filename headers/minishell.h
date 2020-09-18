@@ -48,6 +48,7 @@ void			eof_handler(void);
 void			start_process(t_arguments *command_list, t_list *env_list);
 void			parse_and_execute_command(char **commands, t_list *env_list);
 
+t_list	*parse(char *str, int *length_sequence);
 
 char			*parse_argument_with_single_quotes(char *parameters);
 char			*parse_argument_with_double_quotes(char *parameters, t_list *env_list);

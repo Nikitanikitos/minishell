@@ -20,9 +20,9 @@ void	parse_arguments_in_command(char **command, t_list *env_list)
 	{
 		if ((*command)[0] == '\"')
 			*command = parse_argument_with_double_quotes(*command, env_list);
-		else if ((*command)[0] == '\'')
+		if ((*command)[0] == '\'')
 			*command = parse_argument_with_single_quotes(*command);
-		else if (ft_strchr(*command, '$'))
+		if (ft_strchr(*command, '$'))
 			*command = parse_with_envp(*command, env_list);
 		command++;
 	}

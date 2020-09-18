@@ -50,6 +50,7 @@ char				*ft_itoa(int n);
 char				ft_isalnum(char c);
 char				ft_isalpha(char c);
 char				ft_isprint(char c);
+int					ft_isspace(int c);
 char				ft_isascii(char c);
 char				ft_isdigit(char c);
 char				ft_tolower(char c);
