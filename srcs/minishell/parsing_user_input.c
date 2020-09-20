@@ -31,17 +31,20 @@ int		get_length_argument(char *str)
 	return (i);
 }
 
-void	parse_arguments_in_command(char **command, t_list *env_list)
+void	parse_arguments_in_command(char ***command, t_list *env_list)
 {
-	while (*command)
+	char	**temp;
+
+	temp = *command;
+	while (*temp)
 	{
-		if ((*command)[0] == '\"')
-			*command = parse_argument_with_double_quotes(*command, env_list);
-		else if ((*command)[0] == '\'')
-			*command = parse_argument_with_single_quotes(*command);
-		else if (ft_strchr(*command, '$'))
-			*command = parse_with_envp(*command, env_list);
-		command++;
+		if ((*temp)[0] == '\"')
+			*temp = parse_argument_with_double_quotes(*temp, env_list);
+		else if ((*temp)[0] == '\'')
+			*temp = parse_argument_with_single_quotes(*temp);
+		else if (ft_strchr(*temp, '$'))
+			*temp = parse_with_envp(*temp, env_list);
+		temp++;
 	}
 }
 
@@ -74,13 +77,3 @@ t_list	*parse_user_input(char *user_input, int *length, t_list *env_list)
 	}
 	return (arguments_list);
 }
-
-//t_list	*parse_user_input(char *user_input, int *length, t_list *env_list)
-//{
-//	t_list		*arguments_list;
-//
-//	arguments_list = parse(user_input, length);
-//	arguments_array = convert_from_list_to_array(arguments_list);
-//	return (arguments_list);
-//}
-

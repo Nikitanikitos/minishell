@@ -67,8 +67,11 @@ int		echo(t_arguments *arguments, t_list *env_list)
 	int		flag;
 
 	flag = 1;
-	if (!ft_strcmp(*(arguments->arguments), "-n"))
+	if (*arguments->arguments && !ft_strcmp(*(arguments->arguments), "-n"))
+	{
 		flag = 0;
+		arguments->arguments++;
+	}
 	while (*(arguments->arguments))
 	{
 		ft_putstr_fd(*(arguments->arguments)++, arguments->fds.std_in);

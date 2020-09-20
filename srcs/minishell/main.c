@@ -46,15 +46,22 @@ void	start_process(t_arguments *arguments, t_list *env_list)
 	char		**env;
 	int			status;
 
+	int 	fd[2];
+
+	pipe(fd);
 	errno = 0;
 	if (execute_buildin_command(*arguments, env_list))
 		;
 	else if ((pid = fork()))
+	{
+//		dup2(fd[1], arguments->fds.std_in);
 		waitpid(-1, &status, 0);
+	}
 	else if (pid < 0)
 		exit(EXIT_FAILURE);
 	else
 	{
+//		dup2(fd[0], arguments->fds.temp_fd);
 		check_path(arguments->arguments, env_list);
 		if ((status = execve(arguments->arguments[0], arguments->arguments, env)))
 		{
@@ -69,9 +76,9 @@ int 	get_pipe(t_fds *fds)
 	int 	fd[2];
 
 	pipe(fd);
-	dup2(fds->std_in, fd[0]);
-	dup2(fds->std_out, fds->temp_fd);
-	dup2(fds->temp_fd, fd[1]);
+	dup2(fd[1], fds->std_in);
+	dup2(fds->temp_fd, fds->std_out);
+	dup2(fd[0], fds->temp_fd);
 	return (1);
 }
 
@@ -126,7 +133,7 @@ t_list	*minishell(char *user_input, t_list *env_list)
 			{
 				index = get_fd(arguments_list, &arguments.fds);
 				arguments.arguments = convert_from_list_to_array(arguments_list, index);
-				parse_arguments_in_command(arguments.arguments, env_list);
+//				parse_arguments_in_command(&arguments.arguments, env_list);
 				start_process(&arguments, env_list);
 //				close(arguments.fds.std_in);
 //				close(arguments.fds.std_out);
