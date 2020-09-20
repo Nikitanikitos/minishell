@@ -12,41 +12,41 @@
 
 #include "minishell.h"
 
-void	print_export(t_list *env_list)
+void	print_export(int fd, t_list *env_list)
 {
 	t_env	env;
 
 	while (env_list)
 	{
 		env = *(t_env*)env_list->content;
-		ft_putstr_fd("declare -x ", 1);
-		ft_putstr_fd(env.key, 1);
+		ft_putstr_fd("declare -x ", fd);
+		ft_putstr_fd(env.key, fd);
 		if (env.value)
 		{
-			write(1, "=", 1);
+			write(fd, "=", 1);
 			if (*(env.value))
-				ft_putendl_fd(env.value, 1);
+				ft_putendl_fd(env.value, fd);
 			else
-				ft_putendl_fd("\'\'", 1);
+				ft_putendl_fd("\'\'", fd);
 		}
 		else
-			write(1, "\n", 1);
+			write(fd, "\n", 1);
 		env_list = env_list->next;
 	}
 }
 
-int		export(t_command *command, t_list *env_list)
+int		export(t_arguments *arguments, t_list *env_list)
 {
 	char	**key_value;
 
-	if (!*(command->arguments))
-		print_export(env_list);
+	if (!*(arguments->arguments))
+		print_export(arguments->fds.std_in, env_list);
 	else
 	{
-		key_value = ft_split(*(command->arguments), '=');
+		key_value = ft_split(*(arguments->arguments), '=');
 		if (ft_str_double_len(key_value) == 1)
 		{
-			if (ft_strchr(*(command->arguments), '='))
+			if (ft_strchr(*(arguments->arguments), '='))
 				key_value[1] = ft_strdup("");
 		}
 		add_env(env_list, env_init(key_value));

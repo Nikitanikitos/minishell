@@ -12,7 +12,7 @@
 
 #include "minishell.h"
 
-int		execute_buildin_command(t_command command, t_list *env_list)
+int		execute_buildin_command(t_arguments command, t_list *env_list)
 {
 	int				index;
 	const t_builtin	builtins[] = {
@@ -40,14 +40,14 @@ int		execute_buildin_command(t_command command, t_list *env_list)
 	return (FALSE);
 }
 
-void	start_process(t_command *command, t_list *env_list)
+void	start_process(t_arguments *arguments, t_list *env_list)
 {
 	pid_t		pid;
 	char		**env;
 	int			status;
 
 	errno = 0;
-	if (execute_buildin_command(*command, env_list))
+	if (execute_buildin_command(*arguments, env_list))
 		;
 	else if ((pid = fork()))
 		waitpid(-1, &status, 0);
@@ -55,8 +55,8 @@ void	start_process(t_command *command, t_list *env_list)
 		exit(EXIT_FAILURE);
 	else
 	{
-		check_path(command->arguments, env_list);
-		if ((status = execve(*(command->arguments), command->arguments, env)))
+		check_path(arguments->arguments, env_list);
+		if ((status = execve(arguments->arguments[0], arguments->arguments, env)))
 		{
 			print_error();
 			exit(status);
@@ -64,30 +64,56 @@ void	start_process(t_command *command, t_list *env_list)
 	}
 }
 
-//void	get_fd(t_command *command)
-//{
-//	int		index;
-//
-//	index = 0;
-//	while (command->arguments[index])
-//	{
-//		if (ft_strnstr(command->arguments[index], ">", 1))
-//			return (get_forward_redirect(command, index));
-//		else if (ft_strnstr(command->arguments[index], ">>", 2))
-//			get_double_forward_redirect(command, index);
-//		else if (ft_strnstr(command->arguments[index], "<", 1))
-//			get_back_redirect(command, index);
-//		else if (ft_strnstr(command->arguments[index], "|", 1))
-//			get_pipe(command, index);
-//		index++;
-//	}
-//}
+int 	get_pipe(t_fds *fds)
+{
+	int 	fd[2];
+
+	pipe(fd);
+	dup2(fds->std_in, fd[0]);
+	dup2(fds->std_out, fds->temp_fd);
+	dup2(fds->temp_fd, fd[1]);
+	return (1);
+}
+
+int		get_fd(t_list	*arguments, t_fds *fds)
+{
+	int		index;
+	char 	*argument;
+
+	index = 0;
+	while (arguments)
+	{
+		argument = (char*)arguments->content;
+		if (!ft_strcmp(argument, ">"))
+			return (get_forward_redirect(arguments, index, fds));
+		else if (!ft_strcmp(argument, ">>"))
+			return (get_double_forward_redirect(arguments, index, fds));
+		else if (!ft_strcmp(argument, "<"))
+			return (get_back_redirect(arguments, index, fds) + 2);
+		else if (!ft_strcmp(argument, "|"))
+			return (get_pipe(fds));
+		arguments = arguments->next;
+		index++;
+	}
+	return (index);
+}
+
+//1. Из parse_user_input получаем лист аргументов
+//2. Из get_fd получаем индекс редиректа/пайпа + получаем фд
+//3. В get_redirect создаем нужные файлы + удалем из списка лишние редиректы + заменяем фд через dup2
+//4. В get_redirect и get_pipe мы изменяем список (удаляем не нужные функции)
+//3. в minishell мы создаем массив аргументов из листа до индекса редиректа/пайпа
 
 t_list	*minishell(char *user_input, t_list *env_list)
 {
-	t_command	*command;
+	t_arguments	arguments;
+	t_list		*arguments_list;
 	int 		length;
+	int 		index;
 
+	arguments.fds.std_in = STD_IN;
+	arguments.fds.std_out = STD_OUT;
+	arguments.fds.temp_fd = STD_OUT;
 	while (*user_input)
 	{
 		length = 0;
@@ -95,17 +121,20 @@ t_list	*minishell(char *user_input, t_list *env_list)
 			user_input++;
 		else
 		{
-			command = parse_user_input(user_input, &length, env_list);
-			command->fd[0] = 1;
-			command->fd[1] = 0;
-//			while (command->arguments)
-//			{
-//				get_fd(command);
-				parse_arguments_in_command(command->arguments, env_list);
-				start_process(command, env_list);
-//				(command->arguments)++;
-//				while()
-//			}
+			arguments_list = parse_user_input(user_input, &length, env_list);
+			while (arguments_list)
+			{
+				index = get_fd(arguments_list, &arguments.fds);
+				arguments.arguments = convert_from_list_to_array(arguments_list, index);
+				parse_arguments_in_command(arguments.arguments, env_list);
+				start_process(&arguments, env_list);
+//				close(arguments.fds.std_in);
+//				close(arguments.fds.std_out);
+				move_list(&arguments_list, index);
+			}
+//			close(arguments.fds.temp_fd);
+//			dup2(STD_IN, 1); // возвращаем оригинальный фд
+//			dup2(STD_OUT, 0);
 		}
 		user_input += length;
 	}
@@ -117,6 +146,8 @@ int		main(int ac, char **av, char **envp)
 	char		*user_input;
 	t_list		*env_list;
 
+	dup2(1, STD_IN);
+	dup2(0, STD_OUT);
 	signal(SIGINT, sigint_handler); // TODO добить сигналы
 	if ((env_list = get_env_list(envp)) == NULL)
 		exit(1);
@@ -133,127 +164,3 @@ int		main(int ac, char **av, char **envp)
 	}
 	return (0);
 }
-
-//#include <sys/types.h>
-//#include <unistd.h>
-//#include <stdio.h>
-//int main()
-//{
-//	int fd[2];
-//	size_t size;
-//	char string[] = "Hello, world!";
-//	char resstring[14];
-//	/* Попытаемся создать pipe */
-//	if(pipe(fd) < 0){
-//		/* Если создать pipe не удалось, печатаем об этом сообщение
-//		и прекращаем работу */
-//		printf("Can\'t create pipe\n");
-//		exit(-1);
-//	}
-//	/* Пробуем записать в pipe 14 байт из нашего массива, т.е. всю
-//	строку "Hello, world!" вместе с признаком конца строки */
-//	size = write(fd[1], string, 14);
-//	if(size != 14)
-//	{
-//		/* Если записалось меньшее количество байт, сообщаем об
-//		ошибке */
-//		printf("Can\'t write all string\n");
-//		exit(-1);
-//	}
-//	/* Пробуем прочитать из pip'а 14 байт в другой массив, т.е. всю
-//	записанную строку */
-//	size = read(fd[0], resstring, 14);
-//	if(size < 0)
-//	{
-//		/* Если прочитать не смогли, сообщаем об ошибке */
-//		printf("Can\'t read string\n");
-//		exit(-1);
-//	}
-//	/* Печатаем прочитанную строку */
-//	printf("%s\n",resstring);
-//	/* Закрываем входной поток*/
-//	if(close(fd[0]) < 0)
-//	{
-//		printf("Can\'t close input stream\n");
-//	}
-//	/* Закрываем выходной поток*/
-//	if(close(fd[1]) < 0)
-//	{
-//		printf("Can\'t close output stream\n");
-//	}
-//	return 0;
-//}
-//
-//#include <sys/types.h>
-//#include <unistd.h>
-//#include <stdio.h>
-//int main(){
-//	int fd[2], result;
-//	size_t size;
-//	char resstring[14];
-//	/* Попытаемся создать pipe */
-//	if(pipe(fd) < 0){
-//		/* Если создать pipe не удалось, печатаем об этом сообщение
-//		и прекращаем работу */
-//		printf("Can\'t create pipe\n");
-//		exit(-1);
-//	}
-//	/* Порождаем новый процесс */
-//	result = fork();
-//	if(result)
-//	{
-//		/* Если создать процесс не удалось, сообщаем об этом и
-//		завершаем работу */
-//		printf("Can\'t fork child\n");
-//		exit(-1);
-//	}
-//	else if (result > 0)
-//	{
-//		/* Мы находимся в родительском процессе, который будет
-//		передавать информацию процессу-ребенку. В этом процессе
-//		выходной поток данных нам не понадобится, поэтому
-//		закрываем его.*/
-//		close(fd[0]);
-//		/* Пробуем записать в pipe 14 байт, т.е. всю строку
-//		"Hello, world!" вместе с признаком конца строки */
-//		size = write(fd[1], "Hello, world!", 14);
-//		if(size != 14)
-//		{
-//			/* Если записалось меньшее количество байт, сообщаем
-//			об ошибке и завершаем работу */
-//			printf("Can\'t write all string\n");
-//			exit(-1);
-//		}
-//		/* Закрываем входной поток данных, на этом
-//		родитель прекращает работу */
-//		close(fd[1]);
-//		printf("Parent exit\n");
-//	}
-//	else
-//	{
-//		/* Мы находимся в порожденном процессе, который будет
-//		получать информацию от процесса-родителя. Он унаследовал
-//		от родителя таблицу открытых файлов и, зная файловые
-//		дескрипторы, соответствующие pip, иможет его использовать.
-//		В этом процессе входной поток данных нам не
-//		ипонадобится, поэтому закрываем его.*/
-//		close(fd[1]);
-//		/* Пробуем прочитать из pip'а 14 байт в массив, т.е. всю
-//		записанную строку */
-//		size = read(fd[0], resstring, 14);
-//		if(size < 0)
-//		{
-//
-//			/* Если прочитать не смогли, сообщаем об ошибке и
-//			завершаем работу */
-//
-//			printf("Can\'t read string\n");
-//			exit(-1);
-//		}
-//		/* Печатаем прочитанную строку */
-//		printf("%s\n",resstring);
-//		/* Закрываем входной поток и завершаем работу */
-//		close(fd[0]);
-//	}
-//	return 0;
-//}

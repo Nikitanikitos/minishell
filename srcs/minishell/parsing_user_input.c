@@ -45,26 +45,26 @@ void	parse_arguments_in_command(char **command, t_list *env_list)
 	}
 }
 
-t_list	*parse(char *str, int *length_sequence)
+t_list	*parse_user_input(char *user_input, int *length, t_list *env_list)
 {
 	int 	i;
 	char	*argument;
 	t_list	*arguments_list;
 
 	arguments_list = NULL;
-	while (*str)
+	while (*user_input)
 	{
-		while (ft_isspace(*str))
+		while (ft_isspace(*user_input))
 		{
-			(*length_sequence)++;
-			str++;
+			(*length)++;
+			user_input++;
 		}
-		if (*str == ';')
+		if (*user_input == ';')
 			return (arguments_list);
-		i = get_length_argument(str);
-		*length_sequence += i;
-		argument = ft_strndup(str, (size_t)i);
-		str += i;
+		i = get_length_argument(user_input);
+		*length += i;
+		argument = ft_strndup(user_input, (size_t)i);
+		user_input += i;
 		if (!ft_strcmp(argument, "\'\'") || !ft_strcmp(argument, "\"\""))
 			free(argument);
 		else if (arguments_list)
@@ -75,13 +75,12 @@ t_list	*parse(char *str, int *length_sequence)
 	return (arguments_list);
 }
 
-t_command	*parse_user_input(char *user_input, int *length, t_list *env_list)
-{
-	t_list		*arguments_list;
-	char		**arguments_array;
-
-	arguments_list = parse(user_input, length);
-	arguments_array = convert_from_list_to_array(arguments_list);
-	return (arguments_init(arguments_array));
-}
+//t_list	*parse_user_input(char *user_input, int *length, t_list *env_list)
+//{
+//	t_list		*arguments_list;
+//
+//	arguments_list = parse(user_input, length);
+//	arguments_array = convert_from_list_to_array(arguments_list);
+//	return (arguments_list);
+//}
 

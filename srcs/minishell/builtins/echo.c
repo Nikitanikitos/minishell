@@ -12,7 +12,7 @@
 
 #include "minishell.h"
 
-//static int		create_fd(t_command *args)
+//static int		create_fd(t_arguments *args)
 //{
 //	int i;
 //	int	fd;
@@ -33,7 +33,7 @@
 //	return (fd);
 //}
 //
-//char			**rebuild_args(t_command *arguments)
+//char			**rebuild_args(t_arguments *arguments)
 //{
 //	char **new;
 //	int i;
@@ -62,24 +62,24 @@
 //	return (new);
 //}
 
-int		echo(t_command *command, t_list *env_list)
+int		echo(t_arguments *arguments, t_list *env_list)
 {
 	int		flag;
 
 	flag = 1;
-	if (!ft_strcmp(*(command->arguments), "-n"))
+	if (!ft_strcmp(*(arguments->arguments), "-n"))
 		flag = 0;
-	while (*(command->arguments))
+	while (*(arguments->arguments))
 	{
-		ft_putstr_fd(*(command->arguments)++, 1);
-		if (*(command->arguments))
-			write(1, " ", 1);
+		ft_putstr_fd(*(arguments->arguments)++, arguments->fds.std_in);
+		if (*(arguments->arguments))
+			write(arguments->fds.std_in, " ", 1);
 	}
-	write(STDOUT_FILENO, "\n", (size_t)flag);
+	write(arguments->fds.std_in, "\n", (size_t)flag);
 	return (errno);
 }
 
-//int				echo(t_command *arguments, t_list *env_list)
+//int				echo(t_arguments *arguments, t_list *env_list)
 //{
 //	int		i;
 //	int		flag;

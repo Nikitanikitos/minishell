@@ -12,11 +12,11 @@
 
 #include "minishell.h"
 
-t_command	*arguments_init(char **command)
+t_arguments	*arguments_init(char **command)
 {
-	t_command	*arguments;
+	t_arguments	*arguments;
 
-	if (!(arguments = (t_command*)malloc(sizeof(t_command))))
+	if (!(arguments = (t_arguments*)malloc(sizeof(t_arguments))))
 		return (NULL);
 	arguments->arguments = command;
 	return (arguments);

@@ -12,12 +12,12 @@
 
 #include "minishell.h"
 
-int		pwd(t_command *arguments, t_list *env_list)
+int		pwd(t_arguments *arguments, t_list *env_list)
 {
 	char	*cwd;
 
 	cwd = getcwd(NULL, 0);
-	ft_putendl_fd(cwd, 1);
+	ft_putendl_fd(cwd, arguments->fds.std_in);
 	free(cwd);
 	return (errno);
 }
@@ -36,7 +36,7 @@ char	*get_destination_directory(char *directory)
 	return (new_path);
 }
 
-int		cd(t_command *command, t_list *env_list)
+int		cd(t_arguments *command, t_list *env_list)
 {
 	char	*new_path;
 
@@ -52,7 +52,7 @@ int		cd(t_command *command, t_list *env_list)
 	return (errno);
 }
 
-int		ft_exit(t_command *command, t_list *env_list)
+int		ft_exit(t_arguments *command, t_list *env_list)
 {
 	ft_lstclear(env_list, &free_env);
 	free_double_array(command->arguments);

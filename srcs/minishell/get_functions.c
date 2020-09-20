@@ -12,77 +12,61 @@
 
 #include "minishell.h"
 
-int		get_forward_redirect(t_command *command, int index)
+int		get_forward_redirect(t_list *arguments, int index, t_fds *fds)
 {
 	int		fd;
-	int		i;
 
 	fd = 0;
-	i = 0;
-	while (command->arguments[i])
+	while (arguments)
 	{
-		if (!ft_strncmp(">", command->arguments[i], 1))
+		if (!ft_strcmp(">", (char*)arguments->content))
 		{
-			index = i;
 			if (fd != 0)
-			{
 				close(fd);
-				fd = 0;
-			}
-			fd = open(command->arguments[++i], O_CREAT | O_APPEND | O_RDWR, 0777);
+			fd = open((char*)arguments->next->content, O_CREAT | O_APPEND | O_RDWR, 0777);
 		}
-		i++;
+		arguments = arguments->next;
 	}
-	command->fd[1] = fd;
+	fds->std_out = fd;
+	fds->temp_fd = fd;
 	return (index);
 }
 
-int		get_double_forward_redirect(t_command *command, int index)
+int		get_double_forward_redirect(t_list *arguments, int index, t_fds *fds)
 {
 	int		fd;
-	int		i;
 
 	fd = 0;
-	i = 0;
-	while (command->arguments[i])
+	while (arguments)
 	{
-		if (!ft_strncmp(">>", command->arguments[i], 2))
+		if (!ft_strcmp(">>", (char*)arguments->content))
 		{
-			index = i;
 			if (fd != 0)
-			{
 				close(fd);
-				fd = 0;
-			}
-			fd = open(command->arguments[++i], O_CREAT | O_TRUNC | O_RDWR, 0777);
+			fd = open((char*)arguments->next->content, O_CREAT | O_TRUNC | O_RDWR, 0777);
 		}
-		i++;
+		arguments = arguments->next;
 	}
-	command->fd[1] = fd;
+	fds->std_out = fd;
+	fds->temp_fd = fd;
 	return (index);
 }
 
-int		get_back_redirect(t_command *command, int index)
+int		get_back_redirect(t_list *arguments, int index, t_fds *fds)
 {
 	int		fd;
-	int		i;
 
 	fd = 0;
-	i = 0;
-	while (command->arguments[i])
+	while (arguments)
 	{
-		if (!ft_strncmp("<", command->arguments[i], 1))
+		if (!ft_strcmp("<", (char*)arguments->content))
 		{
-			index = i;
 			if (fd != 0)
-			{
 				close(fd);
-				fd = 0;
-			}
-			fd = open(command->arguments[++i], O_RDONLY);
+			fd = open((char*)arguments->next->content, O_RDONLY);
 		}
-		i++;
+		arguments = arguments->next;
 	}
-	command->fd[0] = fd;
+	fds->std_in = fd; // TODO ?
 	return (index);
 }

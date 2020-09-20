@@ -27,9 +27,9 @@ void	free_double_array(char **array)
 
 //void	free_arguments(void *arguments)
 //{
-//	t_command *commands;
+//	t_arguments *commands;
 //
-//	commands = (t_command*)arguments;
+//	commands = (t_arguments*)arguments;
 //	free_double_array(commands->parameters);
 //	free(commands);
 //}

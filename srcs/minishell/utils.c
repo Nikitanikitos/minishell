@@ -15,7 +15,7 @@
 
 void	print_arguments_list(t_list *commands)
 {
-	t_command	*command;
+	t_arguments	*command;
 
 	printf("\n");
 	while (commands)
@@ -40,16 +40,19 @@ int		str_get_index(const char *str, char *elements)
 	return (-1);
 }
 
-char	**convert_from_list_to_array(t_list *list)
+char	**convert_from_list_to_array(t_list *list, int size_array)
 {
 	char		**array;
-	const int	size_list = ft_lstsize(list);
+	int			size_list;
 	int 		i;
 
+	size_list = ft_lstsize(list);
+	if (size_list > size_array)
+		size_list = size_array;
 	if ((array = (char**)malloc(sizeof(char*) * (size_list + 1))) == NULL)
 		return (NULL);
 	i = 0;
-	while (list)
+	while (list && size_array--)
 	{
 		array[i++] = ft_strdup(list->content);
 		list = list->next;
