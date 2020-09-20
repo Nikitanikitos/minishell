@@ -79,7 +79,10 @@ void	move_list(t_list **list, int length)
 	while (list && length--)
 	{
 		temp_element = *list;
+		if (temp_element == NULL)
+			return;
 		*list = (*list)->next;
 		free(temp_element->content);
+		free(temp_element);
 	}
 }
