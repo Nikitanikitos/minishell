@@ -56,7 +56,7 @@
 //			i++;
 //		else
 //			new[j++] = ft_strdup(arguments->parameters[i]);
-//	arguments->command = new[0];
+//	arguments->func_name = new[0];
 //	// free_double_array(arguments->parameters);
 //	new[j] = 0;
 //	return (new);

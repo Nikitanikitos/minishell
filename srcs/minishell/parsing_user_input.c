@@ -17,8 +17,12 @@ int		get_length_argument(char *str)
 	int		i;
 
 	i = 0;
-	if (str[i] != '\'' && str[i] != '\"' && str[i] != ';')
-		while (!ft_isspace(str[i]) && !ft_strchr(";\'\"\0", str[i]))
+	if (ft_strnstr(str, ">>", 2))
+		i = 2;
+	else if (ft_strchr("|><", str[i]))
+		i = 1;
+	else if (!ft_strchr("\'\";|><", str[i]))
+		while (!ft_isspace(str[i]) && !ft_strchr(";|><\'\"\0", str[i]))
 			i++;
 	else if (str[i] == '\'')
 		i = get_next_quote(str, '\'', i);
@@ -78,7 +82,6 @@ t_command	*parse_user_input(char *user_input, int *length, t_list *env_list)
 
 	arguments_list = parse(user_input, length);
 	arguments_array = convert_from_list_to_array(arguments_list);
-	parse_arguments_in_command(arguments_array, env_list);
 	return (arguments_init(arguments_array));
 }
 

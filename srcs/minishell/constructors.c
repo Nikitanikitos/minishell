@@ -19,7 +19,6 @@ t_command	*arguments_init(char **command)
 	if (!(arguments = (t_command*)malloc(sizeof(t_command))))
 		return (NULL);
 	arguments->arguments = command;
-	arguments->fd = NULL;
 	return (arguments);
 }
 
