@@ -24,14 +24,10 @@
 # define TRUE				1
 # define FALSE				0
 
-# define STD_IN				3
-# define STD_OUT			4
-
 typedef struct	s_fds
 {
 	int 		std_in;
 	int 		std_out;
-	int 		temp_fd;
 }				t_fds;
 
 typedef struct	s_arguments
@@ -78,10 +74,11 @@ t_env			*env_init(char **key_value);
 
 t_list			*get_env_list(char **envp);
 
+int				get_fd(t_list	*arguments, t_fds *fds);
 int				get_back_redirect(t_list *arguments, int index, t_fds *fds);
 int				get_double_forward_redirect(t_list *arguments, int index, t_fds *fds);
 int				get_forward_redirect(t_list *arguments, int index, t_fds *fds);
-
+int				is_fork(t_fds fds);
 int				get_next_quote(const char *str, char quote, int i);
 int				str_get_index(const char *str, char *elements);
 int				ft_get_index_array(char **arrays, char *array);

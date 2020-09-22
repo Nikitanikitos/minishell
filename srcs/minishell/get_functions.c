@@ -28,7 +28,6 @@ int		get_forward_redirect(t_list *arguments, int index, t_fds *fds)
 		arguments = arguments->next;
 	}
 	fds->std_out = fd;
-	fds->temp_fd = fd;
 	return (index);
 }
 
@@ -48,7 +47,6 @@ int		get_double_forward_redirect(t_list *arguments, int index, t_fds *fds)
 		arguments = arguments->next;
 	}
 	fds->std_out = fd;
-	fds->temp_fd = fd;
 	return (index);
 }
 

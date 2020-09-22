@@ -26,6 +26,11 @@ void	print_arguments_list(t_list *commands)
 	printf("\n");
 }
 
+int		is_fork(t_fds fds)
+{
+	return (fds.std_in != 3 && fds.std_out != 4);
+}
+
 int		str_get_index(const char *str, char *elements)
 {
 	int		i;

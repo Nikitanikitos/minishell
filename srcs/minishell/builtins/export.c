@@ -12,25 +12,25 @@
 
 #include "minishell.h"
 
-void	print_export(int fd, t_list *env_list)
+void	print_export(t_list *env_list)
 {
 	t_env	env;
 
 	while (env_list)
 	{
 		env = *(t_env*)env_list->content;
-		ft_putstr_fd("declare -x ", fd);
-		ft_putstr_fd(env.key, fd);
+		ft_putstr_fd("declare -x ", 1);
+		ft_putstr_fd(env.key, 1);
 		if (env.value)
 		{
-			write(fd, "=", 1);
+			write(1, "=", 1);
 			if (*(env.value))
-				ft_putendl_fd(env.value, fd);
+				ft_putendl_fd(env.value, 1);
 			else
-				ft_putendl_fd("\'\'", fd);
+				ft_putendl_fd("\'\'", 1);
 		}
 		else
-			write(fd, "\n", 1);
+			write(1, "\n", 1);
 		env_list = env_list->next;
 	}
 }
@@ -40,7 +40,7 @@ int		export(t_arguments *arguments, t_list *env_list)
 	char	**key_value;
 
 	if (!*(arguments->arguments))
-		print_export(arguments->fds.std_in, env_list);
+		print_export(env_list);
 	else
 	{
 		key_value = ft_split(*(arguments->arguments), '=');

@@ -74,11 +74,11 @@ int		echo(t_arguments *arguments, t_list *env_list)
 	}
 	while (*(arguments->arguments))
 	{
-		ft_putstr_fd(*(arguments->arguments)++, arguments->fds.std_in);
+		ft_putstr_fd(*(arguments->arguments)++, 1);
 		if (*(arguments->arguments))
-			write(arguments->fds.std_in, " ", 1);
+			write(1, " ", 1);
 	}
-	write(arguments->fds.std_in, "\n", (size_t)flag);
+	write(1, "\n", (size_t)flag);
 	return (errno);
 }
 

@@ -17,7 +17,7 @@ int		pwd(t_arguments *arguments, t_list *env_list)
 	char	*cwd;
 
 	cwd = getcwd(NULL, 0);
-	ft_putendl_fd(cwd, arguments->fds.std_in);
+	ft_putendl_fd(cwd, 1);
 	free(cwd);
 	return (errno);
 }
