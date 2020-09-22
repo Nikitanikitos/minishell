@@ -81,10 +81,16 @@ void	type_prompt(void)
 	write(1, "~$ ", 3);
 }
 
-void	print_error(void)
+void	print_error(char **arguments)
 {
 	char	*error;
 
+	ft_putstr_fd("minishell: ", 2);
+	while (*arguments)
+	{
+		ft_putstr_fd(*arguments++, 2);
+		ft_putstr_fd(": ", 2);
+	}
 	error = strerror(errno);
 	ft_putendl_fd(error, STDERR_FILENO);
 }

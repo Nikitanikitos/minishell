@@ -32,7 +32,7 @@ int		execute_buildin_command(t_arguments arguments, t_list *env_list)
 		{
 			arguments.arguments++;
 			if (builtins[index].func(&arguments, env_list))
-				print_error();
+				print_error(--arguments.arguments);
 			return (TRUE);
 		}
 		index++;
@@ -43,6 +43,7 @@ int		execute_buildin_command(t_arguments arguments, t_list *env_list)
 void	start_process(t_arguments *arguments, t_list *env_list)
 {
 	pid_t		pid;
+	int			status;
 
 	errno = 0;
 	if (execute_buildin_command(*arguments, env_list))
@@ -54,8 +55,11 @@ void	start_process(t_arguments *arguments, t_list *env_list)
 	else
 	{
 		check_path(arguments->arguments, env_list);
-		if (execve(*arguments->arguments, arguments->arguments, NULL))
-			print_error();
+		if ((status = execve(*arguments->arguments, arguments->arguments, NULL)))
+		{
+			print_error(arguments->arguments);
+			exit(status);
+		}
 	}
 }
 

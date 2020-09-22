@@ -51,10 +51,11 @@ char	**get_paths(t_list *env_list)
 
 void	check_path(char **command, t_list *env_list)
 {
-	char	*temp_command;
-	char 	**paths;
-	int 	i;
-	int 	fd;
+	const char	*temp_command = ft_strdup(*command);
+	char		*current_command;
+	char 		**paths;
+	int 		i;
+	int 		fd;
 
 	i = 0;
 	if ((fd = open(*command, O_RDONLY)) != -1)
@@ -62,13 +63,13 @@ void	check_path(char **command, t_list *env_list)
 		close(fd);
 		return;
 	}
-	temp_command = ft_strjoin("/", *command);
+	current_command = ft_strjoin("/", *command);
 	free(*command);
 	if ((paths = get_paths(env_list)) == NULL)
 		return;
 	while (paths[i])
 	{
-		*command = ft_strjoin(paths[i], temp_command);
+		*command = ft_strjoin(paths[i], current_command);
 		if ((fd = open(*command, O_RDONLY)) != -1)
 			break;
 		free(*command);
@@ -76,5 +77,7 @@ void	check_path(char **command, t_list *env_list)
 	}
 	if (fd != -1)
 		close(fd);
+	else
+		*command = (char*)temp_command;
 	free_double_array(paths);
 }
