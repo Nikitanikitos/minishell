@@ -21,7 +21,7 @@ int		execute_buildin_command(t_arguments arguments, t_list *env_list)
 			{"pwd", &pwd},
 			{"export", &export},
 			{"unset", &unset},
-			{"env", NULL},
+			{"env", &env},
 			{"exit", &ft_exit},
 	};
 
@@ -68,8 +68,8 @@ void	fork_process(t_arguments arguments, t_list *env_list)
 	{
 		dup2(arguments.fds.std_out, STDOUT_FILENO);
 		start_process(&arguments, env_list);
-//		close(arguments.fds.std_in);
-//		close(STDOUT_FILENO);
+		close(arguments.fds.std_in);
+		close(STDOUT_FILENO);
 		exit(0);
 	}
 	else			// родительский процесс

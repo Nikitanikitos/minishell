@@ -84,6 +84,7 @@ int				str_get_index(const char *str, char *elements);
 int				ft_get_index_array(char **arrays, char *array);
 
 int				echo(t_arguments* arguments, t_list *env_list);
+int				env(t_arguments *arguments, t_list *env_list);
 int				export(t_arguments *, t_list *env_list);
 int				cd(t_arguments *command, t_list *env_list);
 int				ft_exit(t_arguments*, t_list *env_list);

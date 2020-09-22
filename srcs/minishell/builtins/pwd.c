@@ -22,33 +22,16 @@ int		pwd(t_arguments *arguments, t_list *env_list)
 	return (errno);
 }
 
-char	*get_destination_directory(char *directory)
-{
-	char	*new_path;
-	char	*temp_path;
-	char	*cwd;
-
-	cwd = getcwd(NULL, 0);
-	temp_path = ft_strjoin("/", directory);
-	new_path = ft_strjoin(cwd, temp_path);
-	free(temp_path);
-	free(cwd);
-	return (new_path);
-}
-
 int		cd(t_arguments *command, t_list *env_list)
 {
-	char	*new_path;
 
-	if (*(command->arguments)== NULL)
-		new_path = ft_strdup("/");
-	else if (*(command->arguments)[0] == '/' ||
-		!ft_strncmp(*(command->arguments), "../", 3))
-		new_path = ft_strdup(*(command->arguments));
+	if (*command->arguments== NULL)
+		chdir("/");
 	else
-		new_path = get_destination_directory(*(command->arguments));
-	chdir(new_path);
-	free(new_path);
+	{
+		ft_lower(*command->arguments);
+		chdir(*command->arguments);
+	}
 	return (errno);
 }
 

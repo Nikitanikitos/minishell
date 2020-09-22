@@ -24,10 +24,7 @@ void	print_export(t_list *env_list)
 		if (env.value)
 		{
 			write(1, "=", 1);
-			if (*(env.value))
-				ft_putendl_fd(env.value, 1);
-			else
-				ft_putendl_fd("\'\'", 1);
+			ft_putendl_fd(env.value, 1);
 		}
 		else
 			write(1, "\n", 1);
@@ -49,12 +46,30 @@ int		export(t_arguments *arguments, t_list *env_list)
 			if (ft_str_double_len(key_value) == 1)
 			{
 				if (ft_strchr(*arguments->arguments, '='))
-					key_value[1] = ft_strdup("");
+					key_value[1] = ft_strdup("\'\'");
 			}
 			add_env(env_list, env_init(key_value));
 			free(key_value);
 			arguments->arguments++;
 		}
+	}
+	return (errno);
+}
+
+int		env(t_arguments *arguments, t_list *env_list)
+{
+	t_env	env;
+
+	while (env_list)
+	{
+		env = *(t_env*)env_list->content;
+		if (env.value)
+		{
+			ft_putstr_fd(env.key, 1);
+			write(1, "=", 1);
+			ft_putendl_fd(env.value, 1);
+		}
+		env_list = env_list->next;
 	}
 	return (errno);
 }

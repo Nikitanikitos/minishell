@@ -53,7 +53,7 @@ char				ft_isprint(char c);
 int					ft_isspace(int c);
 char				ft_isascii(char c);
 char				ft_isdigit(char c);
-char				ft_tolower(char c);
+char				*ft_lower(char *c);
 char				ft_toupper(char c);
 char				*ft_strdup(const char *src);
 char				*ft_strndup(const char *src, size_t len);

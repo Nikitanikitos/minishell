@@ -17,7 +17,7 @@ int		get_length_argument(char *str)
 	int		i;
 
 	i = 0;
-	if (ft_strcmp(str, ">>"))
+	if (!ft_strcmp(str, ">>"))
 		i = 2;
 	else if (ft_strchr("|><", str[i]))
 		i = 1;
