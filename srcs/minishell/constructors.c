@@ -12,17 +12,7 @@
 
 #include "minishell.h"
 
-t_arguments	*arguments_init(char **command)
-{
-	t_arguments	*arguments;
-
-	if (!(arguments = (t_arguments*)malloc(sizeof(t_arguments))))
-		return (NULL);
-	arguments->arguments = command;
-	return (arguments);
-}
-
-t_env	*env_init(char **key_value)
+t_env		*env_init(char **key_value)
 {
 	t_env	*env;
 

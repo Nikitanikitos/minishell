@@ -89,8 +89,8 @@ void	minishell(char *user_input, t_list *env_list)
 {
 	t_arguments	arguments;
 	t_list		*arguments_list;
-	int 		length;
-	int 		index;
+	int			length;
+	int			index;
 
 	while (*user_input)
 	{
@@ -123,7 +123,7 @@ int		main(int ac, char **av, char **envp)
 
 	dup2(1, 3);
 	dup2(0, 4);
-	signal(SIGINT, sigint_handler); // TODO добить сигналы
+	signal(SIGINT, sigint_handler);
 	if ((env_list = get_env_list(envp)) == NULL)
 		exit(EXIT_FAILURE);
 	while (TRUE)

@@ -22,17 +22,7 @@ void	free_double_array(char **array)
 		array++;
 		free(temp);
 	}
-//	free(array);
 }
-
-//void	free_arguments(void *arguments)
-//{
-//	t_arguments *commands;
-//
-//	commands = (t_arguments*)arguments;
-//	free_double_array(commands->parameters);
-//	free(commands);
-//}
 
 void	free_env(void *arg)
 {

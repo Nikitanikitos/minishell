@@ -16,7 +16,7 @@ char	*parse_with_envp(char *parameters, t_list *env_list)
 {
 	char	*result;
 	char	*temp;
-	int 	index;
+	int		index;
 
 	if (*parameters == '$')
 	{
@@ -53,25 +53,25 @@ void	check_path(char **command, t_list *env_list)
 {
 	const char	*temp_command = ft_strdup(*command);
 	char		*current_command;
-	char 		**paths;
-	int 		i;
-	int 		fd;
+	char		**paths;
+	int			i;
+	int			fd;
 
 	i = 0;
 	if ((fd = open(*command, O_RDONLY)) != -1)
 	{
 		close(fd);
-		return;
+		return ;
 	}
 	current_command = ft_strjoin("/", *command);
 	free(*command);
 	if ((paths = get_paths(env_list)) == NULL)
-		return;
+		return ;
 	while (paths[i])
 	{
 		*command = ft_strjoin(paths[i], current_command);
 		if ((fd = open(*command, O_RDONLY)) != -1)
-			break;
+			break ;
 		free(*command);
 		i++;
 	}

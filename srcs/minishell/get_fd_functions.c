@@ -14,7 +14,7 @@
 
 void	get_pipe(t_fds *fds)
 {
-	int 	fd[2];
+	int		fd[2];
 
 	pipe(fd);
 	fds->std_in = fd[0];
@@ -78,7 +78,7 @@ void	get_back_redirect(t_list *arguments, t_fds *fds)
 int		get_fd(t_list *arguments, t_fds *fds)
 {
 	int		index;
-	char 	*argument;
+	char	*argument;
 
 	index = 0;
 	while (arguments)
@@ -93,7 +93,7 @@ int		get_fd(t_list *arguments, t_fds *fds)
 		else if (!ft_strcmp(argument, "|"))
 		{
 			get_pipe(fds);
-			break;
+			break ;
 		}
 		arguments = arguments->next;
 		index++;
