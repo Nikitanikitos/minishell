@@ -31,45 +31,36 @@ void	unset_env(t_list *env_list, t_list *prev_element)
 	}
 }
 
-int		unset(t_arguments *command, t_list *env_list)
+void	check_in_env(char *argument, t_list *env_list)
 {
 	t_list		*prev_element;
 	t_env		*current_env;
 
 	prev_element = NULL;
-	if (!*(command->arguments))
-		return (errno);
 	while (env_list)
 	{
 		current_env = (t_env*)env_list->content;
-		if (!ft_strcmp(current_env->key, *(command->arguments)))
+		if (!ft_strcmp(current_env->key, argument))
 		{
 			unset_env(env_list, prev_element);
-			return (errno);
+			return ;
 		}
 		prev_element = env_list;
 		env_list = env_list->next;
 	}
-	return (errno);
 }
 
-void	delete_element(t_list *list, t_list *prev_element)
+int		unset(t_arguments *arguments, t_list *env_list)
 {
-	t_list *temp_element;
 
-	free_env(list->content);
-	if (prev_element)
+	if (!*arguments->arguments)
+		return (errno);
+	while (*arguments->arguments)
 	{
-		prev_element->next = list->next;
-		free(list);
+		check_in_env(*arguments->arguments, env_list);
+		arguments->arguments++;
 	}
-	else if (list->next)
-	{
-		temp_element = list->next;
-		list->content = list->next->content;
-		list->next = list->next->next;
-		free(temp_element);
-	}
+	return (errno);
 }
 
 void	move_list(t_list **list, int length)

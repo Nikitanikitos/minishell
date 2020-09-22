@@ -25,5 +25,5 @@ void	sigint_handler(int signum)
 void	eof_handler(void)
 {
 	ft_putendl_fd("exit", 1);
-	exit(0);
+	exit(EXIT_SUCCESS);
 }

@@ -57,9 +57,9 @@ void			move_list(t_list **list, int index);
 
 void			sigint_handler(int signum);
 void			type_prompt(void);
-t_list			*parse_user_input(char *user_input, int *length, t_list *env_list);
+t_list			*parse_user_input(char *user_input, int *length);
 
-void			parse_arguments_in_command(char ***arguments,t_list *env_list);
+void			parse_arguments_in_command(char **arguments,t_list *env_list);
 void			print_error(void);
 void			print_arguments_list(t_list	*commands);
 //void			print_export(t_list *env_list);
@@ -88,4 +88,4 @@ int				export(t_arguments *, t_list *env_list);
 int				cd(t_arguments *command, t_list *env_list);
 int				ft_exit(t_arguments*, t_list *env_list);
 int				pwd(t_arguments*, t_list *env_list);
-int				unset(t_arguments *command, t_list *env_list);
+int				unset(t_arguments *arguments, t_list *env_list);

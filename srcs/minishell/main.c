@@ -68,8 +68,8 @@ void	fork_process(t_arguments arguments, t_list *env_list)
 	{
 		dup2(arguments.fds.std_out, STDOUT_FILENO);
 		start_process(&arguments, env_list);
-		close(arguments.fds.std_in);
-		close(STDOUT_FILENO);
+//		close(arguments.fds.std_in);
+//		close(STDOUT_FILENO);
 		exit(0);
 	}
 	else			// родительский процесс
@@ -95,11 +95,12 @@ void	minishell(char *user_input, t_list *env_list)
 			user_input++;
 		else
 		{
-			arguments_list = parse_user_input(user_input, &length, env_list);
+			arguments_list = parse_user_input(user_input, &length);
 			while (arguments_list)
 			{
 				index = get_fd(arguments_list, &arguments.fds);
 				arguments.arguments = convert_from_list_to_array(arguments_list, index);
+				parse_arguments_in_command(arguments.arguments, env_list);
 				move_list(&arguments_list, index + 1);
 				if (is_fork(arguments.fds))
 					fork_process(arguments, env_list);
@@ -120,7 +121,7 @@ int		main(int ac, char **av, char **envp)
 	dup2(0, 4);
 	signal(SIGINT, sigint_handler); // TODO добить сигналы
 	if ((env_list = get_env_list(envp)) == NULL)
-		exit(1);
+		exit(EXIT_FAILURE);
 	while (TRUE)
 	{
 		type_prompt();

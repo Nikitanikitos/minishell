@@ -43,14 +43,18 @@ int		export(t_arguments *arguments, t_list *env_list)
 		print_export(env_list);
 	else
 	{
-		key_value = ft_split(*(arguments->arguments), '=');
-		if (ft_str_double_len(key_value) == 1)
+		while (*arguments->arguments)
 		{
-			if (ft_strchr(*(arguments->arguments), '='))
-				key_value[1] = ft_strdup("");
+			key_value = ft_split(*arguments->arguments, '=');
+			if (ft_str_double_len(key_value) == 1)
+			{
+				if (ft_strchr(*arguments->arguments, '='))
+					key_value[1] = ft_strdup("");
+			}
+			add_env(env_list, env_init(key_value));
+			free(key_value);
+			arguments->arguments++;
 		}
-		add_env(env_list, env_init(key_value));
-		free(key_value);
 	}
 	return (errno);
 }

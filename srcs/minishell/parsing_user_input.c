@@ -17,7 +17,7 @@ int		get_length_argument(char *str)
 	int		i;
 
 	i = 0;
-	if (ft_strnstr(str, ">>", 2))
+	if (ft_strcmp(str, ">>"))
 		i = 2;
 	else if (ft_strchr("|><", str[i]))
 		i = 1;
@@ -31,24 +31,41 @@ int		get_length_argument(char *str)
 	return (i);
 }
 
-void	parse_arguments_in_command(char ***command, t_list *env_list)
-{
-	char	**temp;
+//void	parse_arguments_in_command(char ***command, t_list *env_list)
+//{
+//	char	**temp;
+//
+//	temp = *command;
+//	while (*temp)
+//	{
+//		if ((*temp)[0] == '\"')
+//			*temp = parse_argument_with_double_quotes(*temp, env_list);
+//		else if ((*temp)[0] == '\'')
+//			*temp = parse_argument_with_single_quotes(*temp);
+//		else if (ft_strchr(*temp, '$'))
+//			*temp = parse_with_envp(*temp, env_list);
+//		temp++;
+//	}
+//}
 
-	temp = *command;
-	while (*temp)
+void	parse_arguments_in_command(char **arguments, t_list *env_list)
+{
+	int 	i;
+
+	i = 0;
+	while (arguments[i])
 	{
-		if ((*temp)[0] == '\"')
-			*temp = parse_argument_with_double_quotes(*temp, env_list);
-		else if ((*temp)[0] == '\'')
-			*temp = parse_argument_with_single_quotes(*temp);
-		else if (ft_strchr(*temp, '$'))
-			*temp = parse_with_envp(*temp, env_list);
-		temp++;
+		if (arguments[i][0] == '\"')
+			arguments[i] = parse_argument_with_double_quotes(arguments[i], env_list);
+		else if (arguments[i][0] == '\'')
+			arguments[i] = parse_argument_with_single_quotes(arguments[i]);
+		else if (ft_strchr(arguments[i], '$'))
+			arguments[i] = parse_with_envp(arguments[i], env_list);
+		i++;
 	}
 }
 
-t_list	*parse_user_input(char *user_input, int *length, t_list *env_list)
+t_list	*parse_user_input(char *user_input, int *length)
 {
 	int 	i;
 	char	*argument;
