@@ -28,3 +28,30 @@ void	*ft_realloc(char *src, int size)
 		src = (char*)malloc(sizeof(char) * size);
 	return (src);
 }
+
+char	**ft_double_realloc(char **src, int size)
+{
+	char	**temp;
+	int 	i;
+
+	temp = src;
+	i = 0;
+	if (src)
+	{
+		size += ft_str_double_len(src);
+		src = (char**)malloc(sizeof(char*) * (size + 1));
+		while (i < size)
+		{
+			src[i] = temp[i];
+			i++;
+		}
+		src[i] = NULL;
+		free(temp);
+	}
+	else
+	{
+		src = (char**)malloc(sizeof(char*) * (size + 1));
+		src[size] = NULL;
+	}
+	return (src);
+}

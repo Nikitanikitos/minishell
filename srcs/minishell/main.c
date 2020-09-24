@@ -88,7 +88,6 @@ void	fork_process(t_arguments arguments, t_list *env_list)
 void	minishell(char *user_input, t_list *env_list)
 {
 	t_arguments	arguments;
-	t_list		*arguments_list;
 	int			length;
 	int			index;
 
@@ -99,18 +98,22 @@ void	minishell(char *user_input, t_list *env_list)
 			user_input++;
 		else
 		{
-			arguments_list = parse_user_input(user_input, &length);
-			while (arguments_list)
+			arguments.arguments = parse_user_input(user_input, &length);
+			while (*arguments.arguments)
 			{
-				index = get_fd(arguments_list, &arguments.fds);
-				arguments.arguments = convert_from_list_to_array(arguments_list, index);
-				parse_arguments_in_command(arguments.arguments, env_list);
-				move_list(&arguments_list, index + 1);
-				if (is_fork(arguments.fds))
-					fork_process(arguments, env_list);
-				else
-					start_process(&arguments, env_list);
+				printf("%s\n", *arguments.arguments++);
 			}
+//			while (arguments_list)
+//			{
+//				index = get_fd(arguments_list, &arguments.fds);
+//				arguments.arguments = convert_from_list_to_array(arguments_list, index);
+//				parse_arguments_in_command(arguments.arguments, env_list);
+//				move_list(&arguments_list, index + 1);
+//				if (is_fork(arguments.fds))
+//					fork_process(arguments, env_list);
+//				else
+//					start_process(&arguments, env_list);
+//			}
 		}
 		user_input += length;
 	}

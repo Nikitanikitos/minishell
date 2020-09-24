@@ -39,6 +39,7 @@ void				ft_putnbr_fd(int nbr, int fd);
 void				ft_bzero(void *dest, size_t byte_sizes);
 void				*ft_calloc(size_t num, size_t byte_sizes);
 void 				*ft_realloc(char *src, int size);
+char				**ft_double_realloc(char **src, int size);
 void				*ft_memset(void *dest, int chr, size_t byte_sizes);
 void				*ft_memchr(const void *arr, int c, size_t byte_sizes);
 void				*ft_memcpy(void *dest, const void *src, size_t byte_sizes);

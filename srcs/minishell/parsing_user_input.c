@@ -15,19 +15,21 @@
 int		get_length_argument(char *str)
 {
 	int		i;
+	int 	quote;
 
 	i = 0;
-	if (!ft_strcmp(str, ">>"))
-		i = 2;
-	else if (ft_strchr("|><", str[i]))
-		i = 1;
-	else if (!ft_strchr("\'\";|><", str[i]))
-		while (!ft_isspace(str[i]) && !ft_strchr(";|><\'\"\0", str[i]))
-			i++;
-	else if (str[i] == '\'')
-		i = get_next_quote(str, '\'', i);
-	else if (str[i] == '\"')
-		i = get_next_quote(str, '\"', i);
+	quote = 0;
+	while (*str)
+	{
+		if (ft_strchr(" |><;", *str) && !quote)
+			break;
+		else if (ft_strchr("\"\'", *str) && !quote)
+			quote = 1;
+		else if (ft_strchr("\"\'", *str) && quote)
+			quote = 0;
+		str++;
+		i++;
+	}
 	return (i);
 }
 
@@ -48,13 +50,14 @@ void	parse_arguments_in_command(char **arguments, t_list *env_list)
 	}
 }
 
-t_list	*parse_user_input(char *user_input, int *length)
+char	**parse_user_input(char *user_input, int *length)
 {
 	int		i;
-	char	*argument;
-	t_list	*arguments_list;
+	int 	number_arguments;
+	char	**arguments;
 
-	arguments_list = NULL;
+	number_arguments = 0;
+	arguments = NULL;
 	while (*user_input)
 	{
 		while (ft_isspace(*user_input))
@@ -63,17 +66,20 @@ t_list	*parse_user_input(char *user_input, int *length)
 			user_input++;
 		}
 		if (*user_input == ';')
-			return (arguments_list);
-		i = get_length_argument(user_input);
-		*length += i;
-		argument = ft_strndup(user_input, (size_t)i);
-		user_input += i;
-		if (!ft_strcmp(argument, "\'\'") || !ft_strcmp(argument, "\"\""))
-			free(argument);
-		else if (arguments_list)
-			ft_lstadd_back(&arguments_list, ft_lstnew(argument));
+			return (arguments);
+		else if (!ft_strncmp(">>", user_input, 2))
+			i = 2;
+		else if (*user_input == '|' || *user_input == '>' || *user_input == '<')
+			i = 1;
 		else
-			arguments_list = ft_lstnew(argument);
+			i = get_length_argument(user_input);
+		if (i != 0)
+		{
+			arguments = ft_double_realloc(arguments, 1);
+			arguments[number_arguments++] = ft_strndup(user_input, (size_t)i);
+		}
+		user_input += i;
+		*length += i;
 	}
-	return (arguments_list);
+	return (arguments);
 }

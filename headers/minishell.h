@@ -57,7 +57,7 @@ void			move_list(t_list **list, int index);
 
 void			sigint_handler(int signum);
 void			type_prompt(void);
-t_list			*parse_user_input(char *user_input, int *length);
+char			**parse_user_input(char *user_input, int *length);
 
 void			parse_arguments_in_command(char **arguments,t_list *env_list);
 void			print_error(char **arguments);
