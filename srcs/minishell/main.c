@@ -101,18 +101,13 @@ void	minishell(char *user_input, t_list *env_list)
 			arguments.arguments = parse_user_input(user_input, &length);
 			while (*arguments.arguments)
 			{
-				printf("%s\n", *arguments.arguments++);
-			}
-			while (arguments.arguments)
-			{
-				index = get_fd(arguments, &arguments.fds);
-				arguments.arguments = convert_from_list_to_array(arguments_list, index);
-				parse_arguments_in_command(arguments.arguments, env_list);
-				move_list(&arguments_list, index + 1);
+				index = get_fd(arguments.arguments, &arguments.fds);
+//				parse_arguments_in_command(arguments.arguments, env_list);
 				if (is_fork(arguments.fds))
 					fork_process(arguments, env_list);
 				else
 					start_process(&arguments, env_list);
+				arguments.arguments += index;
 			}
 		}
 		user_input += length;
