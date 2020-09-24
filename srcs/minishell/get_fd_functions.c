@@ -84,8 +84,8 @@ int		get_back_redirect(char **arguments, t_fds *fds)
 
 int		get_fd(char **arguments, t_fds *fds)
 {
-	int 	index;
-	int 	next_index;
+	int		index;
+	int		next_index;
 
 	fds->std_out = 4;
 	fds->std_in = 3;

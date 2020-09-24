@@ -52,7 +52,6 @@ void	check_in_env(char *argument, t_list *env_list)
 
 int		unset(t_arguments *arguments, t_list *env_list)
 {
-
 	if (!*arguments->arguments)
 		return (errno);
 	while (*arguments->arguments)
@@ -71,7 +70,7 @@ void	move_list(t_list **list, int length)
 	{
 		temp_element = *list;
 		if (temp_element == NULL)
-			return;
+			return ;
 		*list = (*list)->next;
 		free(temp_element->content);
 		free(temp_element);

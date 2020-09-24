@@ -66,7 +66,10 @@ void	check_path(char **command, t_list *env_list)
 	current_command = ft_strjoin("/", *command);
 	free(*command);
 	if ((paths = get_paths(env_list)) == NULL)
+	{
+		free(current_command);
 		return ;
+	}
 	while (paths[i])
 	{
 		*command = ft_strjoin(paths[i], current_command);
@@ -80,4 +83,6 @@ void	check_path(char **command, t_list *env_list)
 	else
 		*command = (char*)temp_command;
 	free_double_array(paths);
+	free(paths); // TODO чекнуть на маке
+	free(current_command);
 }

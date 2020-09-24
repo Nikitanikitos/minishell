@@ -68,7 +68,7 @@ void	fork_process(t_arguments arguments, t_list *env_list)
 	pid_t		pid;
 
 	pid = fork();
-	if (pid == 0)	// дочерний процесс
+	if (pid == 0)
 	{
 		dup2(arguments.fds.std_out, STDOUT_FILENO);
 		start_process(&arguments, env_list);
@@ -76,7 +76,7 @@ void	fork_process(t_arguments arguments, t_list *env_list)
 		close(STDOUT_FILENO);
 		exit(0);
 	}
-	else			// родительский процесс
+	else
 	{
 		dup2(arguments.fds.std_in, STDIN_FILENO);
 		close(arguments.fds.std_out);
@@ -90,6 +90,7 @@ void	minishell(char *user_input, t_list *env_list)
 	t_arguments	arguments;
 	int			length;
 	int			index;
+	int			length_double_array;
 
 	while (*user_input)
 	{
@@ -99,6 +100,7 @@ void	minishell(char *user_input, t_list *env_list)
 		else
 		{
 			arguments.arguments = parse_user_input(user_input, &length);
+			length_double_array = ft_str_double_len(arguments.arguments);
 			while (*arguments.arguments)
 			{
 				index = get_fd(arguments.arguments, &arguments.fds);
@@ -109,6 +111,8 @@ void	minishell(char *user_input, t_list *env_list)
 					start_process(&arguments, env_list);
 				arguments.arguments += index;
 			}
+			free_double_array(arguments.arguments - length_double_array);
+			free(arguments.arguments - length_double_array); // TODO чекнуть на маке
 		}
 		user_input += length;
 	}

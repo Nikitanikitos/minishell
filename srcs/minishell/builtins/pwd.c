@@ -24,8 +24,7 @@ int		pwd(t_arguments *arguments, t_list *env_list)
 
 int		cd(t_arguments *command, t_list *env_list)
 {
-
-	if (*command->arguments== NULL)
+	if (*command->arguments == NULL)
 		chdir("/");
 	else
 	{
@@ -37,7 +36,18 @@ int		cd(t_arguments *command, t_list *env_list)
 
 int		ft_exit(t_arguments *command, t_list *env_list)
 {
+	int		exit_number;
+
+	if (ft_str_double_len(command->arguments) > 1)
+	{
+		errno = 7;
+		return (errno);
+	}
+	(command->arguments)++;
+	if (!ft_isdigit(*command->arguments))
+		print_error(command->arguments);
+	exit_number = ft_atoi(*command->arguments);
 	ft_lstclear(env_list, &free_env);
 	free_double_array(command->arguments);
-	exit(0);
+	exit(exit_number);
 }

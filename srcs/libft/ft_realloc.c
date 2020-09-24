@@ -32,7 +32,7 @@ void	*ft_realloc(char *src, int size)
 char	**ft_double_realloc(char **src, int size)
 {
 	char	**temp;
-	int 	i;
+	int		i;
 
 	temp = src;
 	i = 0;

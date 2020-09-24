@@ -19,6 +19,7 @@
 
 # define BUFFER_SIZE 32
 
+int					ft_isdigit(char *s);
 int					ft_atoi(const char *nptr);
 int					ft_strlen(const char *str);
 int					ft_str_double_len(char **array);
@@ -53,7 +54,6 @@ char				ft_isalpha(char c);
 char				ft_isprint(char c);
 int					ft_isspace(int c);
 char				ft_isascii(char c);
-char				ft_isdigit(char c);
 char				*ft_lower(char *c);
 char				ft_toupper(char c);
 char				*ft_strdup(const char *src);

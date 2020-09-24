@@ -15,11 +15,10 @@
 int		get_length_argument(char *user_input)
 {
 	int		i;
-	int 	quote;
+	int		quote;
 
 	i = 0;
 	quote = 0;
-
 	if (!ft_strncmp(">>", user_input, 2))
 		return (2);
 	else if (*user_input == '|' || *user_input == '>' || *user_input == '<')
@@ -27,7 +26,7 @@ int		get_length_argument(char *user_input)
 	while (*user_input)
 	{
 		if (ft_strchr(" |><;", *user_input) && !quote)
-			break;
+			break ;
 		else if (ft_strchr("\"\'", *user_input) && !quote)
 			quote = 1;
 		else if (ft_strchr("\"\'", *user_input) && quote)
@@ -40,7 +39,7 @@ int		get_length_argument(char *user_input)
 
 void	parse_arguments_in_command(char **arguments, t_list *env_list)
 {
-	int 	i;
+	int		i;
 
 	i = 0;
 	while (arguments[i])
@@ -58,7 +57,7 @@ void	parse_arguments_in_command(char **arguments, t_list *env_list)
 char	*copy_without_unused_quotes(int lenght, char *argument)
 {
 	char	*result;
-	int 	i;
+	int		i;
 
 	i = 0;
 	result = (char*)malloc(sizeof(char) * (lenght + 1));
@@ -74,7 +73,7 @@ char	*copy_without_unused_quotes(int lenght, char *argument)
 
 int		is_double_quote(char *argument, int index, int quote)
 {
-	return(quote && ((argument[index] == '\''
+	return (quote && ((argument[index] == '\''
 			&& argument[index - 1] == '\'') || (argument[index] == '\"'
 			&& argument[index - 1] == '\"')));
 }
@@ -82,11 +81,11 @@ int		is_double_quote(char *argument, int index, int quote)
 char	*delete_unused_quotes(char *argument)
 {
 	char	*result;
-	int 	lenght;
-	int 	quote;
-	int 	index;
+	int		length;
+	int		quote;
+	int		index;
 
-	lenght = ft_strlen(argument);
+	length = ft_strlen(argument);
 	quote = 0;
 	index = 0;
 	while (argument[index])
@@ -97,14 +96,19 @@ char	*delete_unused_quotes(char *argument)
 		{
 			argument[index - 1] = 1;
 			argument[index] = 1;
-			lenght -= 2;
+			length -= 2;
 			quote = 0;
 		}
 		else if ((argument[index] == '\'' || argument[index] == '\"') && quote)
 			quote = 0;
+		else if (argument[index] == '\\' && !quote)
+		{
+			argument[index] = 1;
+			length--;
+		}
 		index++;
 	}
-	result = copy_without_unused_quotes(lenght, argument);
+	result = copy_without_unused_quotes(length, argument);
 	free(argument);
 	return (result);
 }
@@ -112,7 +116,7 @@ char	*delete_unused_quotes(char *argument)
 char	**parse_user_input(char *user_input, int *length)
 {
 	int		length_argument;
-	int 	i;
+	int		i;
 	char	**arguments;
 
 	i = 0;

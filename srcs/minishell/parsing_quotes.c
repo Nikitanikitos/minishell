@@ -12,7 +12,7 @@
 
 #include "minishell.h"
 
-int 	get_next_quote(const char *str, char quote, int i)
+int		get_next_quote(const char *str, char quote, int i)
 {
 	i++;
 	while (str[i] != quote)
@@ -26,7 +26,7 @@ char	*parse_without_quotes(char *parameters, t_list *env_list)
 	char	*result;
 	char	*temp_result;
 	char	*temp;
-	int 	index;
+	int		index;
 
 	result = "";
 	while (*parameters)
