@@ -12,22 +12,27 @@
 
 #include "minishell.h"
 
-int		get_length_argument(char *str)
+int		get_length_argument(char *user_input)
 {
 	int		i;
 	int 	quote;
 
 	i = 0;
 	quote = 0;
-	while (*str)
+
+	if (!ft_strncmp(">>", user_input, 2))
+		return (2);
+	else if (*user_input == '|' || *user_input == '>' || *user_input == '<')
+		return (1);
+	while (*user_input)
 	{
-		if (ft_strchr(" |><;", *str) && !quote)
+		if (ft_strchr(" |><;", *user_input) && !quote)
 			break;
-		else if (ft_strchr("\"\'", *str) && !quote)
+		else if (ft_strchr("\"\'", *user_input) && !quote)
 			quote = 1;
-		else if (ft_strchr("\"\'", *str) && quote)
+		else if (ft_strchr("\"\'", *user_input) && quote)
 			quote = 0;
-		str++;
+		user_input++;
 		i++;
 	}
 	return (i);
@@ -50,13 +55,67 @@ void	parse_arguments_in_command(char **arguments, t_list *env_list)
 	}
 }
 
+char	*copy_without_unused_quotes(int lenght, char *argument)
+{
+	char	*result;
+	int 	i;
+
+	i = 0;
+	result = (char*)malloc(sizeof(char) * (lenght + 1));
+	while (*argument)
+	{
+		if (*argument != 1)
+			result[i++] = *argument;
+		argument++;
+	}
+	result[i] = 0;
+	return (result);
+}
+
+int		is_double_quote(char *argument, int index, int quote)
+{
+	return(quote && ((argument[index] == '\''
+			&& argument[index - 1] == '\'') || (argument[index] == '\"'
+			&& argument[index - 1] == '\"')));
+}
+
+char	*delete_unused_quotes(char *argument)
+{
+	char	*result;
+	int 	lenght;
+	int 	quote;
+	int 	index;
+
+	lenght = ft_strlen(argument);
+	quote = 0;
+	index = 0;
+	while (argument[index])
+	{
+		if ((argument[index] == '\'' || argument[index] == '\"') && !quote)
+			quote = 1;
+		else if (is_double_quote(argument, index, quote))
+		{
+			argument[index - 1] = 1;
+			argument[index] = 1;
+			lenght -= 2;
+			quote = 0;
+		}
+		else if ((argument[index] == '\'' || argument[index] == '\"') && quote)
+			quote = 0;
+		index++;
+	}
+	result = copy_without_unused_quotes(lenght, argument);
+	free(argument);
+	return (result);
+}
+
 char	**parse_user_input(char *user_input, int *length)
 {
-	int		i;
-	int 	number_arguments;
+	int		length_argument;
+	int 	i;
 	char	**arguments;
 
-	number_arguments = 0;
+	i = 0;
 	arguments = NULL;
 	while (*user_input)
 	{
@@ -67,19 +126,15 @@ char	**parse_user_input(char *user_input, int *length)
 		}
 		if (*user_input == ';')
 			return (arguments);
-		else if (!ft_strncmp(">>", user_input, 2))
-			i = 2;
-		else if (*user_input == '|' || *user_input == '>' || *user_input == '<')
-			i = 1;
-		else
-			i = get_length_argument(user_input);
-		if (i != 0)
+		length_argument = get_length_argument(user_input);
+		if (length_argument != 0)
 		{
 			arguments = ft_double_realloc(arguments, 1);
-			arguments[number_arguments++] = ft_strndup(user_input, (size_t)i);
+			arguments[i++] = delete_unused_quotes(ft_strndup(user_input,
+												(size_t)length_argument));
 		}
-		user_input += i;
-		*length += i;
+		user_input += length_argument;
+		*length += length_argument;
 	}
 	return (arguments);
 }

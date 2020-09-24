@@ -75,28 +75,22 @@ void	get_back_redirect(t_list *arguments, t_fds *fds)
 	fds->std_in = fd;
 }
 
-int		get_fd(t_list *arguments, t_fds *fds)
+int		get_fd(char **arguments, t_fds *fds)
 {
-	int		index;
-	char	*argument;
-
-	index = 0;
 	while (arguments)
 	{
-		argument = (char*)arguments->content;
-		if (!ft_strcmp(argument, ">"))
+		if (!ft_strcmp(*arguments, ">"))
 			get_forward_redirect(arguments, fds);
-		else if (!ft_strcmp(argument, ">>"))
+		else if (!ft_strcmp(*arguments, ">>"))
 			get_double_forward_redirect(arguments, fds);
-		else if (!ft_strcmp(argument, "<"))
+		else if (!ft_strcmp(*arguments, "<"))
 			get_back_redirect(arguments, fds);
-		else if (!ft_strcmp(argument, "|"))
+		else if (!ft_strcmp(*arguments, "|"))
 		{
 			get_pipe(fds);
 			break ;
 		}
-		arguments = arguments->next;
-		index++;
+		arguments++;
 	}
 	return (index);
 }

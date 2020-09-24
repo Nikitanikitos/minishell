@@ -103,17 +103,17 @@ void	minishell(char *user_input, t_list *env_list)
 			{
 				printf("%s\n", *arguments.arguments++);
 			}
-//			while (arguments_list)
-//			{
-//				index = get_fd(arguments_list, &arguments.fds);
-//				arguments.arguments = convert_from_list_to_array(arguments_list, index);
-//				parse_arguments_in_command(arguments.arguments, env_list);
-//				move_list(&arguments_list, index + 1);
-//				if (is_fork(arguments.fds))
-//					fork_process(arguments, env_list);
-//				else
-//					start_process(&arguments, env_list);
-//			}
+			while (arguments.arguments)
+			{
+				index = get_fd(arguments, &arguments.fds);
+				arguments.arguments = convert_from_list_to_array(arguments_list, index);
+				parse_arguments_in_command(arguments.arguments, env_list);
+				move_list(&arguments_list, index + 1);
+				if (is_fork(arguments.fds))
+					fork_process(arguments, env_list);
+				else
+					start_process(&arguments, env_list);
+			}
 		}
 		user_input += length;
 	}

@@ -71,7 +71,7 @@ char			*parse_with_envp(char *parameters, t_list *env_list);
 t_env			*env_init(char **key_value);
 t_list			*get_env_list(char **envp);
 
-int				get_fd(t_list *arguments, t_fds *fds);
+int				get_fd(char **arguments, t_fds *fds);
 int				is_fork(t_fds fds);
 int				get_next_quote(const char *str, char quote, int i);
 int				str_get_index(const char *str, char *elements);
