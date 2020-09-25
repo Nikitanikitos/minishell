@@ -14,5 +14,5 @@
 
 char	ft_isalnum(char c)
 {
-	return (ft_isdigit(c) || ft_isalpha(c));
+	return (ft_isdigit(&c) || ft_isalpha(c));
 }

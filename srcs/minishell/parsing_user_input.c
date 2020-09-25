@@ -12,110 +12,147 @@
 
 #include "minishell.h"
 
-void	parse_arguments_in_command(char **arguments, t_list *env_list)
-{
-	int		i;
 
-	i = 0;
-	while (arguments[i])
-	{
-		if (arguments[i][0] == '\"')
-			arguments[i] = parse_argument_with_double_quotes(arguments[i],
-																	env_list);
-		else if (arguments[i][0] == '\'')
-			arguments[i] = parse_argument_with_single_quotes(arguments[i]);
-		else if (ft_strchr(arguments[i], '$'))
-			arguments[i] = parse_with_envp(arguments[i], env_list);
-		i++;
-	}
-}
-
-char	*copy_without_unused_quotes(int lenght, char *argument)
+char	*single_parse(char **argument, t_list *env_list)
 {
+	char	*temp;
 	char	*result;
-	int		i;
+	int 	i;
+	int 	index;
 
-	i = 0;
-	result = (char*)malloc(sizeof(char) * (lenght + 1));
-	while (*argument)
-	{
-		if (*argument != 1)
-			result[i++] = *argument;
-		argument++;
-	}
-	result[i] = 0;
-	return (result);
-}
-
-int		handler_unused_quotes(char *argument, int index, int *quote)
-{
-	int		result;
-
-	result = 0;
-	if ((argument[index] == '\'' || argument[index] == '\"') && !*quote)
-		*quote = 1;
-	else if (is_double_quote(argument, index, *quote))
-	{
-		argument[index - 1] = 1;
-		argument[index] = 1;
-		result = 2;
-		*quote = 0;
-	}
-	else if ((argument[index] == '\'' || argument[index] == '\"') && *quote)
-		*quote = 0;
-	else if (argument[index] == '\\' && !*quote)
-	{
-		argument[index] = 1;
-		result = 1;
-	}
-	return (result);
-}
-
-char	*delete_unused_quotes(char *argument)
-{
-	char	*result;
-	int		length;
-	int		quote;
-	int		index;
-
-	length = ft_strlen(argument);
-	quote = 0;
 	index = 0;
-	while (argument[index])
+	result = NULL;
+	while (**argument && !ft_strchr(" <>|;\'\"", **argument))
 	{
-		length -= handler_unused_quotes(argument, index, &quote);
-		index++;
+		temp = NULL;
+		if (**argument == '\\')
+			(*argument)++;
+		else if (**argument == '$')
+			temp = parse_with_envp(argument, env_list);
+		i = (temp) ? ft_strlen(temp) : 1;
+		result = ft_realloc(result, i);
+		if (temp)
+		{
+			ft_strcpy(result + index, temp);
+			free(temp);
+			index += i;
+		}
+		else
+			result[index++] = *(*argument)++;
 	}
-	result = copy_without_unused_quotes(length, argument);
-	free(argument);
+	if (result)
+		result[index] = 0;
 	return (result);
 }
 
-char	**parse_user_input(char *user_input, int *length)
+char	*parse_single_quote(char **argument)
 {
-	int		length_argument;
+	char		*result;
+	char		*temp;
+	int			index;
+
+	index = 0;
+	result = NULL;
+	temp = ++(*argument);
+	while (temp[index] && temp[index] != '\'')
+		index++;
+	if (index)
+		result = ft_strndup(temp, (size_t)index);
+	temp += index;
+	if (*temp)
+		temp++;
+	*argument = temp;
+	return (result);
+
+}
+
+char	*parse_double_quote(char **argument, t_list *env_list)
+{
+	char	*temp_argument;
+	char	*temp;
+	char	*result;
+	int 	i;
+	int 	index;
+
+	index = 0;
+	result = NULL;
+	temp_argument = ++(*argument);
+	while (*temp_argument && *temp_argument != '\"')
+	{
+		temp = NULL;
+		if (*temp_argument == '\\' && ft_strchr("\\$\"", *(temp_argument + 1)))
+			temp_argument++;
+		else if (*temp_argument == '$')
+			temp = parse_with_envp(&temp_argument, env_list);
+		i = (temp) ? ft_strlen(temp) : 1;
+		result = ft_realloc(result, i);
+		if (temp)
+		{
+			ft_strcpy(result + index, temp);
+			free(temp);
+			index += i;
+		}
+		else
+			result[index++] = *temp_argument++;
+	}
+	*argument = ++temp_argument;
+	if (result)
+		result[index] = 0;
+	return (result);
+}
+
+char	*parse_argument(char **user_input, t_list *env_list)
+{
+	int		argument_length;
+	int 	shift;
+	char	*temp_user_input;
+	char	*result;
+	char	*temp;
+
+	temp_user_input = *user_input;
+	result = NULL;
+	shift = 0;
+	while (*temp_user_input)
+	{
+		if (ft_isspace(*temp_user_input))
+			break ;
+		if (*temp_user_input == '\'')
+			temp = parse_single_quote(&temp_user_input);
+		else if (*temp_user_input == '\"')
+			temp = parse_double_quote(&temp_user_input, env_list);
+		else
+			temp = single_parse(&temp_user_input, env_list);
+		if (temp)
+		{
+			argument_length = ft_strlen(temp);
+			result = ft_realloc(result, argument_length);
+			ft_strcpy(result + shift, temp);
+			shift += argument_length;
+			free(temp);
+		}
+	}
+	*user_input = temp_user_input;
+	return (result);
+}
+
+char	**parse_user_input(char **user_input, t_list *env_list)
+{
 	int		i;
+	char 	*temp_user_input;
 	char	**arguments;
 
 	i = 0;
 	arguments = NULL;
-	while (*user_input)
+	temp_user_input = *user_input;
+	while (*temp_user_input)
 	{
-		while (ft_isspace(*user_input))
-		{
-			(*length)++;
-			user_input++;
-		}
-		if (*user_input == ';')
-			return (arguments);
-		if ((length_argument = get_length_argument(user_input)) != 0)
-		{
-			arguments = ft_double_realloc(arguments, 1);
-			arguments[i++] = delete_unused_quotes(ft_strndup(user_input,
-												(size_t)length_argument));
-		}
-		user_input += length_argument;
-		*length += length_argument;
+		while (ft_isspace(*temp_user_input))
+			temp_user_input++;
+		if (*temp_user_input == ';' || !*temp_user_input)
+			break ;
+		arguments = ft_double_realloc(arguments, 1);
+		arguments[i++] = parse_argument(&temp_user_input, env_list);
 	}
+	*user_input = temp_user_input;
 	return (arguments);
 }

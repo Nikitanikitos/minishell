@@ -17,20 +17,6 @@ int		is_fork(t_fds fds)
 	return (fds.std_in != 3 || fds.std_out != 4);
 }
 
-int		str_get_index(const char *str, char *elements)
-{
-	int		i;
-
-	i = 0;
-	while (str[i])
-	{
-		if (ft_strchr(elements, str[i]))
-			return (i);
-		i++;
-	}
-	return (-1);
-}
-
 char	**convert_from_list_to_array(t_list *list, int size_array)
 {
 	char	**array;

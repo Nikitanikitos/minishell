@@ -52,31 +52,23 @@ void			add_env(t_list *env_list, t_env *env);
 void			eof_handler(void);
 void			free_env(void *arg);
 void			free_double_array(char **array);
-void			move_list(t_list **list, int index);
 
 void			sigint_handler(int signum);
 void			type_prompt(void);
-char			**parse_user_input(char *user_input, int *length);
+char			**parse_user_input(char **user_input, t_list *env_list);
 
-void			parse_arguments_in_command(char **arguments,t_list *env_list);
 void			print_error(char **arguments);
 
-char			**convert_from_list_to_array(t_list *list, int size_array);
+char			*parse_argument(char **user_input, t_list *env_list);
 char			*get_env_value(char *key, t_list *env_list);
-char			*parse_argument_with_double_quotes(char *parameters, t_list *env_list);
-char			*parse_argument_with_single_quotes(char *parameters);
-char			*parse_with_envp(char *parameters, t_list *env_list);
+char			*parse_with_envp(char **argument, t_list *env_list);
 
 t_env			*env_init(char **key_value);
 t_list			*get_env_list(char **envp);
 
 int				get_fd(char **arguments, t_fds *fds);
 int				check_path(char **command, t_list *env_list);
-int				get_length_argument(char *user_input);
-int				is_double_quote(char *argument, int index, int quote);
 int				is_fork(t_fds fds);
-int				get_next_quote(const char *str, char quote, int i);
-int				str_get_index(const char *str, char *elements);
 
 int				echo(t_arguments* arguments, t_list *env_list);
 int				env(t_arguments *arguments, t_list *env_list);

@@ -43,10 +43,13 @@ int		ft_exit(t_arguments *command, t_list *env_list)
 		errno = 7;
 		return (errno);
 	}
-	(command->arguments)++;
-	if (!ft_isdigit(*command->arguments))
+	else if (*command->arguments && !ft_isdigit(*command->arguments))
 		print_error(command->arguments);
-	exit_number = ft_atoi(*command->arguments);
+	if (!*command->arguments)
+		exit_number = 0;
+	else
+		exit_number = ft_atoi(*command->arguments);
+	ft_putendl_fd("exit", 1);
 	ft_lstclear(env_list, &free_env);
 	free_double_array(command->arguments);
 	exit(exit_number);

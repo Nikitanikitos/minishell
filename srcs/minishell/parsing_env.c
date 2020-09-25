@@ -12,20 +12,25 @@
 
 #include "minishell.h"
 
-char	*parse_with_envp(char *argument, t_list *env_list)
+char	*parse_with_envp(char **argument, t_list *env_list)
 {
-	char	*result;
-	char	temp_srace;
-	int 	i;
+	char		*temp_argument;
+	char		*result;
+	char		temp_symbol;
+	int 		i;
 
 	i = 0;
-	while (argument[i] && !ft_isspace(argument[i]))
+	(*argument)++;
+	temp_argument = *argument;
+	while (temp_argument[i] && !ft_isspace(temp_argument [i]) &&
+			temp_argument[i] != '$' && temp_argument[i] != '\\')
 		i++;
-	temp_srace = argument[i];
-	argument[i] = 0;
-	result = ft_strdup(get_env_value(argument, env_list));
-	argument[i] = temp_srace;
-	free(argument);
+	temp_symbol = temp_argument[i];
+	temp_argument[i] = 0;
+	result = ft_strdup(get_env_value(temp_argument, env_list));
+	temp_argument[i] = temp_symbol;
+	temp_argument += i;
+	*argument = temp_argument;
 	return (result);
 }
 

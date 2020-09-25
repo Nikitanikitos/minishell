@@ -16,7 +16,6 @@ char	*get_env_value(char *key, t_list *env_list)
 {
 	t_env	*env;
 
-	key++;
 	while (env_list)
 	{
 		env = (t_env*)env_list->content;
