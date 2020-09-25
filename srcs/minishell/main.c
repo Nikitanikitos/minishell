@@ -92,7 +92,7 @@ void	handle_arguments(t_arguments arguments, t_list *env_list)
 	while (*arguments.arguments)
 	{
 		index = get_fd(arguments.arguments, &arguments.fds);
-//		parse_arguments_in_command(arguments.arguments, env_list);
+		parse_arguments(arguments.arguments, env_list);
 		if (is_fork(arguments.fds))
 			fork_process(arguments, env_list);
 		else

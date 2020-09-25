@@ -12,26 +12,20 @@
 
 #include "minishell.h"
 
-char	*parse_with_envp(char *parameters, t_list *env_list)
+char	*parse_with_envp(char *argument, t_list *env_list)
 {
 	char	*result;
-	char	*temp;
-	int		index;
+	char	temp_srace;
+	int 	i;
 
-	if (*parameters == '$')
-	{
-		result = ft_strdup(get_env_value(parameters, env_list));
-		free(parameters);
-	}
-	else
-	{
-		index = str_get_index(parameters, "$");
-		result = ft_strndup(parameters, (size_t)index);
-		parameters += index;
-		temp = result;
-		result = ft_strjoin(result, get_env_value(parameters, env_list));
-		free(temp);
-	}
+	i = 0;
+	while (argument[i] && !ft_isspace(argument[i]))
+		i++;
+	temp_srace = argument[i];
+	argument[i] = 0;
+	result = ft_strdup(get_env_value(argument, env_list));
+	argument[i] = temp_srace;
+	free(argument);
 	return (result);
 }
 
@@ -55,7 +49,7 @@ char	*get_current_path(char **paths, char *current_command, char *command)
 
 	while (*paths)
 	{
-		command = ft_strjoin((*paths)++, current_command);
+		command = ft_strjoin(*paths++, current_command);
 		if ((fd = open(command, O_RDONLY)) != -1)
 			break ;
 		free(command);
@@ -71,24 +65,25 @@ int 	check_path(char **command, t_list *env_list)
 	const char	*temp_command = ft_strdup(*command);
 	char		*current_command;
 	char		**paths;
-	int			i;
 	int			fd;
 
-	i = 0;
-	if ((fd = open(*command, O_RDONLY)) != -1)
-		return (close(fd));
 	current_command = ft_strjoin("/", *command);
 	free(*command);
 	if ((paths = get_paths(env_list)) == NULL)
+		free(current_command);
+	else if ((*command = get_current_path(paths, current_command, *command)))
 	{
 		free(current_command);
-		return (1);
+		free_double_array(paths);
+		free(paths); // TODO чекнуть на маке
+		return (0);
 	}
-	*command = get_current_path(paths, current_command, *command);
-	if (*command == NULL)
+	if ((fd = open(temp_command, O_RDONLY)) != -1)
+	{
 		*command = (char*)temp_command;
-	free_double_array(paths);
-	free(paths); // TODO чекнуть на маке
-	free(current_command);
+		close(fd);
+	}
+	else
+		*command = (char*)temp_command;
 	return (0);
 }
