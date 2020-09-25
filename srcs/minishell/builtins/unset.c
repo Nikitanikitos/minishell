@@ -61,18 +61,3 @@ int		unset(t_arguments *arguments, t_list *env_list)
 	}
 	return (errno);
 }
-
-void	move_list(t_list **list, int length)
-{
-	t_list *temp_element;
-
-	while (list && length--)
-	{
-		temp_element = *list;
-		if (temp_element == NULL)
-			return ;
-		*list = (*list)->next;
-		free(temp_element->content);
-		free(temp_element);
-	}
-}

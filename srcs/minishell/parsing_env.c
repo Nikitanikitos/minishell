@@ -52,6 +52,7 @@ char	*get_current_path(char **paths, char *current_command, char *command)
 {
 	int 	fd;
 
+	fd = 0;
 	while (*paths)
 	{
 		command = ft_strjoin(*paths++, current_command);
