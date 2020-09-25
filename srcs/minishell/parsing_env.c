@@ -49,7 +49,24 @@ char	**get_paths(t_list *env_list)
 	return (NULL);
 }
 
-void	check_path(char **command, t_list *env_list)
+char	*get_current_path(char **paths, char *current_command, char *command)
+{
+	int 	fd;
+
+	while (*paths)
+	{
+		command = ft_strjoin((*paths)++, current_command);
+		if ((fd = open(command, O_RDONLY)) != -1)
+			break ;
+		free(command);
+		command = NULL;
+	}
+	if (fd != -1)
+		close(fd);
+	return (command);
+}
+
+int 	check_path(char **command, t_list *env_list)
 {
 	const char	*temp_command = ft_strdup(*command);
 	char		*current_command;
@@ -59,30 +76,19 @@ void	check_path(char **command, t_list *env_list)
 
 	i = 0;
 	if ((fd = open(*command, O_RDONLY)) != -1)
-	{
-		close(fd);
-		return ;
-	}
+		return (close(fd));
 	current_command = ft_strjoin("/", *command);
 	free(*command);
 	if ((paths = get_paths(env_list)) == NULL)
 	{
 		free(current_command);
-		return ;
+		return (1);
 	}
-	while (paths[i])
-	{
-		*command = ft_strjoin(paths[i], current_command);
-		if ((fd = open(*command, O_RDONLY)) != -1)
-			break ;
-		free(*command);
-		i++;
-	}
-	if (fd != -1)
-		close(fd);
-	else
+	*command = get_current_path(paths, current_command, *command);
+	if (*command == NULL)
 		*command = (char*)temp_command;
 	free_double_array(paths);
 	free(paths); // TODO чекнуть на маке
 	free(current_command);
+	return (0);
 }

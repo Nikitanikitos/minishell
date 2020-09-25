@@ -49,7 +49,6 @@ typedef struct	s_env
 }				t_env;
 
 void			add_env(t_list *env_list, t_env *env);
-void			check_path(char **command, t_list *env_list);
 void			eof_handler(void);
 void			free_env(void *arg);
 void			free_double_array(char **array);
@@ -72,6 +71,9 @@ t_env			*env_init(char **key_value);
 t_list			*get_env_list(char **envp);
 
 int				get_fd(char **arguments, t_fds *fds);
+int				check_path(char **command, t_list *env_list);
+int				get_length_argument(char *user_input);
+int				is_double_quote(char *argument, int index, int quote);
 int				is_fork(t_fds fds);
 int				get_next_quote(const char *str, char quote, int i);
 int				str_get_index(const char *str, char *elements);
