@@ -87,8 +87,8 @@ int		get_fd(char **arguments, t_fds *fds)
 	int		index;
 	int		next_index;
 
-	fds->std_out = 4;
 	fds->std_in = 3;
+	fds->std_out = 4;
 	index = 0;
 	next_index = 0;
 	while (arguments[index])
