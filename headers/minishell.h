@@ -26,8 +26,8 @@
 
 typedef struct	s_fds
 {
-	int 		std_in;
-	int 		std_out;
+	int 		std_write;
+	int 		std_read;
 }				t_fds;
 
 typedef struct	s_arguments

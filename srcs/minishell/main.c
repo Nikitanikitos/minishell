@@ -70,24 +70,25 @@ void	fork_process(t_arguments arguments, t_list *env_list)
 	pid = fork();
 	if (pid == 0)
 	{
-		dup2(arguments.fds.std_out, STDOUT_FILENO);
+		dup2(arguments.fds.std_write, STDOUT_FILENO);
 		start_process(&arguments, env_list);
-		close(arguments.fds.std_in);
+		close(arguments.fds.std_read);
 		close(STDOUT_FILENO);
 		exit(0);
 	}
 	else
 	{
-		dup2(arguments.fds.std_in, STDIN_FILENO);
-		close(arguments.fds.std_out);
+		dup2(arguments.fds.std_read, STDIN_FILENO);
+		close(arguments.fds.std_write);
 		wait(0);
-		close(arguments.fds.std_in);
+		close(arguments.fds.std_read);
 	}
 }
 
 void	minishell(char *user_input, t_list *env_list)
 {
 	t_arguments	arguments;
+
 
 	while (*user_input)
 	{

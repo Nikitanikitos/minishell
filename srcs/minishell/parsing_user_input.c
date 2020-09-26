@@ -109,7 +109,7 @@ char	*parse_argument(char **user_input, t_list *env_list)
 
 	result = ft_realloc(NULL, 1);
 	shift = 0;
-	while (**user_input)
+	while (**user_input && !ft_strchr("|><", **user_input))
 	{
 		if (ft_isspace(**user_input))
 			break ;
@@ -154,8 +154,8 @@ char	**parse_user_input(char **user_input, t_list *env_list, t_fds *fds)
 
 	i = 0;
 	arguments = NULL;
-	fds->std_in = 3;
-	fds->std_out = 4;
+	fds->std_write = 3;
+	fds->std_read = 4;
 	while (*temp_user_input)
 	{
 		while (ft_isspace(*temp_user_input))
