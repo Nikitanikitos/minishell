@@ -55,10 +55,10 @@ void	start_process(t_arguments *arguments, t_list *env_list)
 	else
 	{
 		check_path(arguments->arguments, env_list);
-		if ((status = execve(*arguments->arguments, arguments->arguments, NULL)))
+		if ((g_status = execve(*arguments->arguments, arguments->arguments, NULL)))
 		{
 			print_error(arguments->arguments);
-			exit(status);
+			exit(g_status);
 		}
 	}
 }
@@ -74,7 +74,7 @@ void	fork_process(t_arguments arguments, t_list *env_list)
 		start_process(&arguments, env_list);
 		close(arguments.fds.std_read);
 		close(STDOUT_FILENO);
-		exit(0);
+		exit(g_status);
 	}
 	else
 	{
@@ -88,7 +88,6 @@ void	fork_process(t_arguments arguments, t_list *env_list)
 void	minishell(char *user_input, t_list *env_list)
 {
 	t_arguments	arguments;
-
 
 	while (*user_input)
 	{
@@ -121,7 +120,8 @@ int		main(int ac, char **av, char **envp)
 	while (TRUE)
 	{
 		type_prompt();
-		read_line(4, &user_input);
+		dup2(4, 0);
+		read_line(0, &user_input);
 		if (user_input == NULL)
 			eof_handler();
 		minishell(user_input, env_list);

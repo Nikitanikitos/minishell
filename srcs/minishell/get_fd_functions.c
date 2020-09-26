@@ -84,8 +84,8 @@ void	get_redirect_fd(char **arguments, t_fds *fds, t_list *env_list)
 	char	*temp_arguments;
 
 	temp_arguments = *arguments;
-	fds->std_read = -1;
-	fds->std_write = -1;
+	fds->std_read = 0;
+	fds->std_write = 1;
 	while (*temp_arguments)
 	{
 		while (ft_isspace(*temp_arguments))

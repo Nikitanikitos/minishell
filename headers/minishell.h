@@ -24,6 +24,8 @@
 # define TRUE				1
 # define FALSE				0
 
+int				g_status;
+
 typedef struct	s_fds
 {
 	int 		std_write;
