@@ -28,7 +28,10 @@ void	read_line(int fd, char **line)
 		if (((readed = read(fd, buf, 1)) == 0) && i == 0)
 			break ;
 		if (readed == 0)
+		{
+			ft_putstr_fd("  \b\b", fd);
 			continue ;
+		}
 		if (*buf == '\n')
 			break ;
 		tmp = result;

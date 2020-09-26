@@ -23,6 +23,19 @@ void	sigint_handler(int signum)
 
 void	eof_handler(void)
 {
-	ft_putendl_fd("exit", 1);
+	ft_putendl_fd("\nexit", 1);
 	exit(EXIT_SUCCESS);
+}
+
+void    quit(int num)
+{
+	int     stat;
+	int     pid;
+
+	(void)num;
+	pid = waitpid(-1, &stat, WNOHANG);
+	if (!pid)
+		ft_putstr_fd("Quit: 3\n", 1);
+	else
+		ft_putstr_fd("\b\b  \b\b", 1);
 }

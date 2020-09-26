@@ -14,7 +14,7 @@
 
 int		is_fork(t_fds fds)
 {
-	return (fds.std_write != 3 || fds.std_read != 4);
+	return ((fds.std_write != 3 || fds.std_read != 4) && fds.fork == 1);
 }
 
 char	**convert_from_list_to_array(t_list *list, int size_array)

@@ -28,6 +28,7 @@ typedef struct	s_fds
 {
 	int 		std_write;
 	int 		std_read;
+	int			fork;
 }				t_fds;
 
 typedef struct	s_arguments
@@ -52,8 +53,11 @@ void			add_env(t_list *env_list, t_env *env);
 void			eof_handler(void);
 void			free_env(void *arg);
 void			free_double_array(char **array);
+void			read_line(int fd, char **line);
 
 void			sigint_handler(int signum);
+void    		quit(int num);
+
 void			type_prompt(void);
 char			**parse_user_input(char **user_input, t_list *env_list, t_fds *fds);
 void			get_pipe_fd(char **arguments, t_fds *fds);

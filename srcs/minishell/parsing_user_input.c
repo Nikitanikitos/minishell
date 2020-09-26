@@ -128,25 +128,48 @@ char	*parse_argument(char **user_input, t_list *env_list)
 			free(temp);
 		}
 	}
-	if (result)
+	if (result && !*result)
+	{
+		free(result);
+		result = NULL;
+	}
+	else if (result)
 		result[shift] = 0;
 	return (result);
 }
 
-int 	get_fd(char **temp_user_input, t_fds *fds, t_list *env_list)
+int 	get_fd(char **temp_user_input, t_fds *fds, t_list *env_list, int *flag)
 {
 	if (**temp_user_input == '|')
 	{
+		fds->fork = 1;
 		get_pipe_fd(temp_user_input, fds);
 		return (1);
 	}
 	else if (ft_strchr("><", **temp_user_input))
+	{
+		fds->fork = 1;
 		get_redirect_fd(temp_user_input, fds, env_list);
+		*flag = 1;
+	}
 	return (0);
+}
+
+void	get_empty_fd(char **temp_user_input, t_fds *fds)
+{
+	int		fd[2];
+
+	(*temp_user_input)++;
+	pipe(fd);
+	close(fd[1]);
+	fds->std_read = fd[0];
+	dup2(fds->std_read, STDIN_FILENO);
+	fds->fork = 0;
 }
 
 char	**parse_user_input(char **user_input, t_list *env_list, t_fds *fds)
 {
+	int 		flag;
 	int			i;
 	char		*argument;
 	char		**arguments;
@@ -156,13 +179,20 @@ char	**parse_user_input(char **user_input, t_list *env_list, t_fds *fds)
 	arguments = NULL;
 	fds->std_write = 3;
 	fds->std_read = 4;
+	flag = 0;
 	while (*temp_user_input)
 	{
 		while (ft_isspace(*temp_user_input))
 			temp_user_input++;
-		if (*temp_user_input == ';' || !*temp_user_input)
+		if (*temp_user_input == ';' || !*temp_user_input ||
+			(*temp_user_input == '|' && flag))
 			break ;
-		else if (get_fd((char**)&temp_user_input, fds, env_list))
+		else if (*temp_user_input == '|' && !arguments)
+		{
+			get_empty_fd((char**)&temp_user_input, fds);
+			continue ;
+		}
+		else if (get_fd((char**)&temp_user_input, fds, env_list, &flag))
 			break ;
 		argument = parse_argument((char**)&temp_user_input, env_list);
 		if (argument)

@@ -114,16 +114,15 @@ int		main(int ac, char **av, char **envp)
 	dup2(1, 3);
 	dup2(0, 4);
 	signal(SIGINT, sigint_handler);
+	signal(SIGQUIT, quit);
 	if ((env_list = get_env_list(envp)) == NULL)
 		exit(EXIT_FAILURE);
 	while (TRUE)
 	{
 		type_prompt();
-		get_next_line(4, &user_input);
-		if (!*user_input)
+		read_line(4, &user_input);
+		if (user_input == NULL)
 			eof_handler();
-		else if (*user_input == '\n')
-			*user_input = 0;
 		minishell(user_input, env_list);
 		free(user_input);
 	}
