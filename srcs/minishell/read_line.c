@@ -19,7 +19,7 @@ void	read_line(int fd, char **line)
 	char	*result;
 	int		readed;
 	int		i;
-	
+
 	i = 0;
 	buf[1] = 0;
 	result = NULL;

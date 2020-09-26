@@ -27,10 +27,10 @@ void	eof_handler(void)
 	exit(EXIT_SUCCESS);
 }
 
-void    quit(int num)
+void	quit(int num)
 {
-	int     stat;
-	int     pid;
+	int		stat;
+	int		pid;
 
 	(void)num;
 	pid = waitpid(-1, &stat, WNOHANG);

@@ -14,15 +14,15 @@
 
 char	*parse_with_envp(char **argument, t_list *env_list)
 {
-	char		*temp_argument;
-	char		*result;
-	char		temp_symbol;
-	int 		i;
+	char	*temp_argument;
+	char	*result;
+	char	temp_symbol;
+	int		i;
 
 	i = 0;
 	(*argument)++;
 	temp_argument = *argument;
-	while (temp_argument[i] && !ft_isspace(temp_argument [i]) &&
+	while (temp_argument[i] && !ft_isspace(temp_argument[i]) &&
 			!ft_strchr("$\'\"\\", temp_argument[i]))
 		i++;
 	temp_symbol = temp_argument[i];
@@ -53,7 +53,7 @@ char	**get_paths(t_list *env_list)
 
 char	*get_current_path(char **paths, char *current_command, char *command)
 {
-	int 	fd;
+	int		fd;
 
 	fd = 0;
 	while (*paths)
@@ -69,7 +69,7 @@ char	*get_current_path(char **paths, char *current_command, char *command)
 	return (command);
 }
 
-int 	check_path(char **command, t_list *env_list)
+int		check_path(char **command, t_list *env_list)
 {
 	const char	*temp_command = ft_strdup(*command);
 	char		*current_command;

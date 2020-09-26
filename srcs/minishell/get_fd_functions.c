@@ -91,13 +91,14 @@ void	get_redirect_fd(char **arguments, t_fds *fds, t_list *env_list)
 		while (ft_isspace(*temp_arguments))
 			temp_arguments++;
 		if (!ft_strncmp(temp_arguments, ">>", 2))
-			fds->std_write = get_double_forward_redirect(&temp_arguments, env_list);
+			fds->std_write = get_double_forward_redirect(&temp_arguments,
+																	env_list);
 		else if (!ft_strncmp(temp_arguments, ">", 1))
 			fds->std_write = get_forward_redirect(&temp_arguments, env_list);
 		else if (!ft_strncmp(temp_arguments, "<", 1))
 			fds->std_read = get_back_redirect(&temp_arguments, env_list);
 		else
-			break;
+			break ;
 	}
 	*arguments = temp_arguments;
 }

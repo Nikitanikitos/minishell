@@ -23,8 +23,8 @@ char	*single_parse(char **argument, t_list *env_list)
 {
 	char	*temp;
 	char	*result;
-	int 	i;
-	int 	index;
+	int		i;
+	int		index;
 
 	index = 0;
 	result = ft_realloc(NULL, 1);
@@ -65,15 +65,14 @@ char	*parse_single_quote(char **argument)
 		temp++;
 	*argument = temp;
 	return (result);
-
 }
 
 char	*parse_double_quote(char **argument, t_list *env_list)
 {
 	char	*temp;
 	char	*result;
-	int 	i;
-	int 	index;
+	int		i;
+	int		index;
 
 	index = 0;
 	result = ft_realloc(NULL, 1);
@@ -99,9 +98,10 @@ char	*parse_double_quote(char **argument, t_list *env_list)
 	return (result);
 }
 
-int 	add_in_argument(char **result, char *temp, int shift)
+int		add_in_argument(char **result, char *temp, int shift)
 {
-	int 	argument_length;
+	int		argument_length;
+
 	argument_length = ft_strlen(temp);
 	*result = ft_realloc(*result, argument_length);
 	ft_strcpy(*result + shift, temp);
@@ -111,7 +111,7 @@ int 	add_in_argument(char **result, char *temp, int shift)
 
 char	*parse_argument(char **user_input, t_list *env_list)
 {
-	int 	shift;
+	int		shift;
 	char	*result;
 	char	*temp;
 
@@ -140,7 +140,7 @@ char	*parse_argument(char **user_input, t_list *env_list)
 	return (result);
 }
 
-int 	get_fd(char **temp_user_input, t_fds *fds, t_list *env_list, int *flag)
+int		get_fd(char **temp_user_input, t_fds *fds, t_list *env_list, int *flag)
 {
 	if (**temp_user_input == '|')
 	{
@@ -159,7 +159,6 @@ int 	get_fd(char **temp_user_input, t_fds *fds, t_list *env_list, int *flag)
 		fds->back_redirect = 0;
 		get_redirect_fd(temp_user_input, fds, env_list);
 		dup2(fds->std_read, STDIN_FILENO);
-
 	}
 	return (0);
 }
@@ -178,7 +177,7 @@ void	get_empty_pipe(char **temp_user_input, t_fds *fds)
 
 char	**parse_user_input(char **user_input, t_list *env_list, t_fds *fds)
 {
-	int 		flag;
+	int			flag;
 	int			i;
 	char		*argument;
 	char		**arguments;
