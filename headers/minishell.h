@@ -36,7 +36,7 @@ typedef struct	s_fds
 
 typedef struct	s_arguments
 {
-	char		**arguments;
+	char		**argv;
 	t_fds		fds;
 }				t_arguments;
 
@@ -60,17 +60,18 @@ void			read_line(int fd, char **line);
 
 void			sigint_handler(int signum);
 void    		quit(int num);
+void		print_error(char **arguments, int error_number);
 
 void			type_prompt(void);
 char			**parse_user_input(char **user_input, t_list *env_list, t_fds *fds);
 void			get_pipe_fd(char **arguments, t_fds *fds);
 void			get_redirect_fd(char **arguments, t_fds *fds, t_list *env_list);
 
-void			print_error(char **arguments);
 
 char			*parse_argument(char **user_input, t_list *env_list);
 char			*get_env_value(char *key, t_list *env_list);
 char			*parse_with_envp(char **argument, t_list *env_list);
+char			**convert_from_list_to_array(t_list *list);
 
 t_env			*env_init(char **key_value);
 t_list			*get_env_list(char **envp);

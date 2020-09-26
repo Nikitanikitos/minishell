@@ -52,12 +52,12 @@ void	check_in_env(char *argument, t_list *env_list)
 
 int		unset(t_arguments *arguments, t_list *env_list)
 {
-	if (!*arguments->arguments)
+	if (!*arguments->argv)
 		return (errno);
-	while (*arguments->arguments)
+	while (*arguments->argv)
 	{
-		check_in_env(*arguments->arguments, env_list);
-		arguments->arguments++;
+		check_in_env(*arguments->argv, env_list);
+		arguments->argv++;
 	}
 	return (errno);
 }

@@ -99,16 +99,25 @@ char	*parse_double_quote(char **argument, t_list *env_list)
 	return (result);
 }
 
+int 	add_in_argument(char **result, char *temp, int shift)
+{
+	int 	argument_length;
+	argument_length = ft_strlen(temp);
+	*result = ft_realloc(*result, argument_length);
+	ft_strcpy(*result + shift, temp);
+	free(temp);
+	return (argument_length);
+}
+
 char	*parse_argument(char **user_input, t_list *env_list)
 {
-	int		argument_length;
 	int 	shift;
 	char	*result;
 	char	*temp;
 
 	result = ft_realloc(NULL, 1);
 	shift = 0;
-	while (**user_input && !ft_strchr("|><", **user_input))
+	while (**user_input && !ft_strchr("|><;", **user_input))
 	{
 		if (ft_isspace(**user_input))
 			break ;
@@ -119,13 +128,7 @@ char	*parse_argument(char **user_input, t_list *env_list)
 		else
 			temp = single_parse(user_input, env_list);
 		if (temp)
-		{
-			argument_length = ft_strlen(temp);
-			result = ft_realloc(result, argument_length);
-			ft_strcpy(result + shift, temp);
-			shift += argument_length;
-			free(temp);
-		}
+			shift += add_in_argument(&result, temp, shift);
 	}
 	if (result && !*result)
 	{

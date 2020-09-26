@@ -18,21 +18,27 @@ int		is_fork(t_fds fds)
 			&& fds.fork == 1 && fds.back_redirect == 0);
 }
 
-char	**convert_from_list_to_array(t_list *list, int size_array)
+char	**convert_from_list_to_array(t_list *list)
 {
+	char	*temp;
 	char	**array;
+	t_env	*env;
 	int		size_list;
 	int		i;
 
 	size_list = ft_lstsize(list);
-	if (size_list > size_array)
-		size_list = size_array;
+	i = 0;
 	if ((array = (char**)malloc(sizeof(char*) * (size_list + 1))) == NULL)
 		return (NULL);
-	i = 0;
-	while (list && size_array--)
+	while (list)
 	{
-		array[i++] = ft_strdup(list->content);
+		env = list->content;
+		if (env->value && *env->value)
+		{
+			temp = ft_strjoin(env->key, "=");
+			array[i++] = ft_strjoin(temp, env->value);
+			free(temp);
+		}
 		list = list->next;
 	}
 	array[i] = NULL;
@@ -51,19 +57,22 @@ void	type_prompt(void)
 	cwd = getcwd(NULL, 0);
 	ft_putstr_fd(cwd, 1);
 	free(cwd);
-	write(1, "$ ", 1);
+	write(1, "$ ", 2);
 }
 
-void	print_error(char **arguments)
+void	print_error(char **arguments, int error_number)
 {
 	char	*error;
 
 	ft_putstr_fd("minishell: ", 2);
-	while (*arguments)
+	while (arguments && *arguments)
 	{
 		ft_putstr_fd(*arguments++, 2);
 		ft_putstr_fd(": ", 2);
 	}
 	error = strerror(errno);
-	ft_putendl_fd(error, STDERR_FILENO);
+	if (!error_number)
+		ft_putendl_fd(error, STDERR_FILENO);
+	else
+		ft_putendl_fd("command not found", STDERR_FILENO);
 }

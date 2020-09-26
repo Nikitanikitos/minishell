@@ -32,25 +32,50 @@ void	print_export(t_list *env_list)
 	}
 }
 
+int		valid_export_key(char *key)
+{
+	if (ft_atoi(key))
+		return (0);
+	while (*key)
+		if (ft_isalnum(*key++) && *key != '_')
+			return (1);
+	return (0);
+}
+
+void	export_error(char **key_value)
+{
+	ft_putstr_fd("minishell: export: '", 2);
+	ft_putstr_fd(key_value[0], 2);
+	ft_putstr_fd("': not valid identifier\n", 2);
+	free(key_value[0]);
+	if (key_value[1])
+		free(key_value[1]);
+}
+
 int		export(t_arguments *arguments, t_list *env_list)
 {
 	char	**key_value;
 
-	if (!*(arguments->arguments))
+	if (!*(arguments->argv))
 		print_export(env_list);
 	else
 	{
-		while (*arguments->arguments)
+		while (*arguments->argv)
 		{
-			key_value = ft_split(*arguments->arguments, '=');
+			key_value = ft_split(*arguments->argv, '=');
+			if (!valid_export_key(key_value[0]))
+			{
+				export_error(key_value);
+				return (errno);
+			}
 			if (ft_str_double_len(key_value) == 1)
 			{
-				if (ft_strchr(*arguments->arguments, '='))
+				if (ft_strchr(*arguments->argv, '='))
 					key_value[1] = ft_strdup("\'\'");
 			}
 			add_env(env_list, env_init(key_value));
 			free(key_value);
-			arguments->arguments++;
+			arguments->argv++;
 		}
 	}
 	return (errno);

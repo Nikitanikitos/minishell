@@ -28,11 +28,11 @@ int		execute_buildin_command(t_arguments arguments, t_list *env_list)
 	index = 0;
 	while (index < NUMBER_BUILDIN_CMD)
 	{
-		if (!ft_strcmp(builtins[index].func_name, *(arguments.arguments)))
+		if (!ft_strcmp(builtins[index].func_name, *(arguments.argv)))
 		{
-			arguments.arguments++;
+			arguments.argv++;
 			if (builtins[index].func(&arguments, env_list))
-				print_error(--arguments.arguments);
+				print_error(--arguments.argv, 0);
 			return (TRUE);
 		}
 		index++;
@@ -43,21 +43,22 @@ int		execute_buildin_command(t_arguments arguments, t_list *env_list)
 void	start_process(t_arguments *arguments, t_list *env_list)
 {
 	pid_t		pid;
-	int			status;
+	char		**env;
 
 	errno = 0;
 	if (execute_buildin_command(*arguments, env_list))
-		;
-	else if ((pid = fork()))
+		return ;
+	env = convert_from_list_to_array(env_list);
+	if ((pid = fork()))
 		wait(0);
 	else if (pid < 0)
 		exit(EXIT_FAILURE);
 	else
 	{
-		check_path(arguments->arguments, env_list);
-		if ((g_status = execve(*arguments->arguments, arguments->arguments, NULL)))
+		check_path(arguments->argv, env_list);
+		if ((g_status = execve(*arguments->argv, arguments->argv, env)))
 		{
-			print_error(arguments->arguments);
+			print_error(arguments->argv, 1);
 			exit(g_status);
 		}
 	}
@@ -96,12 +97,17 @@ void	minishell(char *user_input, t_list *env_list)
 		else
 		{
 			arguments.fds.back_redirect = 0;
-			arguments.arguments = parse_user_input(&user_input, env_list, &arguments.fds);
-			if (is_fork(arguments.fds))
-				fork_process(arguments, env_list);
+			if ((arguments.argv = parse_user_input(&user_input, env_list,
+															&arguments.fds)))
+			{
+				if (is_fork(arguments.fds))
+					fork_process(arguments, env_list);
+				else
+					start_process(&arguments, env_list);
+				free_double_array(arguments.argv);
+			}
 			else
-				start_process(&arguments, env_list);
-			free_double_array(arguments.arguments);
+				print_error(arguments.argv, 1);
 		}
 	}
 }

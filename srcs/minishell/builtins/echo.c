@@ -17,15 +17,15 @@ int		echo(t_arguments *arguments, t_list *env_list)
 	int		flag;
 
 	flag = 1;
-	if (*arguments->arguments && !ft_strcmp(*(arguments->arguments), "-n"))
+	if (*arguments->argv && !ft_strcmp(*(arguments->argv), "-n"))
 	{
 		flag = 0;
-		arguments->arguments++;
+		arguments->argv++;
 	}
-	while (*(arguments->arguments))
+	while (*(arguments->argv))
 	{
-		ft_putstr_fd(*(arguments->arguments)++, 1);
-		if (*(arguments->arguments))
+		ft_putstr_fd(*(arguments->argv)++, 1);
+		if (*(arguments->argv))
 			write(1, " ", 1);
 	}
 	write(1, "\n", (size_t)flag);

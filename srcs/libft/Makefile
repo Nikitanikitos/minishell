@@ -29,7 +29,7 @@ GCC			= gcc -Wall -Wextra -Werror
 all: $(NAME) bonus
 
 $(NAME): $(OBJS)
-	ar -rc $(NAME) $(OBJS)
+	argv -rc $(NAME) $(OBJS)
 	ranlib $(NAME)
 
 %.o : %.c
@@ -38,7 +38,7 @@ $(NAME): $(OBJS)
 #######################################################
 
 bonus: $(OBJS_BONUS)
-	ar -rc $(NAME) $(OBJS_BONUS)
+	argv -rc $(NAME) $(OBJS_BONUS)
 	ranlib $(NAME)
 
 #######################################################
