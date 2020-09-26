@@ -55,7 +55,7 @@ void			free_double_array(char **array);
 
 void			sigint_handler(int signum);
 void			type_prompt(void);
-char			**parse_user_input(char **user_input, t_list *env_list);
+char			**parse_user_input(char **user_input, t_list *env_list, t_fds *fds);
 
 void			print_error(char **arguments);
 
@@ -66,7 +66,8 @@ char			*parse_with_envp(char **argument, t_list *env_list);
 t_env			*env_init(char **key_value);
 t_list			*get_env_list(char **envp);
 
-int				get_fd(char **arguments, t_fds *fds);
+void			get_pipe_fd(char **arguments, t_fds *fds);
+int				get_redirect_fd(char **arguments, t_fds *fds);
 int				check_path(char **command, t_list *env_list);
 int				is_fork(t_fds fds);
 

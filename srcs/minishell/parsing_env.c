@@ -23,7 +23,7 @@ char	*parse_with_envp(char **argument, t_list *env_list)
 	(*argument)++;
 	temp_argument = *argument;
 	while (temp_argument[i] && !ft_isspace(temp_argument [i]) &&
-			temp_argument[i] != '$' && temp_argument[i] != '\\')
+			!ft_strchr("$\'\"\\", temp_argument[i]))
 		i++;
 	temp_symbol = temp_argument[i];
 	temp_argument[i] = 0;

@@ -12,34 +12,43 @@
 
 #include "minishell.h"
 
-int		get_pipe(t_fds *fds)
+void	get_pipe_fd(char **arguments, t_fds *fds)
 {
 	int		fd[2];
 
 	pipe(fd);
+	(*arguments)++;
 	fds->std_in = fd[0];
 	fds->std_out = fd[1];
-	return (1);
 }
 
 int		get_forward_redirect(char **arguments, t_fds *fds)
 {
+	char	*temp_arguments;
+	char	temp_chr;
 	int		fd;
+	int 	length;
 
 	fd = 0;
-	while (*arguments)
+	length = 0;
+	temp_arguments = *arguments;
+	while (*temp_arguments)
 	{
-		if (!ft_strcmp(">", *arguments))
+		if (!ft_strncmp(">", temp_arguments, 1))
 		{
-			free(*arguments);
-			*arguments = NULL;
-			arguments++;
+			temp_arguments++;
 			if (fd != 0)
 				close(fd);
-			fd = open(*arguments, O_CREAT | O_APPEND | O_RDWR, 0777);
+			while (!ft_isspace(temp_arguments[length]))
+				length++;
+			temp_chr = temp_arguments[length];
+			temp_arguments[length] = 0;
+			fd = open(temp_arguments, O_CREAT | O_APPEND | O_RDWR, 0777);
+			temp_arguments[length] = temp_chr;
 		}
 		arguments++;
 	}
+	*arguments = temp_arguments;
 	fds->std_out = fd;
 	return (1);
 }
@@ -51,7 +60,7 @@ int		get_double_forward_redirect(char **arguments, t_fds *fds)
 	fd = 0;
 	while (*arguments)
 	{
-		if (!ft_strcmp(">>", *arguments))
+		if (!ft_strncmp(">>", *arguments, 2))
 		{
 			if (fd != 0)
 				close(fd);
@@ -70,7 +79,7 @@ int		get_back_redirect(char **arguments, t_fds *fds)
 	fd = 0;
 	while (*arguments)
 	{
-		if (!ft_strcmp("<", *arguments))
+		if (!ft_strncmp("<", *arguments, 1))
 		{
 			if (fd != 0)
 				close(fd);
@@ -82,32 +91,19 @@ int		get_back_redirect(char **arguments, t_fds *fds)
 	return (1);
 }
 
-int		get_fd(char **arguments, t_fds *fds)
+int		get_redirect_fd(char **arguments, t_fds *fds)
 {
-	int		index;
-	int		next_index;
+	char	*temp_arguments;
 
-	fds->std_in = 3;
-	fds->std_out = 4;
-	index = 0;
-	next_index = 0;
-	while (arguments[index])
+	temp_arguments = *arguments;
+	while (*temp_arguments)
 	{
-		if (!ft_strcmp(arguments[index], ">"))
-			next_index = get_forward_redirect(arguments + index, fds);
-		else if (!ft_strcmp(arguments[index], ">>"))
-			next_index = get_double_forward_redirect(arguments + index, fds);
-		else if (!ft_strcmp(arguments[index], "<"))
-			next_index = get_back_redirect(arguments + index, fds);
-		else if (!ft_strcmp(arguments[index], "|"))
-		{
-			next_index = get_pipe(fds);
-			break ;
-		}
-		index += (next_index) ? next_index : 1;
+		if (!ft_strncmp(temp_arguments, ">", 1))
+			get_forward_redirect(&temp_arguments, fds);
+		else if (!ft_strncmp(temp_arguments, ">>", 2))
+			get_double_forward_redirect(&temp_arguments, fds);
+		else if (!ft_strncmp(temp_arguments, "<", 1))
+			get_back_redirect(&temp_arguments, fds);
 	}
-	if (arguments[index])
-		free(arguments[index]);
-	arguments[index] = NULL;
-	return (index + next_index);
+	return (0);
 }

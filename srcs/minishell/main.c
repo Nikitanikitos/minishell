@@ -85,21 +85,6 @@ void	fork_process(t_arguments arguments, t_list *env_list)
 	}
 }
 
-void	handle_arguments(t_arguments arguments, t_list *env_list)
-{
-	int 	index;
-
-	while (*arguments.arguments)
-	{
-		index = get_fd(arguments.arguments, &arguments.fds);
-		if (is_fork(arguments.fds))
-			fork_process(arguments, env_list);
-		else
-			start_process(&arguments, env_list);
-		arguments.arguments += index;
-	}
-}
-
 void	minishell(char *user_input, t_list *env_list)
 {
 	t_arguments	arguments;
@@ -110,10 +95,12 @@ void	minishell(char *user_input, t_list *env_list)
 			user_input++;
 		else
 		{
-			arguments.arguments = parse_user_input(&user_input, env_list);
-			handle_arguments(arguments, env_list);
+			arguments.arguments = parse_user_input(&user_input, env_list, &arguments.fds);
+			if (is_fork(arguments.fds))
+				fork_process(arguments, env_list);
+			else
+				start_process(&arguments, env_list);
 			free_double_array(arguments.arguments);
-//			free(arguments.arguments); // TODO чекнуть на маке
 		}
 	}
 }
