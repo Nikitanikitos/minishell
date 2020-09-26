@@ -96,6 +96,7 @@ void	minishell(char *user_input, t_list *env_list)
 			user_input++;
 		else
 		{
+			arguments.fds.back_redirect = 0;
 			arguments.arguments = parse_user_input(&user_input, env_list, &arguments.fds);
 			if (is_fork(arguments.fds))
 				fork_process(arguments, env_list);

@@ -29,6 +29,7 @@ typedef struct	s_fds
 	int 		std_write;
 	int 		std_read;
 	int			fork;
+	int 		back_redirect;
 }				t_fds;
 
 typedef struct	s_arguments

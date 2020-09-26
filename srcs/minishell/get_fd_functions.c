@@ -62,19 +62,20 @@ int		get_double_forward_redirect(char **arguments, t_list *env_list)
 
 int		get_back_redirect(char **arguments, t_list *env_list)
 {
-	int		fd;
+	char			*temp_arguments;
+	char			*file_name;
+	static int		fd;
 
-	fd = 0;
-	while (*arguments)
-	{
-		if (!ft_strncmp("<", *arguments, 1))
-		{
-			if (fd != 0)
-				close(fd);
-			fd = open(*arguments, O_RDONLY);
-		}
-		arguments++;
-	}
+	if (fd != 0)
+		close(fd);
+	temp_arguments = *arguments;
+	temp_arguments++;
+	while (ft_isspace(*temp_arguments))
+		temp_arguments++;
+	file_name = parse_argument(&temp_arguments, env_list);
+	fd = open(file_name, O_CREAT | O_RDONLY, 0644);
+	free(file_name);
+	*arguments = temp_arguments;
 	return (fd);
 }
 
@@ -83,6 +84,8 @@ void	get_redirect_fd(char **arguments, t_fds *fds, t_list *env_list)
 	char	*temp_arguments;
 
 	temp_arguments = *arguments;
+	fds->std_read = -1;
+	fds->std_write = -1;
 	while (*temp_arguments)
 	{
 		while (ft_isspace(*temp_arguments))
@@ -96,6 +99,5 @@ void	get_redirect_fd(char **arguments, t_fds *fds, t_list *env_list)
 		else
 			break;
 	}
-	fds->std_read = 10;
 	*arguments = temp_arguments;
 }
