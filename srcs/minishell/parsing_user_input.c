@@ -161,7 +161,7 @@ int 	get_fd(char **temp_user_input, t_fds *fds, t_list *env_list, int *flag)
 	return (0);
 }
 
-void	get_empty_pipe(char **temp_user_input, t_fds *fds, int flag)
+void	get_empty_pipe(char **temp_user_input, t_fds *fds)
 {
 	int		fd[2];
 
@@ -191,7 +191,7 @@ char	**parse_user_input(char **user_input, t_list *env_list, t_fds *fds)
 			(**user_input == '|' && flag))
 			break ;
 		else if (**user_input == '|' && !arguments)
-			get_empty_pipe(user_input, fds, flag);
+			get_empty_pipe(user_input, fds);
 		else if (get_fd(user_input, fds, env_list, &flag))
 			break ;
 		if ((argument = parse_argument(user_input, env_list)))
