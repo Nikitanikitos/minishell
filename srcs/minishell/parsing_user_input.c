@@ -131,6 +131,8 @@ char	*parse_argument(char **user_input, t_list *env_list)
 			free(temp);
 		}
 	}
+	if (result)
+		result[shift] = 0;
 	*user_input = temp_user_input;
 	return (result);
 }
@@ -138,6 +140,7 @@ char	*parse_argument(char **user_input, t_list *env_list)
 char	**parse_user_input(char **user_input, t_list *env_list)
 {
 	int		i;
+	char	*argument;
 	char 	*temp_user_input;
 	char	**arguments;
 
@@ -150,8 +153,12 @@ char	**parse_user_input(char **user_input, t_list *env_list)
 			temp_user_input++;
 		if (*temp_user_input == ';' || !*temp_user_input)
 			break ;
-		arguments = ft_double_realloc(arguments, 1);
-		arguments[i++] = parse_argument(&temp_user_input, env_list);
+		argument = parse_argument(&temp_user_input, env_list);
+		if (argument)
+		{
+			arguments = ft_double_realloc(arguments, 1);
+			arguments[i++] = argument;
+		}
 	}
 	*user_input = temp_user_input;
 	return (arguments);
