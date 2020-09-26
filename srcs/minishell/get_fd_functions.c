@@ -22,38 +22,26 @@ void	get_pipe_fd(char **arguments, t_fds *fds)
 	fds->std_out = fd[1];
 }
 
-int		get_forward_redirect(char **arguments, t_fds *fds)
+int		get_forward_redirect(char **arguments, t_list *env_list)
 {
-	char	*temp_arguments;
-	char	temp_chr;
-	int		fd;
-	int 	length;
+	char			*temp_arguments;
+	char			*file_name;
+	static int		fd;
 
-	fd = 0;
-	length = 0;
+	if (fd != 0)
+		close(fd);
 	temp_arguments = *arguments;
-	while (*temp_arguments)
-	{
-		if (!ft_strncmp(">", temp_arguments, 1))
-		{
-			temp_arguments++;
-			if (fd != 0)
-				close(fd);
-			while (!ft_isspace(temp_arguments[length]))
-				length++;
-			temp_chr = temp_arguments[length];
-			temp_arguments[length] = 0;
-			fd = open(temp_arguments, O_CREAT | O_APPEND | O_RDWR, 0777);
-			temp_arguments[length] = temp_chr;
-		}
-		arguments++;
-	}
+	temp_arguments++;
+	while (ft_isspace(*temp_arguments))
+		temp_arguments++;
+	file_name = parse_argument(&temp_arguments, env_list);
+	fd = open(file_name, O_CREAT | O_TRUNC | O_WRONLY, 0644);
+	free(file_name);
 	*arguments = temp_arguments;
-	fds->std_out = fd;
-	return (1);
+	return (fd);
 }
 
-int		get_double_forward_redirect(char **arguments, t_fds *fds)
+int		get_double_forward_redirect(char **arguments, t_list *env_list)
 {
 	int		fd;
 
@@ -64,15 +52,14 @@ int		get_double_forward_redirect(char **arguments, t_fds *fds)
 		{
 			if (fd != 0)
 				close(fd);
-			fd = open(*arguments, O_CREAT | O_TRUNC | O_RDWR, 0777);
+			fd = open(*arguments, O_CREAT | O_APPEND | O_RDWR, 0644);
 		}
 		arguments++;
 	}
-	fds->std_out = fd;
-	return (1);
+	return (fd);
 }
 
-int		get_back_redirect(char **arguments, t_fds *fds)
+int		get_back_redirect(char **arguments, t_list *env_list)
 {
 	int		fd;
 
@@ -87,23 +74,19 @@ int		get_back_redirect(char **arguments, t_fds *fds)
 		}
 		arguments++;
 	}
-	fds->std_in = fd;
-	return (1);
+	return (fd);
 }
 
-int		get_redirect_fd(char **arguments, t_fds *fds)
+void	get_redirect_fd(char **arguments, t_fds *fds, t_list *env_list)
 {
 	char	*temp_arguments;
 
 	temp_arguments = *arguments;
-	while (*temp_arguments)
-	{
-		if (!ft_strncmp(temp_arguments, ">", 1))
-			get_forward_redirect(&temp_arguments, fds);
-		else if (!ft_strncmp(temp_arguments, ">>", 2))
-			get_double_forward_redirect(&temp_arguments, fds);
-		else if (!ft_strncmp(temp_arguments, "<", 1))
-			get_back_redirect(&temp_arguments, fds);
-	}
-	return (0);
+	if (!ft_strncmp(temp_arguments, ">", 1))
+		fds->std_out = get_forward_redirect(&temp_arguments, env_list);
+	else if (!ft_strncmp(temp_arguments, ">>", 2))
+		fds->std_out = get_double_forward_redirect(&temp_arguments, env_list);
+	else if (!ft_strncmp(temp_arguments, "<", 1))
+		fds->std_in = get_back_redirect(&temp_arguments, env_list);
+	*arguments = temp_arguments;
 }

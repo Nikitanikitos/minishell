@@ -20,12 +20,14 @@ void	*ft_realloc(char *src, int size)
 	if (src != NULL)
 	{
 		size += ft_strlen(src);
-		src = (char*)malloc(sizeof(char) * size);
+		src = (char*)ft_calloc(1, (size_t)size);
 		ft_strcpy(src, temp);
 		free(temp);
 	}
 	else
-		src = (char*)malloc(sizeof(char) * size);
+	{
+		src = (char*)ft_calloc(1, (size_t)size);
+	}
 	return (src);
 }
 

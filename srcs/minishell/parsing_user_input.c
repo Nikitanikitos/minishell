@@ -12,7 +12,6 @@
 
 #include "minishell.h"
 
-
 char	*single_parse(char **argument, t_list *env_list)
 {
 	char	*temp;
@@ -94,6 +93,8 @@ char	*parse_double_quote(char **argument, t_list *env_list)
 		else
 			result[index++] = *(*argument)++;
 	}
+	if (**argument == '\"')
+		(*argument)++;
 	if (result)
 		result[index] = 0;
 	return (result);
@@ -106,7 +107,7 @@ char	*parse_argument(char **user_input, t_list *env_list)
 	char	*result;
 	char	*temp;
 
-	result = NULL;
+	result = ft_realloc(NULL, 1);
 	shift = 0;
 	while (**user_input)
 	{
@@ -132,7 +133,7 @@ char	*parse_argument(char **user_input, t_list *env_list)
 	return (result);
 }
 
-int 	get_fd(char **temp_user_input, t_fds *fds)
+int 	get_fd(char **temp_user_input, t_fds *fds, t_list *env_list)
 {
 	if (**temp_user_input == '|')
 	{
@@ -140,7 +141,7 @@ int 	get_fd(char **temp_user_input, t_fds *fds)
 		return (1);
 	}
 	else if (ft_strchr("><", **temp_user_input))
-		get_redirect_fd(temp_user_input, fds);
+		get_redirect_fd(temp_user_input, fds, env_list);
 	return (0);
 }
 
@@ -161,7 +162,7 @@ char	**parse_user_input(char **user_input, t_list *env_list, t_fds *fds)
 			temp_user_input++;
 		if (*temp_user_input == ';' || !*temp_user_input)
 			break ;
-		else if (get_fd((char**)&temp_user_input, fds))
+		else if (get_fd((char**)&temp_user_input, fds, env_list))
 			break ;
 		argument = parse_argument((char**)&temp_user_input, env_list);
 		if (argument)
