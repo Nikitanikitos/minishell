@@ -79,7 +79,7 @@ int		check_path(char **command, t_list *env_list)
 	current_command = ft_strjoin("/", *command);
 	free(*command);
 	if ((paths = get_paths(env_list)) == NULL)
-		free(current_command);
+		*command = (char*)temp_command;
 	else if ((*command = get_current_path(paths, current_command, *command)))
 		;
 	else if ((fd = open(temp_command, O_RDONLY)) != -1)
@@ -90,7 +90,10 @@ int		check_path(char **command, t_list *env_list)
 	else
 		*command = (char*)temp_command;
 	free(current_command);
-	free_double_array(paths);
-	free(paths);
+	if (paths)
+	{
+		free(paths);
+		free_double_array(paths);
+	}
 	return (0);
 }

@@ -50,7 +50,11 @@ void	start_process(t_arguments *arguments, t_list *env_list)
 		return ;
 	env = convert_from_list_to_array(env_list);
 	if ((pid = fork()))
+	{
 		wait(&g_status);
+		free_double_array(env);
+		free(env);
+	}
 	else if (pid < 0)
 		exit(EXIT_FAILURE);
 	else
@@ -58,6 +62,7 @@ void	start_process(t_arguments *arguments, t_list *env_list)
 		check_path(arguments->argv, env_list);
 		execve(*arguments->argv, arguments->argv, env);
 		print_error(arguments->argv, 1);
+		exit(127);
 	}
 }
 
@@ -102,6 +107,7 @@ void	minishell(char *user_input, t_list *env_list)
 				else
 					start_process(&arguments, env_list);
 				free_double_array(arguments.argv);
+				free(arguments.argv);
 			}
 			else
 				print_error(arguments.argv, 1);

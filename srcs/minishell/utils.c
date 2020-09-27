@@ -51,29 +51,29 @@ void	type_prompt(void)
 	char		*cwd;
 
 	if (first_time)
-		write(STDOUT_FILENO, " \e[1:1H\e[2J", 12);
+		ft_putstr_fd(" \e[1:1H\e[2J", STDOUT_FILENO);
 	first_time = 0;
-	write(STDOUT_FILENO, "minishell:~", 11);
+	ft_putstr_fd("\e[1mminishell:~", STDOUT_FILENO);
 	cwd = getcwd(NULL, 0);
 	ft_putstr_fd(cwd, 1);
+	ft_putstr_fd("$\e[0m ", STDOUT_FILENO);
 	free(cwd);
-	write(1, "$ ", 2);
 }
 
 void	print_error(char **arguments, int error_number)
 {
 	char	*error;
 
-	ft_putstr_fd("minishell: ", 2);
+	ft_putstr_fd("\e[31m\e[1mminishell: ", STDERR_FILENO);
 	while (arguments && *arguments)
 	{
-		ft_putstr_fd(*arguments++, 2);
-		ft_putstr_fd(": ", 2);
+		ft_putstr_fd(*arguments++, STDERR_FILENO);
+		ft_putstr_fd(": ", STDERR_FILENO);
 	}
 	error = strerror(errno);
 	if (!error_number)
 		ft_putendl_fd(error, STDERR_FILENO);
 	else
-		ft_putendl_fd("command not found", STDERR_FILENO);
+		ft_putendl_fd("command not found\e[0m", STDERR_FILENO);
 	g_status = 1;
 }
