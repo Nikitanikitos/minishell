@@ -16,6 +16,7 @@ int		ft_isdigit(char *s)
 	{
 		if (!('0' <= *s && *s <= '9'))
 			return (0);
+		s++;
 	}
 	return (1);
 }
