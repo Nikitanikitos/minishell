@@ -81,12 +81,7 @@ int		check_path(char **command, t_list *env_list)
 	if ((paths = get_paths(env_list)) == NULL)
 		free(current_command);
 	else if ((*command = get_current_path(paths, current_command, *command)))
-	{
-		free(current_command);
-//		free_double_array(paths);
-//		free(paths); // TODO чекнуть на маке
-//		return (0);
-	}
+		;
 	else if ((fd = open(temp_command, O_RDONLY)) != -1)
 	{
 		*command = (char*)temp_command;
