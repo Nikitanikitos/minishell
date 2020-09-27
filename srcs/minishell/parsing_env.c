@@ -88,6 +88,8 @@ void	check_path(char **command, t_list *env_list)
 		free(paths);
 		free(current_command);
 	}
+	else
+		*command = (char*)temp_command;
 	if (*command == NULL)
 		*command = (char*)temp_command;
 }
