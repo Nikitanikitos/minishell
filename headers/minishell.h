@@ -10,15 +10,16 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdio.h> // TODO удалить!
+#ifndef MINISHELL_H
+# define MINISHELL_H
 
-#include <stdlib.h>
-#include <unistd.h>
-#include <fcntl.h>
-#include <sys/wait.h>
-#include <errno.h>
-#include <sys/dir.h>
-#include "libft.h"
+# include <stdlib.h>
+# include <unistd.h>
+# include <fcntl.h>
+# include <sys/wait.h>
+# include <errno.h>
+# include <sys/dir.h>
+# include "libft.h"
 
 # define NUMBER_BUILDIN_CMD	7
 # define TRUE				1
@@ -28,10 +29,10 @@ int				g_status;
 
 typedef struct	s_fds
 {
-	int 		std_write;
-	int 		std_read;
+	int			std_write;
+	int			std_read;
 	int			fork;
-	int 		back_redirect;
+	int			back_redirect;
 }				t_fds;
 
 typedef struct	s_arguments
@@ -43,7 +44,7 @@ typedef struct	s_arguments
 typedef struct	s_builtin
 {
 	char		*func_name;
-	int 		(*func)(t_arguments*, t_list*);
+	int			(*func)(t_arguments*, t_list*);
 }				t_builtin;
 
 typedef struct	s_env
@@ -52,38 +53,43 @@ typedef struct	s_env
 	char		*value;
 }				t_env;
 
-void			get_empty_pipe(char **temp_user_input, t_fds *fds);
 void			add_env(t_list *env_list, t_env *env);
+void			arguments_init(t_arguments *arguments);
 void			eof_handler(void);
+void			get_empty_pipe(char **temp_user_input, t_fds *fds);
+void			get_pipe_fd(char **arguments, t_fds *fds);
+void			get_redirect_fd(char **arguments, t_fds *fds, t_list *env_list);
 void			free_env(void *arg);
 void			free_double_array(char **array);
 void			read_line(int fd, char **line);
-void			sigint_handler(int signum);
-void    		quit(int num);
 void			print_error(char **arguments, int error_number);
 void			type_prompt(void);
-char			**parse_user_input(char **usr_input, t_list *env_list, t_fds *fds);
-void			get_pipe_fd(char **arguments, t_fds *fds);
-void			get_redirect_fd(char **arguments, t_fds *fds, t_list *env_list);
-void			arguments_init(t_arguments *arguments);
+void			quit(int num);
+void			sigint_handler(int signum);
 
-char			*parse_argument(char **user_input, t_list *env_list);
-char			*get_env_value(char *key, t_list *env_list);
-char			*parse_with_envp(char **argument, t_list *env_list);
 char			**convert_from_list_to_array(t_list *list);
+char			*get_env_value(char *key, t_list *env_list);
+char			*parse_argument(char **user_input, t_list *env_list);
+char			*parse_with_envp(char **argument, t_list *env_list);
+char			**parse_user_input(char **usr_input, t_list *env_list,
+																	t_fds *fds);
 
 t_env			*env_init(char **key_value);
 t_list			*get_env_list(char **envp);
 
-int				get_fd(char **temp_user_input, t_fds *fds, t_list *env_list, int *flag);
 int				add_in_argument(char **result, char *temp, int shift);
 int				add_in_result(char *result, char *temp, int i, int index);
 int				check_path(char **command, t_list *env_list);
-int				is_fork(t_fds fds);
-int				echo(t_arguments* arguments, t_list *env_list);
-int				env(t_arguments *arguments, t_list *env_list);
-int				export(t_arguments *, t_list *env_list);
+int				echo(t_arguments *arguments, t_list *env_list);
+int				get_fd(char **temp_user_input, t_fds *fds, t_list *env_list,
+																	int *flag);
+
 int				cd(t_arguments *arguments, t_list *env_list);
-int				ft_exit(t_arguments*, t_list *env_list);
-int				pwd(t_arguments*, t_list *env_list);
+int				env(t_arguments *arguments, t_list *env_list);
+int				export(t_arguments *arguments, t_list *env_list);
+int				is_fork(t_fds fds);
+int				ft_exit(t_arguments *arguments, t_list *env_list);
+int				pwd(t_arguments *arguments, t_list *env_list);
 int				unset(t_arguments *arguments, t_list *env_list);
+
+#endif
