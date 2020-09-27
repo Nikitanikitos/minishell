@@ -45,19 +45,18 @@ int		ft_exit(t_arguments *arguments, t_list *env_list)
 	int		exit_number;
 
 	exit_number = 0;
-	ft_putendl_fd("exit", 1);
+	ft_putendl_fd("exit", STDOUT_FILENO);
 	if (ft_str_double_len(arguments->argv) > 1)
 	{
-		ft_putendl_fd("\e[31m\e[1mminishell: exit:"
-											"Argument list too long\e[0m", 2);
+		ft_putstderr("minishell: exit: argument list too long");
 		return (errno);
 	}
-	else if (*arguments->argv && !ft_isdigit(*arguments->argv) &&
-													**arguments->argv != '-')
+	else if (*arguments->argv && ((!ft_isdigit(*arguments->argv) &&
+			**arguments->argv != '-') || !**arguments->argv))
 	{
-		ft_putstr_fd("\e[31m\e[1mminishell: exit: ", 2);
-		ft_putstr_fd(*arguments->argv, 2);
-		ft_putendl_fd(": a numeric is required\e[0m", 2);
+		ft_putstr_fd("\e[1m\e[31mminishell: exit: ", STDERR_FILENO);
+		ft_putstr_fd(*arguments->argv, STDERR_FILENO);
+		ft_putendl_fd(": a numeric is required\e[0m", STDERR_FILENO);
 	}
 	if (*arguments->argv)
 		exit_number = ft_atoi(*arguments->argv);

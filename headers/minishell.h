@@ -24,6 +24,8 @@
 # define NUMBER_BUILDIN_CMD	7
 # define TRUE				1
 # define FALSE				0
+# define RED_COLOR
+
 
 int				g_status;
 
@@ -79,7 +81,7 @@ t_list			*get_env_list(char **envp);
 
 int				add_in_argument(char **result, char *temp, int shift);
 int				add_in_result(char *result, char *temp, int i, int index);
-int				check_path(char **command, t_list *env_list);
+void			check_path(char **command, t_list *env_list);
 int				echo(t_arguments *arguments, t_list *env_list);
 int				get_fd(char **temp_user_input, t_fds *fds, t_list *env_list,
 																	int *flag);

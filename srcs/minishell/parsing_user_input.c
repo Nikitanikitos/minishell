@@ -12,6 +12,15 @@
 
 #include "minishell.h"
 
+char	*check_result(char *result, int index)
+{
+	if (result)
+		result[index] = 0;
+	else
+		result = ft_strdup("\0");
+	return (result);
+}
+
 char	*single_parse(char **argument, t_list *env_list)
 {
 	char	*temp;
@@ -35,7 +44,7 @@ char	*single_parse(char **argument, t_list *env_list)
 		else
 			result[index++] = *(*argument)++;
 	}
-	(result) ? result[index] = 0 : 0;
+	result = check_result(result, index);
 	return (result);
 }
 
@@ -52,8 +61,11 @@ char	*parse_single_quote(char **argument)
 		index++;
 	if (index)
 		result = ft_strndup(temp, (size_t)index);
+	else
+		result = ft_strdup("\0");
 	temp += index;
-	(*temp == '\'') ? temp++ : 0;
+	if (*temp == '\'')
+		temp++;
 	*argument = temp;
 	return (result);
 }
@@ -83,7 +95,7 @@ char	*parse_double_quote(char **argument, t_list *env_list)
 			result[index++] = *(*argument)++;
 	}
 	(**argument == '\"') ? (*argument)++ : 0;
-	(result) ? result[index] = 0 : 0;
+	result = check_result(result, index);
 	return (result);
 }
 

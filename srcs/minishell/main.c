@@ -99,18 +99,14 @@ void	minishell(char *user_input, t_list *env_list)
 		else
 		{
 			arguments_init(&arguments);
-			if ((arguments.argv = parse_user_input(&user_input, env_list,
-															&arguments.fds)))
-			{
-				if (is_fork(arguments.fds))
-					fork_process(arguments, env_list);
-				else
-					start_process(&arguments, env_list);
-				free_double_array(arguments.argv);
-				free(arguments.argv);
-			}
+			arguments.argv = parse_user_input(&user_input, env_list,
+															&arguments.fds);
+			if (is_fork(arguments.fds))
+				fork_process(arguments, env_list);
 			else
-				print_error(arguments.argv, 1);
+				start_process(&arguments, env_list);
+			free_double_array(arguments.argv);
+			free(arguments.argv);
 		}
 	}
 }

@@ -71,31 +71,23 @@ char	*get_current_path(char **paths, char *current_command, char *command)
 	return (command);
 }
 
-int		check_path(char **command, t_list *env_list)
+void	check_path(char **command, t_list *env_list)
 {
 	const char	*temp_command = ft_strdup(*command);
 	char		*current_command;
 	char		**paths;
-	int			fd;
 
-	current_command = ft_strjoin("/", *command);
 	free(*command);
-	if ((paths = get_paths(env_list)) == NULL)
+	if (!*temp_command)
 		*command = (char*)temp_command;
-	else if ((*command = get_current_path(paths, current_command, *command)))
-		;
-	else if ((fd = open(temp_command, O_RDONLY)) != -1)
+	else if ((paths = get_paths(env_list)))
 	{
-		*command = (char*)temp_command;
-		close(fd);
-	}
-	else
-		*command = (char*)temp_command;
-	free(current_command);
-	if (paths)
-	{
+		current_command = ft_strjoin("/", temp_command);
+		*command = get_current_path(paths, current_command, *command);
 		free_double_array(paths);
 		free(paths);
+		free(current_command);
 	}
-	return (0);
+	if (*command == NULL)
+		*command = (char*)temp_command;
 }

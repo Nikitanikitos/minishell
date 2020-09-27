@@ -20,3 +20,10 @@ void	ft_putendl_fd(char *s, int fd)
 		write(fd, &(*s), buff);
 	write(fd, "\n", 1);
 }
+
+void	ft_putstderr(char *s)
+{
+	write(2, "\e[31m\e[1m", 10);
+	ft_putstr_fd(s, 2);
+	write(2, "\e[0m\n", 6);
+}
