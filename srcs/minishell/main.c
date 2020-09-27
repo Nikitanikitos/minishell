@@ -97,6 +97,9 @@ void	minishell(char *user_input, t_list *env_list)
 		else
 		{
 			arguments.fds.back_redirect = 0;
+			arguments.fds.fork = 0;
+			arguments.fds.std_read = 4;
+			arguments.fds.std_write = 3;
 			if ((arguments.argv = parse_user_input(&user_input, env_list,
 															&arguments.fds)))
 			{

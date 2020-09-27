@@ -21,7 +21,6 @@ void	sigint_handler(int signum)
 	if (signum == SIGINT)
 	{
 		write(1, "\n", 1);
-		errno = 0;
 		if (pid)
 			type_prompt();
 	}

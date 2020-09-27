@@ -27,7 +27,7 @@ char	*single_parse(char **argument, t_list *env_list)
 	int		index;
 
 	index = 0;
-	result = ft_realloc(NULL, 1);
+	result = NULL;
 	while (**argument && !ft_strchr(" <>|;\'\"", **argument))
 	{
 		temp = NULL;
@@ -36,14 +36,13 @@ char	*single_parse(char **argument, t_list *env_list)
 		else if (**argument == '$')
 			temp = parse_with_envp(argument, env_list);
 		i = (temp) ? ft_strlen(temp) : 1;
-		result = ft_realloc(result, i);
+		result = ft_realloc(result, i + 1);
 		if (temp)
 			index += add_in_result(result, temp, i, index);
 		else
 			result[index++] = *(*argument)++;
 	}
-	if (result)
-		result[index] = 0;
+	result[index] = 0;
 	return (result);
 }
 
@@ -75,7 +74,7 @@ char	*parse_double_quote(char **argument, t_list *env_list)
 	int		index;
 
 	index = 0;
-	result = ft_realloc(NULL, 1);
+	result = NULL;
 	(*argument)++;
 	while (**argument && **argument != '\"')
 	{
@@ -85,7 +84,7 @@ char	*parse_double_quote(char **argument, t_list *env_list)
 		else if (**argument == '$')
 			temp = parse_with_envp(argument, env_list);
 		i = (temp) ? ft_strlen(temp) : 1;
-		result = ft_realloc(result, i);
+		result = ft_realloc(result, i + 1);
 		if (temp)
 			index += add_in_result(result, temp, i, index);
 		else
@@ -93,8 +92,7 @@ char	*parse_double_quote(char **argument, t_list *env_list)
 	}
 	if (**argument == '\"')
 		(*argument)++;
-	if (result)
-		result[index] = 0;
+	result[index] = 0;
 	return (result);
 }
 
@@ -103,7 +101,7 @@ int		add_in_argument(char **result, char *temp, int shift)
 	int		argument_length;
 
 	argument_length = ft_strlen(temp);
-	*result = ft_realloc(*result, argument_length);
+	*result = ft_realloc(*result, argument_length + 1);
 	ft_strcpy(*result + shift, temp);
 	free(temp);
 	return (argument_length);
@@ -115,8 +113,8 @@ char	*parse_argument(char **user_input, t_list *env_list)
 	char	*result;
 	char	*temp;
 
-	result = ft_realloc(NULL, 1);
 	shift = 0;
+	result = NULL;
 	while (**user_input && !ft_strchr("|><;", **user_input))
 	{
 		if (ft_isspace(**user_input))
@@ -130,12 +128,12 @@ char	*parse_argument(char **user_input, t_list *env_list)
 		if (temp)
 			shift += add_in_argument(&result, temp, shift);
 	}
-	if (result && !*result)
-	{
-		free(result);
-		result = NULL;
-	}
-	else if (result)
+//	if (result && !*result)
+//	{
+//		free(result);
+//		result = NULL;
+//	}
+	if (result)
 		result[shift] = 0;
 	return (result);
 }
