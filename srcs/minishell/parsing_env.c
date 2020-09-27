@@ -91,6 +91,6 @@ int		check_path(char **command, t_list *env_list)
 		*command = (char*)temp_command;
 	free(current_command);
 	free_double_array(paths);
-	free(paths); // TODO чекнуть на маке
+	free(paths);
 	return (0);
 }

@@ -39,10 +39,13 @@ void	change_value_env(t_env *current_env, t_env *env)
 	free(env);
 }
 
-void	list_element_swap(t_list *first_element, t_list *second_element)
+void	list_element_swap(t_list *first_element, t_list *second_element,
+															t_list *temp_elem)
 {
 	void	*temp_content;
 
+	if (temp_elem)
+		first_element->next->next = temp_elem;
 	temp_content = first_element->content;
 	first_element->content = second_element->content;
 	second_element->content = temp_content;
@@ -64,9 +67,7 @@ void	add_env(t_list *env_list, t_env *env)
 			{
 				temp_elem = env_list->next;
 				env_list->next = ft_lstnew(env);
-				if (temp_elem)
-					env_list->next->next = temp_elem;
-				list_element_swap(env_list, env_list->next);
+				list_element_swap(env_list, env_list->next, temp_elem);
 			}
 			else if (compare_result == 0)
 				change_value_env(current_env, env);

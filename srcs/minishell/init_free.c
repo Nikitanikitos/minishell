@@ -1,16 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   free_functions.c                                   :+:      :+:    :+:   */
+/*   constructors.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: froxanne <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/09/14 18:52:25 by imicah            #+#    #+#             */
-/*   Updated: 2020/09/17 11:04:04 by froxanne         ###   ########.fr       */
+/*   Created: 2020/09/15 20:01:58 by imicah            #+#    #+#             */
+/*   Updated: 2020/09/17 11:06:12 by froxanne         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+t_env	*env_init(char **key_value)
+{
+	t_env	*env;
+
+	if ((env = (t_env*)malloc(sizeof(t_env))) == NULL)
+		return (NULL);
+	env->key = key_value[0];
+	env->value = key_value[1];
+	return (env);
+}
 
 void	free_double_array(char **array)
 {
@@ -32,4 +43,12 @@ void	free_env(void *arg)
 	free(env->value);
 	free(env->key);
 	free(env);
+}
+
+void	arguments_init(t_arguments *arguments)
+{
+	arguments->fds.back_redirect = 0;
+	arguments->fds.fork = 0;
+	arguments->fds.std_read = 4;
+	arguments->fds.std_write = 3;
 }

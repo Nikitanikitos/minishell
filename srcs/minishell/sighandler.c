@@ -13,7 +13,7 @@
 #include "minishell.h"
 
 void	sigint_handler(int signum)
-{	
+{
 	int		stat;
 	int		pid;
 

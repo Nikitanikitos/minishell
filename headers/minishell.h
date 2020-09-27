@@ -52,6 +52,7 @@ typedef struct	s_env
 	char		*value;
 }				t_env;
 
+void			get_empty_pipe(char **temp_user_input, t_fds *fds);
 void			add_env(t_list *env_list, t_env *env);
 void			eof_handler(void);
 void			free_env(void *arg);
@@ -61,10 +62,10 @@ void			sigint_handler(int signum);
 void    		quit(int num);
 void			print_error(char **arguments, int error_number);
 void			type_prompt(void);
-char			**parse_user_input(char **user_input, t_list *env_list, t_fds *fds);
+char			**parse_user_input(char **usr_input, t_list *env_list, t_fds *fds);
 void			get_pipe_fd(char **arguments, t_fds *fds);
 void			get_redirect_fd(char **arguments, t_fds *fds, t_list *env_list);
-
+void			arguments_init(t_arguments *arguments);
 
 char			*parse_argument(char **user_input, t_list *env_list);
 char			*get_env_value(char *key, t_list *env_list);
@@ -74,6 +75,9 @@ char			**convert_from_list_to_array(t_list *list);
 t_env			*env_init(char **key_value);
 t_list			*get_env_list(char **envp);
 
+int				get_fd(char **temp_user_input, t_fds *fds, t_list *env_list, int *flag);
+int				add_in_argument(char **result, char *temp, int shift);
+int				add_in_result(char *result, char *temp, int i, int index);
 int				check_path(char **command, t_list *env_list);
 int				is_fork(t_fds fds);
 int				echo(t_arguments* arguments, t_list *env_list);
