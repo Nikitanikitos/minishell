@@ -57,11 +57,9 @@ void			eof_handler(void);
 void			free_env(void *arg);
 void			free_double_array(char **array);
 void			read_line(int fd, char **line);
-
 void			sigint_handler(int signum);
 void    		quit(int num);
-void		print_error(char **arguments, int error_number);
-
+void			print_error(char **arguments, int error_number);
 void			type_prompt(void);
 char			**parse_user_input(char **user_input, t_list *env_list, t_fds *fds);
 void			get_pipe_fd(char **arguments, t_fds *fds);
@@ -81,7 +79,7 @@ int				is_fork(t_fds fds);
 int				echo(t_arguments* arguments, t_list *env_list);
 int				env(t_arguments *arguments, t_list *env_list);
 int				export(t_arguments *, t_list *env_list);
-int				cd(t_arguments *command, t_list *env_list);
+int				cd(t_arguments *arguments, t_list *env_list);
 int				ft_exit(t_arguments*, t_list *env_list);
 int				pwd(t_arguments*, t_list *env_list);
 int				unset(t_arguments *arguments, t_list *env_list);

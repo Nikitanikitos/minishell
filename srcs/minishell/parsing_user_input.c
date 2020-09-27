@@ -60,7 +60,7 @@ char	*parse_single_quote(char **argument)
 	if (index)
 		result = ft_strndup(temp, (size_t)index);
 	temp += index;
-	if (*temp)
+	if (*temp == '\'')
 		temp++;
 	*argument = temp;
 	return (result);
@@ -128,11 +128,6 @@ char	*parse_argument(char **user_input, t_list *env_list)
 		if (temp)
 			shift += add_in_argument(&result, temp, shift);
 	}
-//	if (result && !*result)
-//	{
-//		free(result);
-//		result = NULL;
-//	}
 	if (result)
 		result[shift] = 0;
 	return (result);

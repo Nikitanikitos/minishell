@@ -50,17 +50,14 @@ void	start_process(t_arguments *arguments, t_list *env_list)
 		return ;
 	env = convert_from_list_to_array(env_list);
 	if ((pid = fork()))
-		wait(0);
+		wait(&g_status);
 	else if (pid < 0)
 		exit(EXIT_FAILURE);
 	else
 	{
 		check_path(arguments->argv, env_list);
-		if ((g_status = execve(*arguments->argv, arguments->argv, env)))
-		{
-			print_error(arguments->argv, 1);
-			exit(g_status);
-		}
+		execve(*arguments->argv, arguments->argv, env);
+		print_error(arguments->argv, 1);
 	}
 }
 
