@@ -101,6 +101,7 @@ void	minishell(char *user_input, t_list *env_list)
 			arguments_init(&arguments);
 			arguments.argv = parse_user_input(&user_input, env_list,
 															&arguments.fds);
+			ft_lower(*arguments.argv); // TODO check in mac
 			if (is_fork(arguments.fds))
 				fork_process(arguments, env_list);
 			else
