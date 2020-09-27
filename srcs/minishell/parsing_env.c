@@ -29,6 +29,8 @@ char	*parse_with_envp(char **argument, t_list *env_list)
 	temp_argument[i] = 0;
 	if (!ft_strcmp(temp_argument, "?"))
 		result = ft_itoa(g_status);
+	else if (!i)
+		result = ft_strdup("$");
 	else
 		result = ft_strdup(get_env_value(temp_argument, env_list));
 	temp_argument[i] = temp_symbol;
@@ -92,8 +94,8 @@ int		check_path(char **command, t_list *env_list)
 	free(current_command);
 	if (paths)
 	{
-		free(paths);
 		free_double_array(paths);
+		free(paths);
 	}
 	return (0);
 }
