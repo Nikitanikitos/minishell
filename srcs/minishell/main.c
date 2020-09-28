@@ -137,7 +137,10 @@ int		main(int ac, char **av, char **envp)
 		read_line(0, &user_input);
 		if (user_input == NULL)
 			eof_handler();
-		minishell(user_input, env_list);
+		else if (*user_input == '|')
+			ft_putstderr("minishell: syntax error near unexpected token '|'");
+		else
+			minishell(user_input, env_list);
 		free(user_input);
 	}
 }

@@ -56,7 +56,8 @@ int		get_double_forward_redirect(char **arguments, t_list *env_list,
 	temp_arguments += 2;
 	while (ft_isspace(*temp_arguments))
 		temp_arguments++;
-	file_name = parse_argument(&temp_arguments, env_list);
+	if ((file_name = parse_argument(&temp_arguments, env_list)) == NULL)
+		fds->std_write = -2;
 	fd = open(file_name, O_CREAT | O_APPEND | O_RDWR, 0644);
 	free(file_name);
 	*arguments = temp_arguments;
