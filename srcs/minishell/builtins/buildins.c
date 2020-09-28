@@ -16,6 +16,7 @@ int		echo(t_arguments *arguments, t_list *env_list)
 {
 	int		flag;
 
+	(void)env_list;
 	flag = 1;
 	if (*arguments->argv && !ft_strcmp(*(arguments->argv), "-n"))
 	{
@@ -36,20 +37,22 @@ int		pwd(t_arguments *arguments, t_list *env_list)
 {
 	char	*cwd;
 
+	(void)arguments;
+	(void)env_list;
 	cwd = getcwd(NULL, 0);
 	ft_putendl_fd(cwd, 1);
 	free(cwd);
 	return (errno);
 }
 
-void	export_home_env(t_list *env_list)
+void	export_home_env(char *key, t_list *env_list)
 {
 	t_arguments	argument;
 	char		*arg[2];
 	char		*cwd;
 
 	cwd = getcwd(NULL, 0);
-	arg[0] = ft_strjoin("PWD=", cwd);
+	arg[0] = ft_strjoin(key, cwd);
 	arg[1] = NULL;
 	argument.argv = arg;
 	export(&argument, env_list);
@@ -61,6 +64,7 @@ int		cd(t_arguments *arguments, t_list *env_list)
 {
 	char	*home;
 
+	export_home_env("OLDPWD=", env_list);
 	if (*arguments->argv == NULL)
 	{
 		home = get_env_value("HOME", env_list);
@@ -77,7 +81,7 @@ int		cd(t_arguments *arguments, t_list *env_list)
 		ft_lower(*arguments->argv);
 		chdir(*arguments->argv);
 	}
-	export_home_env(env_list);
+	export_home_env("PWD=", env_list);
 	return (errno);
 }
 

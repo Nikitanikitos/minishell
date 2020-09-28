@@ -85,6 +85,7 @@ int		env(t_arguments *arguments, t_list *env_list)
 {
 	t_env	env;
 
+	(void)arguments;
 	while (env_list)
 	{
 		env = *(t_env*)env_list->content;
