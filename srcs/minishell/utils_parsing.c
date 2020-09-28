@@ -12,6 +12,15 @@
 
 #include "minishell.h"
 
+char	*check_result(char *result, int index)
+{
+	if (result)
+		result[index] = 0;
+	else
+		result = ft_strdup("\0");
+	return (result);
+}
+
 int		add_in_result(char *result, char *temp, int i, int index)
 {
 	ft_strcpy(result + index, temp);

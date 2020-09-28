@@ -22,11 +22,11 @@ void	get_pipe_fd(char **arguments, t_fds *fds)
 	fds->std_read = fd[0];
 }
 
-int		get_forward_redirect(char **arguments, t_list *env_list)
+int		get_forward_redirect(char **arguments, t_list *env_list, t_fds *fds)
 {
-	char			*temp_arguments;
-	char			*file_name;
-	static int		fd;
+	char		*temp_arguments;
+	char		*file_name;
+	static int	fd;
 
 	if (fd != 0)
 		close(fd);
@@ -38,14 +38,17 @@ int		get_forward_redirect(char **arguments, t_list *env_list)
 	fd = open(file_name, O_CREAT | O_TRUNC | O_WRONLY, 0644);
 	free(file_name);
 	*arguments = temp_arguments;
+	if (fds->std_write >= 0)
+		fds->std_write = fd;
 	return (fd);
 }
 
-int		get_double_forward_redirect(char **arguments, t_list *env_list)
+int		get_double_forward_redirect(char **arguments, t_list *env_list,
+																	t_fds *fds)
 {
-	char			*temp_arguments;
-	char			*file_name;
-	static int		fd;
+	char		*temp_arguments;
+	char		*file_name;
+	static int	fd;
 
 	if (fd != 0)
 		close(fd);
@@ -57,14 +60,16 @@ int		get_double_forward_redirect(char **arguments, t_list *env_list)
 	fd = open(file_name, O_CREAT | O_APPEND | O_RDWR, 0644);
 	free(file_name);
 	*arguments = temp_arguments;
+	if (fds->std_write >= 0)
+		fds->std_write = fd;
 	return (fd);
 }
 
-int		get_back_redirect(char **arguments, t_list *env_list)
+int		get_back_redirect(char **arguments, t_list *env_list, t_fds *fds)
 {
-	char			*temp_arguments;
-	char			*file_name;
-	static int		fd;
+	char		*temp_arguments;
+	char		*file_name;
+	static int	fd;
 
 	if (fd != 0)
 		close(fd);
@@ -72,10 +77,13 @@ int		get_back_redirect(char **arguments, t_list *env_list)
 	temp_arguments++;
 	while (ft_isspace(*temp_arguments))
 		temp_arguments++;
-	file_name = parse_argument(&temp_arguments, env_list);
-	fd = open(file_name, O_CREAT | O_RDONLY, 0644);
+	if ((file_name = parse_argument(&temp_arguments, env_list)) == NULL)
+		fds->std_read = -2;
+	fd = open(file_name, O_RDONLY, 0644);
 	free(file_name);
 	*arguments = temp_arguments;
+	if (fds->std_read >= 0)
+		fds->std_read = fd;
 	return (fd);
 }
 
@@ -91,12 +99,11 @@ void	get_redirect_fd(char **arguments, t_fds *fds, t_list *env_list)
 		while (ft_isspace(*temp_arguments))
 			temp_arguments++;
 		if (!ft_strncmp(temp_arguments, ">>", 2))
-			fds->std_write = get_double_forward_redirect(&temp_arguments,
-																	env_list);
+			get_double_forward_redirect(&temp_arguments, env_list, fds);
 		else if (!ft_strncmp(temp_arguments, ">", 1))
-			fds->std_write = get_forward_redirect(&temp_arguments, env_list);
+			get_forward_redirect(&temp_arguments, env_list, fds);
 		else if (!ft_strncmp(temp_arguments, "<", 1))
-			fds->std_read = get_back_redirect(&temp_arguments, env_list);
+			get_back_redirect(&temp_arguments, env_list, fds);
 		else
 			break ;
 	}

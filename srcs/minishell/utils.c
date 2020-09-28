@@ -77,3 +77,15 @@ void	print_error(char **arguments, int error_number)
 		ft_putendl_fd("command not found\e[0m", STDERR_FILENO);
 	g_status = 1;
 }
+
+void	ft_put_redirect_error(t_fds fds)
+{
+	if (fds.std_write == -1)
+		ft_putstderr("minishell: syntax error near unexpected token '>'");
+	else if (fds.std_read == -1)
+		ft_putstderr("minishell: No such file or directory");
+	else if (fds.std_write == -2)
+		ft_putstderr("minishell: syntax error near unexpected token '>>'");
+	else if (fds.std_read == -2)
+		ft_putstderr("minishell: syntax error near unexpected token '<'");
+}

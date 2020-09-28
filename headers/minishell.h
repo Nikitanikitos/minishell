@@ -57,10 +57,12 @@ typedef struct	s_env
 
 void			add_env(t_list *env_list, t_env *env);
 void			arguments_init(t_arguments *arguments);
+void			check_path(char **command, t_list *env_list);
 void			eof_handler(void);
 void			get_empty_pipe(char **temp_user_input, t_fds *fds);
 void			get_pipe_fd(char **arguments, t_fds *fds);
 void			get_redirect_fd(char **arguments, t_fds *fds, t_list *env_list);
+void			ft_put_redirect_error(t_fds fds);
 void			free_env(void *arg);
 void			free_double_array(char **array);
 void			read_line(int fd, char **line);
@@ -69,6 +71,7 @@ void			type_prompt(void);
 void			quit(int num);
 void			sigint_handler(int signum);
 
+char			*check_result(char *result, int index);
 char			**convert_from_list_to_array(t_list *list);
 char			*get_env_value(char *key, t_list *env_list);
 char			*parse_argument(char **user_input, t_list *env_list);
@@ -81,7 +84,6 @@ t_list			*get_env_list(char **envp);
 
 int				add_in_argument(char **result, char *temp, int shift);
 int				add_in_result(char *result, char *temp, int i, int index);
-void			check_path(char **command, t_list *env_list);
 int				echo(t_arguments *arguments, t_list *env_list);
 int				get_fd(char **temp_user_input, t_fds *fds, t_list *env_list,
 																	int *flag);
