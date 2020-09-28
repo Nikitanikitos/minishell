@@ -89,4 +89,6 @@ void	ft_put_redirect_error(t_fds fds)
 		ft_putstderr("minishell: syntax error near unexpected token '>>'");
 	else if (fds.std_read == -2)
 		ft_putstderr("minishell: syntax error near unexpected token '<'");
+	else if (fds.std_read == -3)
+		ft_putstderr("minishell: syntax error near unexpected token '|'");
 }

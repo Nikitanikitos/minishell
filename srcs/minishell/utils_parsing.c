@@ -44,11 +44,19 @@ void	get_empty_pipe(char **temp_user_input, t_fds *fds)
 	int		fd[2];
 
 	(*temp_user_input)++;
-	pipe(fd);
-	close(fd[1]);
-	fds->std_read = fd[0];
-	dup2(fds->std_read, STDIN_FILENO);
-	fds->fork = 0;
+	if (!**temp_user_input)
+	{
+		fds->std_read = -3;
+		return ;
+	}
+	else if (fds->std_read > 0)
+	{
+		pipe(fd);
+		close(fd[1]);
+		fds->std_read = fd[0];
+		dup2(fds->std_read, STDIN_FILENO);
+		fds->fork = 0;
+	}
 }
 
 int		get_fd(char **temp_user_input, t_fds *fds, t_list *env_list, int *flag)

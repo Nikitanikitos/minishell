@@ -12,6 +12,26 @@
 
 #include "minishell.h"
 
+int		echo(t_arguments *arguments, t_list *env_list)
+{
+	int		flag;
+
+	flag = 1;
+	if (*arguments->argv && !ft_strcmp(*(arguments->argv), "-n"))
+	{
+		flag = 0;
+		arguments->argv++;
+	}
+	while (*(arguments->argv))
+	{
+		ft_putstr_fd(*(arguments->argv)++, 1);
+		if (*(arguments->argv))
+			write(1, " ", 1);
+	}
+	write(1, "\n", (size_t)flag);
+	return (errno);
+}
+
 int		pwd(t_arguments *arguments, t_list *env_list)
 {
 	char	*cwd;
@@ -78,8 +98,9 @@ int		ft_exit(t_arguments *arguments, t_list *env_list)
 		ft_putstr_fd("\e[1m\e[31mminishell: exit: ", STDERR_FILENO);
 		ft_putstr_fd(*arguments->argv, STDERR_FILENO);
 		ft_putendl_fd(": a numeric is required\e[0m", STDERR_FILENO);
+		exit_number = 255;
 	}
-	if (*arguments->argv)
+	if (*arguments->argv && exit_number == 0)
 		exit_number = ft_atoi(*arguments->argv);
 	ft_lstclear(env_list, &free_env);
 	free_double_array(arguments->argv);

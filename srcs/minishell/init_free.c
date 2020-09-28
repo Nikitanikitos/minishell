@@ -27,6 +27,8 @@ void	free_double_array(char **array)
 {
 	char	*temp;
 
+	if (!array)
+		return ;
 	while (*array)
 	{
 		temp = *array;
