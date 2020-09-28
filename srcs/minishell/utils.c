@@ -74,7 +74,8 @@ void	print_error(char **arguments, int error_number)
 	if (!error_number)
 		ft_putendl_fd(error, STDERR_FILENO);
 	else
-		ft_putendl_fd("command not found\e[0m", STDERR_FILENO);
+		ft_putendl_fd("command not found", STDERR_FILENO);
+	ft_putstr_fd("\e[0m", STDERR_FILENO);
 	g_status = 1;
 }
 

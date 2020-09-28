@@ -12,11 +12,14 @@
 
 char	*ft_lower(char *c)
 {
-	while (*c)
+	int 	i;
+
+	i = 0;
+	while (c[i])
 	{
-		if (*c >= 65 && *c <= 90)
-			*c += 32;
-		c++;
+		if (c[i] >= 65 && c[i] <= 90)
+			c[i] += 32;
+		i++;
 	}
 	return (c);
 }

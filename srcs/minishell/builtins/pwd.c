@@ -22,21 +22,42 @@ int		pwd(t_arguments *arguments, t_list *env_list)
 	return (errno);
 }
 
-int		cd(t_arguments *arguments, t_list *env_list)
+void	export_home_env(t_list *env_list)
 {
+	t_arguments	argument;
+	char		*arg[2];
 	char		*cwd;
 
+	cwd = getcwd(NULL, 0);
+	arg[0] = ft_strjoin("PWD=", cwd);
+	arg[1] = NULL;
+	argument.argv = arg;
+	export(&argument, env_list);
+	free(cwd);
+	free(arg[0]);
+}
+
+int		cd(t_arguments *arguments, t_list *env_list)
+{
+	char	*home;
+
 	if (*arguments->argv == NULL)
-		chdir("/");
+	{
+		home = get_env_value("HOME", env_list);
+		if (*home)
+			chdir(home);
+		else
+		{
+			ft_putstderr("minishell: cd: HOME not set");
+			return (errno);
+		}
+	}
 	else
 	{
 		ft_lower(*arguments->argv);
 		chdir(*arguments->argv);
 	}
-	cwd = getcwd(NULL, 0);
-	arguments->argv[0] = ft_strjoin("PWD=", cwd);
-	free(cwd);
-	export(arguments, env_list);
+	export_home_env(env_list);
 	return (errno);
 }
 
