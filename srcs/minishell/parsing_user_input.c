@@ -55,7 +55,6 @@ char	*parse_single_quote(char **argument)
 	int			index;
 
 	index = 0;
-	result = NULL;
 	temp = ++(*argument);
 	while (temp[index] && temp[index] != '\'')
 		index++;
