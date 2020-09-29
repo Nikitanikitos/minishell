@@ -10,6 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <printf.h>
 #include "minishell.h"
 
 int		execute_buildin_command(t_arguments arguments, t_list *env_list)
@@ -32,7 +33,7 @@ int		execute_buildin_command(t_arguments arguments, t_list *env_list)
 		{
 			arguments.argv++;
 			if (builtins[index].func(&arguments, env_list))
-				print_error(--arguments.argv, 0);
+				print_error(--arguments.argv);
 			return (TRUE);
 		}
 		index++;
@@ -43,6 +44,7 @@ int		execute_buildin_command(t_arguments arguments, t_list *env_list)
 void	start_process(t_arguments *arguments, t_list *env_list)
 {
 	pid_t	pid;
+	int		status;
 	char	**env;
 
 	errno = 0;
@@ -52,7 +54,8 @@ void	start_process(t_arguments *arguments, t_list *env_list)
 	env = convert_from_list_to_array(env_list);
 	if ((pid = fork()))
 	{
-		wait(&g_status);
+		wait(&status);
+		check_exit_status(status);
 		free_double_array(env);
 		free(env);
 	}
@@ -60,12 +63,10 @@ void	start_process(t_arguments *arguments, t_list *env_list)
 		exit(EXIT_FAILURE);
 	else
 	{
-		check_path(arguments->argv, env_list);
-		execve(*arguments->argv, arguments->argv, env);
-		print_error(arguments->argv, 1);
-		exit(127);
+		if (check_path(arguments->argv, env_list) == 0)
+			execve(*arguments->argv, arguments->argv, env);
+		exit_with_error(arguments);
 	}
-	g_status = (g_status == 32512) ? 127 : g_status;
 }
 
 void	fork_process(t_arguments arguments, t_list *env_list)
@@ -79,7 +80,7 @@ void	fork_process(t_arguments arguments, t_list *env_list)
 		start_process(&arguments, env_list);
 		close(arguments.fds.std_read);
 		close(STDOUT_FILENO);
-		exit(127);
+		exit_with_error(&arguments);
 	}
 	else
 	{

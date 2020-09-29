@@ -20,6 +20,7 @@
 # include <errno.h>
 # include <sys/dir.h>
 # include "libft.h"
+# include <sysexits.h>
 
 # define NUMBER_BUILDIN_CMD	7
 # define TRUE				1
@@ -55,7 +56,7 @@ typedef struct	s_env
 
 void			add_env(t_list *env_list, t_env *env);
 void			arguments_init(t_arguments *arguments);
-void			check_path(char **command, t_list *env_list);
+int				check_path(char **command, t_list *env_list);
 void			eof_handler(void);
 void			get_empty_pipe(char **temp_user_input, t_fds *fds);
 void			get_pipe_fd(char **arguments, t_fds *fds);
@@ -64,11 +65,13 @@ void			ft_put_redirect_error(t_fds fds);
 void			free_env(void *arg);
 void			free_double_array(char **array);
 void			read_line(int fd, char **line);
-void			print_error(char **arguments, int error_number);
+void			print_error(char **arguments);
 void			type_prompt(void);
 void			quit(int num);
 void			sigint_handler(int signum);
 void			ft_put_error_pipe();
+void			exit_with_error(t_arguments *arguments);
+void			check_exit_status(int status);
 
 char			*check_result(char *result, int index);
 char			**convert_from_list_to_array(t_list *list);

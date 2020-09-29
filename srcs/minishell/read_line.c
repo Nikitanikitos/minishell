@@ -51,3 +51,20 @@ void	ft_put_error_pipe(void)
 	ft_putstderr("minishell: syntax error near unexpected token '|'");
 	g_status = 258;
 }
+
+void	check_exit_status(int status)
+{
+	if (WIFEXITED(status))
+		g_status = WEXITSTATUS(status);
+	else if (WIFSIGNALED(status))
+		g_status = WTERMSIG(status) + 128;
+}
+
+void	exit_with_error(t_arguments *arguments)
+{
+	print_error(arguments->argv);
+	if (errno == 13)
+		exit(126);
+	else
+		exit(127);
+}

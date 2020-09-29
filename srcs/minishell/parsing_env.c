@@ -10,6 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <printf.h>
 #include "minishell.h"
 
 char	*parse_with_envp(char **argument, t_list *env_list)
@@ -71,25 +72,34 @@ char	*get_current_path(char **paths, char *current_command, char *command)
 	return (command);
 }
 
-void	check_path(char **command, t_list *env_list)
+int		check_absolute_path(const char *s)
 {
-	const char	*temp_command = ft_strdup(*command);
+	return ((*s == '.' && *(s + 1) == '/') || *s == '/');
+}
+
+int		check_path(char **command, t_list *env_list)
+{
+	char		*temp_command;
 	char		*current_command;
 	char		**paths;
+	int			fd;
 
-	free(*command);
-	if (!*temp_command)
-		*command = (char*)temp_command;
-	else if ((paths = get_paths(env_list)))
+	if (!**command || check_absolute_path(*command))
+		return (((fd = open(*command, O_RDONLY)) == -1) ? 1 : close(fd));
+	temp_command = ft_strdup(*command);
+	if ((paths = get_paths(env_list)))
 	{
 		current_command = ft_strjoin("/", temp_command);
 		*command = get_current_path(paths, current_command, *command);
 		free_double_array(paths);
 		free(paths);
 		free(current_command);
+		free(temp_command);
 	}
-	else
-		*command = (char*)temp_command;
 	if (*command == NULL)
-		*command = (char*)temp_command;
+	{
+		errno = 0;
+		return ((int)(*command = temp_command));
+	}
+	return (0);
 }

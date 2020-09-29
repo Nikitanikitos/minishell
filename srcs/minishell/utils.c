@@ -60,7 +60,7 @@ void	type_prompt(void)
 	free(cwd);
 }
 
-void	print_error(char **arguments, int error_number)
+void	print_error(char **arguments)
 {
 	char	*error;
 
@@ -71,7 +71,7 @@ void	print_error(char **arguments, int error_number)
 		ft_putstr_fd(": ", STDERR_FILENO);
 	}
 	error = strerror(errno);
-	if (!error_number)
+	if (errno)
 		ft_putendl_fd(error, STDERR_FILENO);
 	else
 		ft_putendl_fd("command not found", STDERR_FILENO);
