@@ -38,3 +38,16 @@ void	read_line(int fd, char **line)
 	}
 	*line = result;
 }
+
+int		check_incorrect_pipe(char *s)
+{
+	while (ft_isspace(*s))
+		s++;
+	return (*s == '|');
+}
+
+void	ft_put_error_pipe(void)
+{
+	ft_putstderr("minishell: syntax error near unexpected token '|'");
+	g_status = 258;
+}

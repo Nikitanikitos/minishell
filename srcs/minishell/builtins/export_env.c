@@ -54,6 +54,7 @@ void	export_error(char **key_value)
 	free(key_value[0]);
 	if (key_value[1])
 		free(key_value[1]);
+	g_status = 1;
 }
 
 int		export(t_arguments *arguments, t_list *env_list)

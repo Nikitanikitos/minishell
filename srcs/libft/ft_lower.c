@@ -12,7 +12,7 @@
 
 char	*ft_lower(char *c)
 {
-	int 	i;
+	int		i;
 
 	i = 0;
 	while (c[i])

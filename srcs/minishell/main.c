@@ -46,6 +46,7 @@ void	start_process(t_arguments *arguments, t_list *env_list)
 	char	**env;
 
 	errno = 0;
+	g_status = 0;
 	if (execute_buildin_command(*arguments, env_list))
 		return ;
 	env = convert_from_list_to_array(env_list);
@@ -103,7 +104,7 @@ void	minishell(char *user_input, t_list *env_list)
 					env_list, &arguments.fds);
 			if (arguments.fds.std_read < 0 || arguments.fds.std_write < 0)
 				ft_put_redirect_error(arguments.fds);
-			else
+			else if (arguments.argv)
 			{
 				ft_lower(*arguments.argv);
 				if (is_fork(arguments.fds))
@@ -137,8 +138,8 @@ int		main(int ac, char **av, char **envp)
 		read_line(0, &user_input);
 		if (user_input == NULL)
 			eof_handler();
-		else if (*user_input == '|')
-			ft_putstderr("minishell: syntax error near unexpected token '|'");
+		else if (check_incorrect_pipe(user_input))
+			ft_put_error_pipe();
 		else
 			minishell(user_input, env_list);
 		free(user_input);

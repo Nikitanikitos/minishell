@@ -70,6 +70,7 @@ void			print_error(char **arguments, int error_number);
 void			type_prompt(void);
 void			quit(int num);
 void			sigint_handler(int signum);
+void			ft_put_error_pipe();
 
 char			*check_result(char *result, int index);
 char			**convert_from_list_to_array(t_list *list);
@@ -82,6 +83,7 @@ char			**parse_user_input(char **usr_input, t_list *env_list,
 t_env			*env_init(char **key_value);
 t_list			*get_env_list(char **envp);
 
+int 			check_incorrect_pipe(char *s);
 int				add_in_argument(char **result, char *temp, int shift);
 int				add_in_result(char *result, char *temp, int i, int index);
 int				echo(t_arguments *arguments, t_list *env_list);
