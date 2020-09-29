@@ -17,14 +17,13 @@ void	read_line(int fd, char **line)
 	char	buf[2];
 	char	*tmp;
 	char	*result;
-	int		readed;
 
 	buf[1] = 0;
 	result = NULL;
 	while (TRUE)
 	{
 		tmp = result;
-		if ((readed = read(fd, buf, 1)) == 0)
+		if (read(fd, buf, 1) == 0)
 		{
 			if (!tmp)
 				break ;
