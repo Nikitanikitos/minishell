@@ -50,7 +50,7 @@ void				*ft_memccpy(void *dest, const void *src, int c,
 								size_t byte_sizes);
 
 int					is_correct_number(char *argument);
-int				 	ft_digit(char c);
+int					ft_digit(char c);
 char				*ft_itoa(int n);
 char				ft_isalnum(char c);
 char				ft_isalpha(char c);

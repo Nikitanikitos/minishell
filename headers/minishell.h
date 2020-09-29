@@ -84,7 +84,7 @@ char			**parse_user_input(char **usr_input, t_list *env_list,
 t_env			*env_init(char **key_value);
 t_list			*get_env_list(char **envp);
 
-int 			check_incorrect_pipe(char *s);
+int				check_incorrect_pipe(char *s);
 int				add_in_argument(char **result, char *temp, int shift);
 int				add_in_result(char *result, char *temp, int i, int index);
 int				echo(t_arguments *arguments, t_list *env_list);
