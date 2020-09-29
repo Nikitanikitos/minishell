@@ -19,8 +19,7 @@ LIBFT   = srcs/libft/libft.a
 
 HEADERS = -Iheaders/
 
-# FLAGS   = -Wall -Wextra -Werror
-FLAGS   =
+FLAGS   = -Wall -Wextra -Werror
 
 .PHONY: all re clean fclean
 

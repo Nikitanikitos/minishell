@@ -119,11 +119,13 @@ void	minishell(char *user_input, t_list *env_list)
 
 int		main(int ac, char **av, char **envp)
 {
-	char		*user_input;
-	t_list		*env_list;
+	char	*user_input;
+	t_list	*env_list;
 
 	dup2(1, 3);
 	dup2(0, 4);
+	(void)ac;
+	(void)av;
 	signal(SIGINT, sigint_handler);
 	signal(SIGQUIT, quit);
 	if ((env_list = get_env_list(envp)) == NULL)
@@ -135,7 +137,10 @@ int		main(int ac, char **av, char **envp)
 		read_line(0, &user_input);
 		if (user_input == NULL)
 			eof_handler();
-		minishell(user_input, env_list);
+		else if (*user_input == '|')
+			ft_putstderr("minishell: syntax error near unexpected token '|'");
+		else
+			minishell(user_input, env_list);
 		free(user_input);
 	}
 }
