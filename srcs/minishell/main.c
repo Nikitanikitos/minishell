@@ -65,6 +65,7 @@ void	start_process(t_arguments *arguments, t_list *env_list)
 		print_error(arguments->argv, 1);
 		exit(127);
 	}
+	g_status = (g_status == 32512) ? 127 : g_status;
 }
 
 void	fork_process(t_arguments arguments, t_list *env_list)

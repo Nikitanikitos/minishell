@@ -24,8 +24,6 @@
 # define NUMBER_BUILDIN_CMD	7
 # define TRUE				1
 # define FALSE				0
-# define RED_COLOR
-
 
 int				g_status;
 

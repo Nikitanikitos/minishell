@@ -35,7 +35,7 @@ void	print_export(t_list *env_list)
 
 int		valid_export_key(char *key)
 {
-	if (ft_atoi(key))
+	if (*key == '0' || ft_atoi(key))
 		return (0);
 	while (*key)
 	{
@@ -46,14 +46,11 @@ int		valid_export_key(char *key)
 	return (1);
 }
 
-void	export_error(char **key_value)
+void	export_error(char *key_value)
 {
 	ft_putstr_fd("\e[31m\e[1mminishell: export: '", 2);
-	ft_putstr_fd(key_value[0], 2);
+	ft_putstr_fd(key_value, 2);
 	ft_putstr_fd("': not valid identifier\e[0m\n", 2);
-	free(key_value[0]);
-	if (key_value[1])
-		free(key_value[1]);
 	g_status = 1;
 }
 
@@ -69,17 +66,17 @@ int		export(t_arguments *arguments, t_list *env_list)
 		{
 			key_value = ft_split(*arguments->argv, '=');
 			if (!valid_export_key(key_value[0]))
+				export_error(*arguments->argv);
+			else
 			{
-				export_error(key_value);
-				return (errno);
+				if (ft_str_double_len(key_value) == 1)
+				{
+					if (ft_strchr(*arguments->argv, '='))
+						key_value[1] = ft_strdup("\0");
+				}
+				add_env(env_list, env_init(key_value));
+				free(key_value);
 			}
-			else if (ft_str_double_len(key_value) == 1)
-			{
-				if (ft_strchr(*arguments->argv, '='))
-					key_value[1] = ft_strdup("\0");
-			}
-			add_env(env_list, env_init(key_value));
-			free(key_value);
 			arguments->argv++;
 		}
 	}
