@@ -6,7 +6,7 @@
 /*   By: froxanne <froxanne@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/26 16:14:56 by froxanne          #+#    #+#             */
-/*   Updated: 2020/09/29 12:02:12 by froxanne         ###   ########.fr       */
+/*   Updated: 2020/09/29 13:03:33 by froxanne         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,18 +18,16 @@ void	read_line(int fd, char **line)
 	char	*tmp;
 	char	*result;
 	int		readed;
-	int		i;
 
-	i = 0;
 	buf[1] = 0;
 	result = NULL;
-	while (1)
+	while (TRUE)
 	{
 		tmp = result;
-		if (((readed = read(fd, buf, 1)) == 0) && i == 0)
-			break ;
-		if (readed == 0)
+		if ((readed = read(fd, buf, 1)) == 0)
 		{
+			if (!tmp)
+				break ;
 			ft_putstr_fd("  \b\b", fd);
 			continue ;
 		}
@@ -38,7 +36,6 @@ void	read_line(int fd, char **line)
 			free(tmp);
 		if (*buf == '\n')
 			break ;
-		i++;
 	}
 	*line = result;
 }
