@@ -10,6 +10,8 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "libft.h"
+
 int		ft_str_double_len(char **array)
 {
 	int		i;
@@ -18,4 +20,16 @@ int		ft_str_double_len(char **array)
 	while (array[i])
 		i++;
 	return (i);
+}
+
+int		is_correct_number(char *argument)
+{
+	if (*argument == '-' || *argument == '+')
+		argument++;
+	if (*argument == '\0')
+		return (0);
+	while (*argument)
+		if (!ft_digit(*argument++))
+			return (0);
+	return (1);
 }

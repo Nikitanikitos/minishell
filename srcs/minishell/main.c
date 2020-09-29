@@ -80,7 +80,7 @@ void	fork_process(t_arguments arguments, t_list *env_list)
 		start_process(&arguments, env_list);
 		close(arguments.fds.std_read);
 		close(STDOUT_FILENO);
-		exit_with_error(&arguments);
+		exit(127);
 	}
 	else
 	{

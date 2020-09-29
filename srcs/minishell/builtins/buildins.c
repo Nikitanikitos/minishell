@@ -87,26 +87,27 @@ int		cd(t_arguments *arguments, t_list *env_list)
 
 int		ft_exit(t_arguments *arguments, t_list *env_list)
 {
-	int		exit_number;
+	const int	arg_number = ft_str_double_len(arguments->argv);
 
-	exit_number = 0;
+	(void)env_list;
 	ft_putendl_fd("exit", STDOUT_FILENO);
-	if (ft_str_double_len(arguments->argv) > 1)
+	if (!*arguments->argv || arg_number == 0)
+		exit(0);
+	else if (arg_number == 1)
 	{
+		if (is_correct_number(*arguments->argv))
+			exit(ft_atoi(*arguments->argv));
+		else
+		{
+			ft_putstr_fd("\e[1m\e[31mminishell: exit: ", STDERR_FILENO);
+			ft_putstr_fd(*arguments->argv, STDERR_FILENO);
+			ft_putendl_fd(": a numeric is required\e[0m", STDERR_FILENO);
+			exit(255);
+		}
+	}
+	else
 		ft_putstderr("minishell: exit: argument list too long");
-		return (errno);
-	}
-	else if (*arguments->argv && ((!ft_isdigit(*arguments->argv) &&
-			**arguments->argv != '-') || !**arguments->argv))
-	{
-		ft_putstr_fd("\e[1m\e[31mminishell: exit: ", STDERR_FILENO);
-		ft_putstr_fd(*arguments->argv, STDERR_FILENO);
-		ft_putendl_fd(": a numeric is required\e[0m", STDERR_FILENO);
-		exit_number = 255;
-	}
-	if (*arguments->argv && exit_number == 0)
-		exit_number = ft_atoi(*arguments->argv);
-	ft_lstclear(env_list, &free_env);
-	free_double_array(arguments->argv);
-	exit(exit_number);
+	if (!is_correct_number(*arguments->argv))
+		exit(255);
+	return (0);
 }

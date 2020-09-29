@@ -10,7 +10,6 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <printf.h>
 #include "minishell.h"
 
 char	*parse_with_envp(char **argument, t_list *env_list)
@@ -74,7 +73,8 @@ char	*get_current_path(char **paths, char *current_command, char *command)
 
 int		check_absolute_path(const char *s)
 {
-	return ((*s == '.' && *(s + 1) == '/') || *s == '/');
+	return (ft_strncmp("../", s, 3) ||
+			ft_strncmp("/", s, 1) || ft_strncmp("./", s, 2));
 }
 
 int		check_path(char **command, t_list *env_list)
@@ -94,12 +94,13 @@ int		check_path(char **command, t_list *env_list)
 		free_double_array(paths);
 		free(paths);
 		free(current_command);
-		free(temp_command);
 	}
 	if (*command == NULL)
 	{
 		errno = 0;
-		return ((int)(*command = temp_command));
+		*command = temp_command;
+		return (1);
 	}
+	free(temp_command);
 	return (0);
 }
