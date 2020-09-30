@@ -6,7 +6,7 @@
 /*   By: froxanne <froxanne@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/26 16:14:56 by froxanne          #+#    #+#             */
-/*   Updated: 2020/09/29 13:03:33 by froxanne         ###   ########.fr       */
+/*   Updated: 2020/09/30 12:15:11 by froxanne         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,17 +39,27 @@ void	read_line(int fd, char **line)
 	*line = result;
 }
 
-int		check_incorrect_pipe(char *s)
+int		check_incorrect_pipe_colon(char *s)
 {
 	while (ft_isspace(*s))
 		s++;
-	return (*s == '|');
+	if (*s == '|')
+		return (1);
+	else if (*s == ';')
+		return (2);
+	return (0);
 }
 
-void	ft_put_error_pipe(void)
+int		ft_put_error_pipe_colon(int status)
 {
-	ft_putstderr("minishell: syntax error near unexpected token '|'");
+	if (status == 0)
+		return (0);
+	else if (status == 1)
+		ft_putstderr("minishell: syntax error near unexpected token '|'");
+	else
+		ft_putstderr("minishell: syntax error near unexpected token ';'");
 	g_status = 258;
+	return (1);
 }
 
 void	check_exit_status(int status)

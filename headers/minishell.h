@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: froxanne <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: froxanne <froxanne@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/02 15:41:49 by imicah            #+#    #+#             */
-/*   Updated: 2020/09/17 10:21:22 by froxanne         ###   ########.fr       */
+/*   Updated: 2020/09/30 12:14:41 by froxanne         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ void			print_error(char **arguments);
 void			type_prompt(void);
 void			quit(int num);
 void			sigint_handler(int signum);
-void			ft_put_error_pipe();
+int				ft_put_error_pipe_colon(int status);
 void			exit_with_error(t_arguments *arguments);
 void			check_exit_status(int status);
 
@@ -84,7 +84,7 @@ char			**parse_user_input(char **usr_input, t_list *env_list,
 t_env			*env_init(char **key_value);
 t_list			*get_env_list(char **envp);
 
-int				check_incorrect_pipe(char *s);
+int				check_incorrect_pipe_colon(char *s);
 int				add_in_argument(char **result, char *temp, int shift);
 int				add_in_result(char *result, char *temp, int i, int index);
 int				echo(t_arguments *arguments, t_list *env_list);

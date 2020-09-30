@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: froxanne <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: froxanne <froxanne@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/02 15:41:20 by imicah            #+#    #+#             */
-/*   Updated: 2020/09/17 11:31:25 by froxanne         ###   ########.fr       */
+/*   Updated: 2020/09/30 12:18:01 by froxanne         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -140,8 +140,8 @@ int		main(int ac, char **av, char **envp)
 		read_line(0, &user_input);
 		if (user_input == NULL)
 			eof_handler();
-		else if (check_incorrect_pipe(user_input))
-			ft_put_error_pipe();
+		else if (ft_put_error_pipe_colon(check_incorrect_pipe_colon(user_input)))
+			printf("hello\n");
 		else
 			minishell(user_input, env_list);
 		free(user_input);
