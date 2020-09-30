@@ -105,7 +105,7 @@ void	minishell(char *user_input, t_list *env_list)
 			arguments.argv = parse_user_input(&user_input,
 					env_list, &arguments.fds);
 			if (arguments.fds.std_read < 0 || arguments.fds.std_write < 0)
-				ft_put_redirect_error(arguments.fds);
+				ft_put_redirect_error(arguments.argv, arguments.fds);
 			else if (arguments.argv)
 			{
 				ft_lower(*arguments.argv);

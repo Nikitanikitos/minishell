@@ -79,9 +79,15 @@ void	print_error(char **arguments)
 	g_status = 1;
 }
 
-void	ft_put_redirect_error(t_fds fds)
+void	ft_put_redirect_error(char **arguments, t_fds fds)
 {
-	if (fds.std_write == -1)
+	g_status = 258;
+	if (errno)
+	{
+		print_error(arguments);
+		g_status = 1;
+	}
+	else if (fds.std_write == -1)
 		ft_putstderr("minishell: syntax error near unexpected token '>'");
 	else if (fds.std_read == -1)
 		ft_putstderr("minishell: No such file or directory");
@@ -89,5 +95,4 @@ void	ft_put_redirect_error(t_fds fds)
 		ft_putstderr("minishell: syntax error near unexpected token '>>'");
 	else if (fds.std_read == -2)
 		ft_putstderr("minishell: syntax error near unexpected token '<'");
-	g_status = 258;
 }
