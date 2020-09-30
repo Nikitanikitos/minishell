@@ -105,7 +105,7 @@ void	minishell(char *user_input, t_list *env_list)
 			arguments.argv = parse_user_input(&user_input,
 					env_list, &arguments.fds);
 			if (arguments.fds.std_read < 0 || arguments.fds.std_write < 0)
-				ft_put_redirect_error(arguments.fds);
+				ft_put_redirect_error(arguments.argv, arguments.fds);
 			else if (arguments.argv)
 			{
 				ft_lower(*arguments.argv);
@@ -140,8 +140,8 @@ int		main(int ac, char **av, char **envp)
 		read_line(0, &user_input);
 		if (user_input == NULL)
 			eof_handler();
-		else if (ft_put_error_pipe_colon(check_incorrect_pipe_colon(user_input)))
-			printf("hello\n");
+		else if (check_incorrect_pipe_colon(user_input))
+			;
 		else
 			minishell(user_input, env_list);
 		free(user_input);
