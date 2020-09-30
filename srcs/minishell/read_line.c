@@ -44,22 +44,15 @@ int		check_incorrect_pipe_colon(char *s)
 	while (ft_isspace(*s))
 		s++;
 	if (*s == '|')
-		return (1);
-	else if (*s == ';')
-		return (2);
-	return (0);
-}
-
-int		ft_put_error_pipe_colon(int status)
-{
-	if (status == 0)
-		return (0);
-	else if (status == 1)
 		ft_putstderr("minishell: syntax error near unexpected token '|'");
-	else
+	else if (*s == ';')
 		ft_putstderr("minishell: syntax error near unexpected token ';'");
-	g_status = 258;
-	return (1);
+	if (*s == '|' || *s == ';')
+	{
+		g_status = 258;
+		return (1);
+	}
+	return (0);
 }
 
 void	check_exit_status(int status)

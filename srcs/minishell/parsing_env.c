@@ -73,8 +73,8 @@ char	*get_current_path(char **paths, char *current_command, char *command)
 
 int		check_absolute_path(const char *s)
 {
-	return (ft_strncmp("../", s, 3) ||
-			ft_strncmp("/", s, 1) || ft_strncmp("./", s, 2));
+	return (!ft_strncmp("../", s, 3) ||
+			!ft_strncmp("/", s, 1) || !ft_strncmp("./", s, 2));
 }
 
 int		check_path(char **command, t_list *env_list)

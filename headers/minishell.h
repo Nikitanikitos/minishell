@@ -18,7 +18,6 @@
 # include <fcntl.h>
 # include <sys/wait.h>
 # include <errno.h>
-# include <sys/dir.h>
 # include "libft.h"
 # include <sysexits.h>
 
@@ -69,7 +68,6 @@ void			print_error(char **arguments);
 void			type_prompt(void);
 void			quit(int num);
 void			sigint_handler(int signum);
-int				ft_put_error_pipe_colon(int status);
 void			exit_with_error(t_arguments *arguments);
 void			check_exit_status(int status);
 
