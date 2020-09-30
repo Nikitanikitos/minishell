@@ -6,7 +6,7 @@
 /*   By: froxanne <froxanne@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/16 15:42:11 by imicah            #+#    #+#             */
-/*   Updated: 2020/09/27 13:51:24 by froxanne         ###   ########.fr       */
+/*   Updated: 2020/09/30 17:00:12 by froxanne         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@ void	sigint_handler(int signum)
 	if (signum == SIGINT)
 	{
 		write(1, "\n", 1);
+		g_status = 130;
 		if (pid)
 			type_prompt();
 	}
