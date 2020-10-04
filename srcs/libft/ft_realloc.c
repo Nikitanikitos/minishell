@@ -25,9 +25,7 @@ void	*ft_realloc(char *src, int size)
 		free(temp);
 	}
 	else
-	{
 		src = (char*)ft_calloc(1, (size_t)size);
-	}
 	return (src);
 }
 
