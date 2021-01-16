@@ -10,7 +10,6 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <printf.h>
 #include "minishell.h"
 
 int		execute_buildin_command(t_arguments arguments, t_list *env_list)
@@ -71,10 +70,7 @@ void	start_process(t_arguments *arguments, t_list *env_list)
 
 void	fork_process(t_arguments arguments, t_list *env_list)
 {
-	pid_t	pid;
-
-	pid = fork();
-	if (pid == 0)
+	if (fork() == 0)
 	{
 		dup2(arguments.fds.std_write, STDOUT_FILENO);
 		start_process(&arguments, env_list);
